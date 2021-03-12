@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -22,16 +23,20 @@ public class Main extends Application {
         stage.setTitle("S.C.R.U.M.");
 
         Group root = new Group();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-
+        
         Canvas canvas = new Canvas(1225, 600);
         root.getChildren().add(canvas);
-
+        
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        System.out.println(gc.getFont());
+        System.out.println(Font.getFamilies());
+        gc.setFont(new Font("Comic Sans MS", 50));
 
-        Entity test = new Entity(canvas.getGraphicsContext2D());
 
+        Scene currentScene = new MainMenu(root, gc);
+        stage.setScene(currentScene);
+        
+        currentScene.setup();
         // Image scrum = new Image("https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif");        
 
         // Set up game loop
