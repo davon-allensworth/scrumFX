@@ -37,10 +37,15 @@ public class MainMenu extends Scene {
     }
     
     public void setup() {
-        // Entity test2 = new Entity(gc);
+        double centerx = (double)gc.getCanvas().getWidth() / 2;
+        double centery = (double)gc.getCanvas().getHeight() / 2;
         
-        startGameButton = new Button(gc, "Start Game", 0, 0, 200, 100);
+        startGameButton = new Button(gc, "Start Game", centerx - 200/2, centery - 100/2, 200, 100);
         this.entities.add(startGameButton);
+
+        Entity title = new Entity(gc, centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
+        this.entities.add(title);
+
     }
 
     public void teardown() {

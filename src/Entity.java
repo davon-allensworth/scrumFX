@@ -2,25 +2,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Entity {
-    float x, y;
-    float height, width;
+    double x, y;
+    double height, width;
     private Sprite sprite;
-    private float xpeed, yspeed;
+    private double xpeed, yspeed;
     GraphicsContext gc;
 
     public Entity(GraphicsContext gc) {
-        this(gc, 0, 0, 0, 0);
+        this(gc, 0, 0, 0, 0, 1);
     }
 
-    public Entity(GraphicsContext gc, float x, float y, float w, float h) {
+    public Entity(GraphicsContext gc, double x, double y, double w, double h, double scale) {
         this(gc, "https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif",
-             x, y, h, w);
+             x, y, h, w, scale);
         System.out.println("default entity asset constructor called");
     }
     
-    public Entity(GraphicsContext gc, String filename, float x, float y, float w, float h) {
+    public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, double scale) {
         this.gc = gc;
-        this.sprite = new Sprite(gc, filename);
+        this.sprite = new Sprite(gc, filename, scale);
         this.x = x;
         this.y = y;
         this.height = h;
@@ -43,13 +43,9 @@ public class Entity {
         return false;
     }
 
-    public boolean collidesWith(float x2, float y2) {
+    public boolean collidesWith(double x2, double y2) {
         return (x2 > x && x2 < (x+width)) &&
                (y2 > y && y2 < (y+height));
-    }
-
-    public boolean collidesWith(double x2, double y2) {
-        return this.collidesWith((float) x2, (float) y2);
     }
 
     public boolean changeSprite(Image image) {

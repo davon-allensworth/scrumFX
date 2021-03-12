@@ -6,14 +6,14 @@ public class Button extends Entity {
     String text = "placeholder";
 
     public Button(GraphicsContext gc, String text,
-                  float x, float y, float w, float h) {
-        super(gc, "assets/button.png", x, y, w, h);
+                  double x, double y, double w, double h) {
+        super(gc, "assets/button.png", x, y, w, h, 1);
         this.text = text;
     }
 
     public void draw() {
         super.draw();
         
-        gc.fillText(this.text, x, y+height-gc.getFont().getSize()/2);
+        gc.fillText(this.text, x, y+height-gc.getFont().getSize()/2, width);
     }
 }

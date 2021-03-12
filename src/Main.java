@@ -24,7 +24,7 @@ public class Main extends Application {
 
         Group root = new Group();
         
-        Canvas canvas = new Canvas(1225, 600);
+        Canvas canvas = new Canvas(900, 900);
         root.getChildren().add(canvas);
         
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -32,12 +32,9 @@ public class Main extends Application {
         System.out.println(Font.getFamilies());
         gc.setFont(new Font("Comic Sans MS", 50));
 
-
         Scene currentScene = new MainMenu(root, gc);
         stage.setScene(currentScene);
-        
-        currentScene.setup();
-        // Image scrum = new Image("https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif");        
+        currentScene.setup();        
 
         // Set up game loop
         Timeline gameLoop = new Timeline();
@@ -51,16 +48,9 @@ public class Main extends Application {
             {
                 public void handle(ActionEvent ae)
                 {
-                    double t = (System.currentTimeMillis() - timeStart) / 1000.0; 
-                                
-                    // double x = 232 + 128 * Math.cos(t);
-                    // double y = 232 + 128 * Math.sin(t);
-                    
                     // Clear the canvas
                     gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     
-                    // background image clears canvas
-                    // gc.drawImage(scrum, 0, 0 );
                     currentScene.draw();
                 }
             });
