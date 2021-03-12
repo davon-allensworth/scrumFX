@@ -7,7 +7,7 @@ public class Button extends Entity {
 
     public Button(GraphicsContext gc, String text,
                   float x, float y, float w, float h) {
-        super(gc, "button.png", x, y, w, h);
+        super(gc, "assets/button.png", x, y, w, h);
         this.text = text;
     }
 
