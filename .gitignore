@@ -2,3 +2,13 @@
 /workspace.xml
 /bin/
 .idea/
+
+# vscode
+.vscode/
+
+# java files
+*.jar
+*.class
+
+# javafx
+javafx*
