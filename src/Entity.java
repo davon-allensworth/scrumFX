@@ -1,3 +1,11 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.*;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -5,11 +13,17 @@ public class Entity {
     double x, y;
     double height, width;
     private Sprite sprite;
-    private double xpeed, yspeed;
+    private double xspeed, yspeed;
+    private double scale;
     GraphicsContext gc;
 
     public Entity(GraphicsContext gc) {
         this(gc, 0, 0, 0, 0, 1);
+    }
+
+    public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
+        this(gc, filename, x, y, 1, 1, scale);
+        setDimensionsToSprite();
     }
 
     public Entity(GraphicsContext gc, double x, double y, double w, double h, double scale) {
@@ -25,6 +39,11 @@ public class Entity {
         this.y = y;
         this.height = h;
         this.width = w;
+        this.scale = scale;
+    }
+
+    public void updateSprite(String filename){
+        this.sprite = new Sprite(gc, filename, scale);
     }
     
     public void draw() {
@@ -37,6 +56,10 @@ public class Entity {
 
     private void move() {
         this.x += 0.1;
+    }
+
+    public Sprite getSprite(){
+        return this.sprite;
     }
 
     public boolean collidesWith(Entity other) {
@@ -58,5 +81,11 @@ public class Entity {
 
     public boolean changeSprite(Sprite newSprite) {
         return false;
+    }
+
+    public void setDimensionsToSprite(){
+        Image image = sprite.getImage();
+        width = image.getWidth();
+        height = image.getHeight();
     }
 }
