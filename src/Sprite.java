@@ -18,15 +18,19 @@ public class Sprite {
         this(gc, filename, 1);
     }
 
-    public Sprite(GraphicsContext gc, String filename, double scale) {
+    public Sprite(GraphicsContext gc, String fileName, double scale) {
         this.gc = gc;
         this.scale = scale;
-        image = new Image(filename);
+        image = new Image(fileName);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
     }
 
     public void draw(double x, double y) {
         gc.drawImage(image, x, y, image.getWidth()*scale, image.getHeight()*scale);
+    }
+
+    public Image getImage(){
+        return image;
     }
 }
