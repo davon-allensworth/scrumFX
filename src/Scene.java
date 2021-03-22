@@ -22,7 +22,7 @@ public abstract class Scene extends javafx.scene.Scene {
     public void update() {
         for(Entity e : entities)
             e.update();
-        }
+    }
         
     public void draw() {       
     }

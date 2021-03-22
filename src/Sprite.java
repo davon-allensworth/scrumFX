@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 
 
 public class Sprite {
+    public boolean visible = true;
     private double scale = 1;
     private String imageName;
     Image image = null;
@@ -18,16 +19,16 @@ public class Sprite {
         this(gc, filename, 1);
     }
 
-    public Sprite(GraphicsContext gc, String fileName, double scale) {
+    public Sprite(GraphicsContext gc, String filename, double scale) {
         this.gc = gc;
         this.scale = scale;
-        image = new Image(fileName);
+        image = new Image(filename);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
     }
 
     public void draw(double x, double y) {
-        gc.drawImage(image, x, y, image.getWidth()*scale, image.getHeight()*scale);
+        if(visible) gc.drawImage(image, x, y, image.getWidth()*scale, image.getHeight()*scale);
     }
 
     public Image getImage(){
