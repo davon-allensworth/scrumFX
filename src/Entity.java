@@ -17,6 +17,7 @@ public class Entity {
         this(gc, 0, 0, 0, 0, 1);
     }
 
+    //for hitbox set to same as sprite dimensions
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
         this(gc, filename, x, y, 1, 1, scale);
         setDimensionsToSprite();
@@ -28,7 +29,7 @@ public class Entity {
         System.out.println("default entity asset constructor called");
     }
     
-    //for hitbox set to same as sprite dimensions
+    //for hitbox set same as sprite explicitly
     public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, 
             double scale) {
         this.gc = gc;
@@ -44,7 +45,7 @@ public class Entity {
         this.scale = scale;
     }
 
-    //for specifying hitbox
+    //for specifying hitbox separate from sprite
     public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, 
             double scale, double hX, double hY, double hW, double hH) {
         this(gc, filename, x, y, w, h, scale);
@@ -88,10 +89,16 @@ public class Entity {
     }
 
     public boolean collidesWith(Entity other) {
-        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right
-        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left
+        //check corners of this
+        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left of this
+        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right of this
+        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right of this
+        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left of this
+        //check corners of other
+        if(this.collidesWith(other.hitboxX,other.hitboxY))return true; //top left of other
+        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY))return true; //top right of other
+        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY+other.hitboxHeight))return true; //bottom right of other
+        if(this.collidesWith(other.hitboxX,other.hitboxY+other.hitboxHeight))return true; //bottom left of other
         return false;
     }
 
@@ -114,7 +121,9 @@ public class Entity {
 
     public void setDimensionsToSprite(){
         Image image = sprite.getImage();
-        width = image.getWidth();
-        height = image.getHeight();
+        width = image.getWidth() * Sprite.SCALE_MULTIPLIER;
+        height = image.getHeight() * Sprite.SCALE_MULTIPLIER;
+        hitboxWidth = width;
+        hitboxHeight = height;
     }
 }

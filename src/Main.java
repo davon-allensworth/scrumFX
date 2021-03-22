@@ -24,7 +24,7 @@ public class Main extends Application {
 
         Group root = new Group();
         
-        Canvas canvas = new Canvas(1080, 700);
+        Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         
         GraphicsContext gc = canvas.getGraphicsContext2D();

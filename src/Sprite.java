@@ -15,13 +15,15 @@ public class Sprite {
     Image image = null;
     GraphicsContext gc;
 
+    public static final double SCALE_MULTIPLIER = 0.5;
+
     public Sprite(GraphicsContext gc, String filename) {
         this(gc, filename, 1);
     }
 
     public Sprite(GraphicsContext gc, String filename, double scale) {
         this.gc = gc;
-        this.scale = scale;
+        this.scale = scale * SCALE_MULTIPLIER;
         image = new Image(filename);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
