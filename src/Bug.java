@@ -9,8 +9,6 @@ public class Bug extends Entity{
     private double velocity = 3;
     private long timeCheck = 0; //to make absorb animate slowly
 
-    private double endzone;
-
     private static final int ABSORB_TIME = 100;
 
     private static final String MOVE = "assets/Bugs/bug move.gif";
@@ -21,7 +19,6 @@ public class Bug extends Entity{
 
     public Bug(GraphicsContext gc, double x) {
         super(gc, MOVE, x, -300, 1);
-        endzone = gc.getCanvas().getHeight() - 500;
     }
 
     public void startMoving(){

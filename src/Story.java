@@ -8,9 +8,11 @@ public class Story extends Entity {
     private boolean progress = true; //should the progress bar go up
     private boolean inArena = true; //is the story in the arena
     private long timeCheck = 0; //to make progress bar move slowly
+    private long decreaseTimeCheck = 0; //to make progress bar move slowly
     private int level;
 
-    private static final int PROGRESS_TIME = 5000;
+    private static final int PROGRESS_TIME = 1000;
+    private static final int DECREASE_TIME = 4000;
 
     private static final String ASSET_PATH = "assets/stories/";
     private String levelPath;
@@ -61,6 +63,9 @@ public class Story extends Entity {
         }else{
             this.updateSprite(ASSET_PATH+levelPath+" red "+completion+FILE_EXT);
         }
+        setDimensionsToSprite();
+        this.y = gc.getCanvas().getHeight()-this.height;
+        this.hitboxY = this.y;
     }
 
     public void increase(){
@@ -73,9 +78,11 @@ public class Story extends Entity {
     }
 
     public void decrease(){
-        if(!completed && completion > 0){
+        if(!completed && completion > 0 &&
+                System.currentTimeMillis() - decreaseTimeCheck < DECREASE_TIME){
             completion--;
-            green = false;
+        }else{
+            green = true;
         }
         arenaMode();
     }
@@ -88,12 +95,18 @@ public class Story extends Entity {
         return level;
     }
 
+    public void hit(){
+        green = false;
+        decreaseTimeCheck = System.currentTimeMillis();
+    }
+
     @Override 
     public void update(){
         if(inArena && progress){
             if(System.currentTimeMillis() - timeCheck > PROGRESS_TIME){ //if 1 second passes
                 timeCheck = System.currentTimeMillis();
-                increase();
+                if(green) increase();
+                else decrease();
             }
         }
     }

@@ -18,17 +18,22 @@ public class Player extends Entity {
 
     private static final int SWAT_TIME = 500;
     private static final double VELOCITY = 6;
-    private static final double PLAYER_WIDTH = 46;
-    private static final double PLAYER_HEIGHT = 32;
-    private static final double PLAYER_HITBOX_OFFSET_X = 160;
-    private static final double PLAYER_HITBOX_OFFSET_Y = 105;
-    private static final double PLAYER_HITBOX_WIDTH = 288;
-    private static final double PLAYER_HITBOX_HEIGHT = 32;
+    private static final double PLAYER_WIDTH = 46;//not correct yet
+    private static final double PLAYER_HEIGHT = 32;//not correct yet
+    private static final double PLAYER_HITBOX_OFFSET_X = 90;
+    private static final double PLAYER_HITBOX_OFFSET_Y = 30;//not correct yet
+    private static final double PLAYER_HITBOX_WIDTH = 143;
+    private static final double PLAYER_HITBOX_HEIGHT = 38;//not correct yet
+    private static final double PLAYER_Y_OFFSET = 120;
 
-    public Player(GraphicsContext gc, double x, double y) {
+    public Player(GraphicsContext gc) {
+        this(gc, gc.getCanvas().getWidth()/2, gc.getCanvas().getHeight() / 4);
+    }
+
+    private Player(GraphicsContext gc, double x, double y){
         super(gc, IDLE, x, y, PLAYER_WIDTH, PLAYER_HEIGHT, 1, 
-                x + PLAYER_HITBOX_OFFSET_X, y + PLAYER_HITBOX_OFFSET_Y,
-                PLAYER_HITBOX_WIDTH, PLAYER_HITBOX_HEIGHT);
+            x + PLAYER_HITBOX_OFFSET_X, y + PLAYER_HITBOX_OFFSET_Y,
+            PLAYER_HITBOX_WIDTH, PLAYER_HITBOX_HEIGHT);
     }
 
     @Override

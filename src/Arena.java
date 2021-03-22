@@ -66,19 +66,21 @@ public class Arena extends Scene {
         double centerx = (double)screenWidth / 2;
         double centery = (double)screenHeight / 2;
         
-        player = new Player(gc, centerx/2, -centery/4);
+        player = new Player(gc);
 
         //replace this with adding selected stories from product backlog !!!
         sprintBacklog.add(new Story(gc, "filler text", 1, 0, 0));
         sprintBacklog.add(new Story(gc, "filler text 2", 2, 0, 0));
         sprintBacklog.add(new Story(gc, "filler text 3", 3, 0, 0));
 
+        //replace this with adding bugs based on the stories !!!
         bugs.add(new Bug(gc, centerx));
+        bugs.add(new Bug(gc, centerx/3));
 
 
         double x = 0;
         for(Story story : sprintBacklog){
-            if(x==0)x=(screenWidth/sprintBacklog.size()-story.getWidth());
+            if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
             this.entities.add(story);
@@ -105,7 +107,10 @@ public class Arena extends Scene {
             if(e instanceof Bug && ((Bug)e).isAlive()){ //check for bug collisions
                 for(Entity other : entities){
                     if(other instanceof Story){ //with story
-                        if(e.collidesWith(other)) ((Bug)e).startAbsorb();
+                        if(e.collidesWith(other)){
+                            ((Bug)e).startAbsorb();
+                            ((Story)other).hit();
+                        }
                     }
                     // this is where we should probably check for if the bug got hit by the swatter
                 }
