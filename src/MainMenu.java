@@ -37,6 +37,7 @@ public class MainMenu extends Scene {
             });
     }
     
+    @Override
     public void setup() {
         double centerx = (double)gc.getCanvas().getWidth() / 2;
         double centery = (double)gc.getCanvas().getHeight() / 2;
@@ -49,10 +50,12 @@ public class MainMenu extends Scene {
 
     }
 
+    @Override
     public void teardown() {
         
     }
 
+    @Override
     public void draw() {
         for(Entity e : this.entities)
             e.draw();  

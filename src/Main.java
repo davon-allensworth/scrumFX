@@ -24,15 +24,15 @@ public class Main extends Application {
 
         Group root = new Group();
         
-        Canvas canvas = new Canvas(900, 900);
+        Canvas canvas = new Canvas(1080, 700);
         root.getChildren().add(canvas);
         
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        System.out.println(gc.getFont());
-        System.out.println(Font.getFamilies());
+        //System.out.println(gc.getFont());
+        //System.out.println(Font.getFamilies());
         gc.setFont(new Font("Comic Sans MS", 50));
 
-        Scene currentScene = new MainMenu(root, gc);
+        Scene currentScene = new Arena(root, gc);
         stage.setScene(currentScene);
         currentScene.setup();        
 
@@ -50,7 +50,7 @@ public class Main extends Application {
                 {
                     // Clear the canvas
                     gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                    
+                    currentScene.update();
                     currentScene.draw();
                 }
             });
