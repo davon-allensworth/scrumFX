@@ -105,8 +105,7 @@ public class Arena extends Scene {
             if(e instanceof Bug && ((Bug)e).isAlive()){ //check for bug collisions
                 for(Entity other : entities){
                     if(other instanceof Story){ //with story
-                        if(e.collidesWith(other)) ((Bug)e).startAbsorb();//not working :(
-                        //else System.out.println(e.x +" "+e.y+" "+e.width+" "+e.height+" != "+other.x+" "+other.y+" "+other.width+" "+other.height);
+                        if(e.collidesWith(other)) ((Bug)e).startAbsorb();
                     }
                     // this is where we should probably check for if the bug got hit by the swatter
                 }

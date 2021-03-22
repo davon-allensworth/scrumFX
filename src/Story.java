@@ -33,6 +33,8 @@ public class Story extends Entity {
     public void setLocation(double x, double y){
         this.x = x;
         this.y = y;
+        this.hitboxX = x;
+        this.hitboxY = y;
     }
 
     public void select(){

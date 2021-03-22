@@ -88,14 +88,21 @@ public class Entity {
     }
 
     public boolean collidesWith(Entity other) {
-        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right
-        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left
+        //check corners of this
+        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left of this
+        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right of this
+        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right of this
+        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left of this
+        //check corners of other
+        if(this.collidesWith(other.hitboxX,other.hitboxY))return true; //top left of other
+        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY))return true; //top right of other
+        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY+other.hitboxHeight))return true; //bottom right of other
+        if(this.collidesWith(other.hitboxX,other.hitboxY+other.hitboxHeight))return true; //bottom left of other
         return false;
     }
 
     public boolean collidesWith(double x2, double y2) {
+        System.out.println(x2+" "+y2+" "+hitboxX+" "+hitboxY+" "+(width+hitboxX)+" "+(height+hitboxY));
         return (x2 > (hitboxX) && x2 < (width+hitboxX)) &&
                (y2 > (hitboxY) && y2 < (height+hitboxY));
     }
@@ -116,5 +123,7 @@ public class Entity {
         Image image = sprite.getImage();
         width = image.getWidth();
         height = image.getHeight();
+        hitboxWidth = width;
+        hitboxHeight = height;
     }
 }
