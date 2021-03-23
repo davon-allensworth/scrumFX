@@ -32,6 +32,7 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
+                        GameManager.getInstance().changeScene("arena");
                     }
                 }
             });
@@ -57,7 +58,12 @@ public class MainMenu extends Scene {
 
     @Override
     public void draw() {
+        this.drawBackground();
         for(Entity e : this.entities)
             e.draw();  
+    }
+
+    private void drawBackground() {
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 }

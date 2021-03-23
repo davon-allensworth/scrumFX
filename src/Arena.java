@@ -120,7 +120,12 @@ public class Arena extends Scene {
 
     @Override
     public void draw() {
+        this.drawBackground();
         for(Entity e : this.entities)
             e.draw();  
+    }
+
+    private void drawBackground() {
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 }

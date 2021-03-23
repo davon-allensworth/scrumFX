@@ -23,18 +23,15 @@ public class Main extends Application {
         stage.setTitle("S.C.R.U.M.");
 
         Group root = new Group();
-        
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
-        
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        //System.out.println(gc.getFont());
-        //System.out.println(Font.getFamilies());
-        gc.setFont(new Font("Comic Sans MS", 50));
 
-        Scene currentScene = new Arena(root, gc);
-        stage.setScene(currentScene);
-        currentScene.setup();        
+        stage.setScene(new MainMenu(root, gc));
+        stage.setResizable(false);
+        ((Scene) stage.getScene()).setup();
+
+        GameManager.getInstance().setStage(stage);
 
         // Set up game loop
         Timeline gameLoop = new Timeline();
@@ -48,10 +45,8 @@ public class Main extends Application {
             {
                 public void handle(ActionEvent ae)
                 {
-                    // Clear the canvas
-                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                    currentScene.update();
-                    currentScene.draw();
+                    ((Scene) stage.getScene()).update();
+                    ((Scene) stage.getScene()).draw();
                 }
             });
         
