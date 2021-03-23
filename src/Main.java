@@ -49,7 +49,9 @@ public class Main extends Application {
                 {
                     ((Scene) stage.getScene()).update();
                     ((Scene) stage.getScene()).draw();
-                    if(gm.storiesDone()){
+
+                    // Check if Arena needs to be stopped
+                    if(stage.getScene() instanceof Arena && gm.storiesDone()){
                         gm.endSprint();
                     }
                 }
@@ -59,6 +61,7 @@ public class Main extends Application {
         gameLoop.play();
 
         stage.show();
+
     }
     
     public static void main(String[] args) {
