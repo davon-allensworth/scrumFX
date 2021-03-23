@@ -13,7 +13,7 @@ public class MainMenu extends Scene {
     Button startGameButton = null;
     GraphicsContext gc;
 
-    public MainMenu(Parent root, GraphicsContext gc) {
+    public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -32,7 +32,7 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
-                        GameManager.getInstance().changeScene("arena");
+                        gm.changeScene("arena");
                     }
                 }
             });

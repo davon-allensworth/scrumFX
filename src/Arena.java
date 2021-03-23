@@ -12,13 +12,15 @@ import javafx.scene.input.MouseEvent;
 public class Arena extends Scene {
     Player player = null;
     GraphicsContext gc;
-    List<Story> sprintBacklog = new ArrayList<>();
+    List<Story> sprintBacklog;
     List<Bug> bugs = new ArrayList<>();
+    List<Entity> entities;
 
-    public Arena(Parent root, GraphicsContext gc) {
+    public Arena(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
-        this.entities = new ArrayList<Entity>();
+        this.entities = gm.entities;
         this.gc = gc;
+        this.sprintBacklog = gm.sprintBacklog;
 
         this.setOnKeyPressed(
             new EventHandler<KeyEvent>()
@@ -83,7 +85,7 @@ public class Arena extends Scene {
             if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
-            this.entities.add(story);
+            entities.add(story);
             x += screenWidth/sprintBacklog.size();
         }
 

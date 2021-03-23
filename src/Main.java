@@ -26,12 +26,14 @@ public class Main extends Application {
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        GameManager gm = new GameManager(root);
 
-        stage.setScene(new MainMenu(root, gc));
+        stage.setScene(new MainMenu(root, gc, gm));
         stage.setResizable(false);
         ((Scene) stage.getScene()).setup();
 
-        GameManager.getInstance().setStage(stage);
+        // GameManager gm = new GameManager(root);
+        gm.setStage(stage);
 
         // Set up game loop
         Timeline gameLoop = new Timeline();
@@ -47,6 +49,9 @@ public class Main extends Application {
                 {
                     ((Scene) stage.getScene()).update();
                     ((Scene) stage.getScene()).draw();
+                    if(gm.storiesDone()){
+                        gm.endSprint();
+                    }
                 }
             });
         
