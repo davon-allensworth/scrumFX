@@ -32,6 +32,7 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
+                        GameManager.getInstance().changeScene("arena");
                     }
                 }
             });

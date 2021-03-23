@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 
 public class GameManager {
@@ -38,7 +41,22 @@ public class GameManager {
         return null;
     }
 
-    public void changeScene(Scene scene) {
+    public void changeScene(String sceneName) {
+        Group root = new Group();
+        Canvas canvas = new Canvas(600, 600);
+        root.getChildren().add(canvas);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        Scene scene = null;
+
+        switch(sceneName) {
+            case "arena":
+            scene = new Arena(root, gc);
+            break;
+            
+            default:
+            return;
+        }
+        scene.setup();
         stage.setScene(scene);
     }
 
