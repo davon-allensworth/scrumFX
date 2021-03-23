@@ -8,10 +8,9 @@ import javafx.stage.Stage;
 
 public class GameManager {
     private static GameManager instance = null;
-    
-    public List<Entity> entities;
 
-    private Group root;
+    private GraphicsContext gc;
+
     private int totalScore;
     private int currentSprint;
     private int amountOfSprints;
@@ -34,15 +33,14 @@ public class GameManager {
 
 
 
-    public GameManager(Group root){
-        this.root = root;
+    public GameManager(GraphicsContext gc){
+        this.gc = gc;
         this.totalScore = 0;
         this.currentSprint = 0;
         this.amountOfSprints = 4;
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
         this.sprintBacklog = new ArrayList<>();
-        this.entities = new ArrayList<>();
     }
 
     public static GameManager getInstance() {
@@ -56,11 +54,21 @@ public class GameManager {
         return null;
     }
 
+    public List<Story> getSprintBacklog() {
+        // replace with values set by storyselect screen
+        sprintBacklog = new ArrayList<Story>();
+        sprintBacklog.add(new Story(gc, "filler text", 1, 0, 0));
+        sprintBacklog.add(new Story(gc, "filler text 2", 2, 0, 0));
+        sprintBacklog.add(new Story(gc, "filler text 3", 3, 0, 0));
+
+        return sprintBacklog;
+    }
+
     public void changeScene(String sceneName) {
         Group root = new Group();
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        this.gc = canvas.getGraphicsContext2D();
         Scene scene = null;
 
         switch(sceneName) {
