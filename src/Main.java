@@ -32,9 +32,12 @@ public class Main extends Application {
         //System.out.println(Font.getFamilies());
         gc.setFont(new Font("Comic Sans MS", 50));
 
-        Scene currentScene = new Arena(root, gc);
-        stage.setScene(currentScene);
-        currentScene.setup();        
+        // Scene currentScene = new MainMenu(root, gc);
+        stage.setScene(new MainMenu(root, gc));
+        ((Scene) stage.getScene()).setup();
+        // currentScene.setup();        
+
+        GameManager.getInstance().setStage(stage);
 
         // Set up game loop
         Timeline gameLoop = new Timeline();
@@ -49,9 +52,9 @@ public class Main extends Application {
                 public void handle(ActionEvent ae)
                 {
                     // Clear the canvas
-                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                    currentScene.update();
-                    currentScene.draw();
+                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight()); // move to Scene.draw
+                    ((Scene) stage.getScene()).update();
+                    ((Scene) stage.getScene()).draw();
                 }
             });
         
