@@ -26,7 +26,7 @@ public class Main extends Application {
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        GameManager gm = new GameManager(root);
+        GameManager gm = new GameManager(gc);
 
         stage.setScene(new MainMenu(root, gc, gm));
         stage.setResizable(false);
@@ -49,9 +49,6 @@ public class Main extends Application {
                 {
                     ((Scene) stage.getScene()).update();
                     ((Scene) stage.getScene()).draw();
-                    if(gm.storiesDone()){
-                        gm.endSprint();
-                    }
                 }
             });
         

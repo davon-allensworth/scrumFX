@@ -12,15 +12,17 @@ import javafx.scene.input.MouseEvent;
 public class Arena extends Scene {
     Player player = null;
     GraphicsContext gc;
+    GameManager gm;
     List<Story> sprintBacklog;
     List<Bug> bugs = new ArrayList<>();
     List<Entity> entities;
 
     public Arena(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
-        this.entities = gm.entities;
+        this.entities = new ArrayList<>();
         this.gc = gc;
         this.sprintBacklog = gm.sprintBacklog;
+        this.gm = gm;
 
         this.setOnKeyPressed(
             new EventHandler<KeyEvent>()
@@ -71,9 +73,7 @@ public class Arena extends Scene {
         player = new Player(gc);
 
         //replace this with adding selected stories from product backlog !!!
-        sprintBacklog.add(new Story(gc, "filler text", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 2", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 3", 3, 0, 0));
+        sprintBacklog = gm.getSprintBacklog();
 
         //replace this with adding bugs based on the stories !!!
         bugs.add(new Bug(gc, centerx));
@@ -85,7 +85,8 @@ public class Arena extends Scene {
             if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
-            entities.add(story);
+            this.entities.add(story);
+            System.out.println(this.entities.size());
             x += screenWidth/sprintBacklog.size();
         }
 
@@ -104,6 +105,8 @@ public class Arena extends Scene {
 
     @Override
     public void update() {
+
+        // update entities and check for collisions
         for(Entity e : entities){
             e.update();
             if(e instanceof Bug && ((Bug)e).isAlive()){ //check for bug collisions
@@ -113,6 +116,8 @@ public class Arena extends Scene {
                             ((Bug)e).startAbsorb();
                             ((Story)other).hit();
                         }
+                    } else if (other instanceof Story) {
+                        System.out.println("updated story");
                     }
                     // Check if bug is hit by swatter
                     if(player.moveCode() == 3 & e.collidesWith(player)){
@@ -120,6 +125,11 @@ public class Arena extends Scene {
                     }
                 }
             }
+        }
+
+        // check if the sprint is over
+        if(gm.storiesDone()){
+            gm.endSprint();
         }
     }
 
