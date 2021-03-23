@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    public static GameManager instance;
+    private static GameManager instance = null;
     
     public Entity[] entities;
 
@@ -23,7 +23,7 @@ public class GameManager {
         sprintBacklog = new ArrayList<Story>();
     }
 
-    public GameManager getInstance() {
+    public static GameManager getInstance() {
         if (instance == null)
             instance = new GameManager();
 
