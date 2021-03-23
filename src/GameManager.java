@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
@@ -17,7 +18,15 @@ public class GameManager {
     private int musicVolume = 100;
     private int soundVolume = 100;
 
+    private GameManager() {
+        productBacklog = new ArrayList<Story>();
+        sprintBacklog = new ArrayList<Story>();
+    }
+
     public GameManager getInstance() {
+        if (instance == null)
+            instance = new GameManager();
+
         return instance;
     }
 
