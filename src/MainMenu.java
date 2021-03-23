@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
     Button startGameButton = null;
+    Button settingsButton = null;
     GraphicsContext gc;
 
     public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
@@ -43,8 +44,13 @@ public class MainMenu extends Scene {
         double centerx = (double)gc.getCanvas().getWidth() / 2;
         double centery = (double)gc.getCanvas().getHeight() / 2;
         
-        startGameButton = new Button(gc, "start button", "start button pressed", centerx - centerx/1.5, centery + centery/6);
+        startGameButton = new Button(gc, "start button", "start button pressed", centerx /*- centerx/1.5*/, centery /*+ centery/6*/);
+        startGameButton.updateX(-(startGameButton.getWidth()/2));
+        settingsButton = new Button(gc, "settings button", "settings button", centerx, centery);
+        settingsButton.updateX(-(settingsButton.getWidth()/2));
+        settingsButton.updateY((startGameButton.getHeight() + 30));
         this.entities.add(startGameButton);
+        this.entities.add(settingsButton);
 
         Entity title = new Entity(gc, centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
         this.entities.add(title);
