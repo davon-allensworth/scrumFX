@@ -114,7 +114,10 @@ public class Arena extends Scene {
                             ((Story)other).hit();
                         }
                     }
-                    // this is where we should probably check for if the bug got hit by the swatter
+                    // Check if bug is hit by swatter
+                    if(player.moveCode() == 3 & e.collidesWith(player)){
+                        ((Bug)e).kill();
+                    }
                 }
             }
         }

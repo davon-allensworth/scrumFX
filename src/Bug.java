@@ -12,7 +12,7 @@ public class Bug extends Entity{
     private static final int ABSORB_TIME = 100;
 
     private static final String MOVE = "assets/Bugs/bug move.gif";
-    private static final String DEAD = "assets/Bugs/bug splatter.gif";
+    private static final String DEAD = "assets/Bugs/bug splatter.png";
     private static final String ABSORB = "assets/Bugs/bug absorb ";
 
     private int absorbState = 0;
