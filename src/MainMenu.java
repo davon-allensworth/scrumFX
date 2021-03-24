@@ -35,6 +35,10 @@ public class MainMenu extends Scene {
                         System.out.println("startgameButton pressed");
                         gm.changeScene("arena");
                     }
+
+                    if(settingsButton.collidesWith(e.getX(), e.getY())){
+                        gm.changeScene("settings");
+                    }
                 }
             });
     }

@@ -81,6 +81,14 @@ public class GameManager {
                 System.out.println("User score was: " + totalScore);
                 break;
             
+            case "main menu":
+                scene = new MainMenu(root, gc, this);
+                break;
+
+            case "settings":
+                scene = new Settings(root, gc, this);
+                break;
+                
             default:
             return;
         }
