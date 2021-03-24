@@ -40,7 +40,7 @@ public class Settings extends Scene {
     
     @Override
     public void setup() {
-        backButton = new Button(gc, "back arrow", "back arrow", 0, 0);
+        backButton = new Button(gc, "exit button", "exit button pressed", 0, 0);
         this.entities.add(backButton);
     }
 

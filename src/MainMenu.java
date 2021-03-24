@@ -50,7 +50,7 @@ public class MainMenu extends Scene {
         
         startGameButton = new Button(gc, "start button", "start button pressed", centerx /*- centerx/1.5*/, centery /*+ centery/6*/);
         startGameButton.updateX(-(startGameButton.getWidth()/2));
-        settingsButton = new Button(gc, "settings button", "settings button", centerx, centery);
+        settingsButton = new Button(gc, "menu button", "menu button pressed", centerx, centery);
         settingsButton.updateX(-(settingsButton.getWidth()/2));
         settingsButton.updateY((startGameButton.getHeight() + 30));
         this.entities.add(startGameButton);
