@@ -13,9 +13,12 @@ public class Entity {
     private double scale;
     GraphicsContext gc;
 
+    /*
     public Entity(GraphicsContext gc) {
         this(gc, 0, 0, 0, 0, 1);
     }
+
+     */
 
     //for hitbox set to same as sprite dimensions
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
@@ -23,11 +26,13 @@ public class Entity {
         setDimensionsToSprite();
     }
 
+    /*
     public Entity(GraphicsContext gc, double x, double y, double w, double h, double scale) {
         this(gc, "https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif",
              x, y, h, w, scale);
         System.out.println("default entity asset constructor called");
     }
+     */
     
     //for hitbox set same as sprite explicitly
     public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, 
@@ -57,6 +62,11 @@ public class Entity {
     
     public void draw() {
         sprite.draw(x, y);
+        /*
+        if(GameManager.getInstance().debugMode){
+            gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+        }
+         */
     }
 
     public void update() {

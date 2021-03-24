@@ -56,7 +56,7 @@ public class MainMenu extends Scene {
         this.entities.add(startGameButton);
         this.entities.add(settingsButton);
 
-        Entity title = new Entity(gc, centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
+        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif",centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
         this.entities.add(title);
 
     }
