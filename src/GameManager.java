@@ -116,6 +116,14 @@ public class GameManager {
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
+
+        // add sprint score to user total.
+        for(Story s : sprintBacklog){
+            if (s.isCompleted()){
+                totalScore += s.getLevel();
+            }
+        }
+
         System.out.println("End of the sprint. User score was: " + this.totalScore);
 
         // Check if last iteration
