@@ -11,6 +11,8 @@ public class GameManager {
 
     private GraphicsContext gc;
 
+    public static final boolean debugMode = false;
+
     private int totalScore;
     private int currentSprint;
     private int amountOfSprints;
