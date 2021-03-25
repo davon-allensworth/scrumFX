@@ -11,7 +11,7 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    public static final boolean debugMode = false;
+    public static final boolean debugMode = true;
 
     private int totalScore;
     private int currentSprint;
@@ -94,6 +94,9 @@ public class GameManager {
             default:
             return;
         }
+
+        ((Scene) stage.getScene()).teardown();
+
         scene.setup();
         stage.setScene(scene);
     }

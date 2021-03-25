@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,12 +8,16 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
     Button startGameButton = null;
     Button settingsButton = null;
     GraphicsContext gc;
+
+    MediaPlayer musicPlayer;
 
     public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -59,11 +64,20 @@ public class MainMenu extends Scene {
         Entity title = new Entity(gc, "assets/S.C.R.U.M..gif",centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
         this.entities.add(title);
 
+        Media sound = new Media(new File("src/assets/music/music1.mp3").toURI().toString());
+        musicPlayer = new MediaPlayer(sound);
+        musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        musicPlayer.setAutoPlay(true);
+
+        System.out.println(musicPlayer.cycleDurationProperty());
+        System.out.println(sound.getDuration());
+        System.out.println();
+        
     }
 
     @Override
     public void teardown() {
-        
+        musicPlayer.stop();
     }
 
     @Override

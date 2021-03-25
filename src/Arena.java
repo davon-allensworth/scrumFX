@@ -72,7 +72,6 @@ public class Arena extends Scene {
         
         player = new Player(gc);
 
-        //replace this with adding selected stories from product backlog !!!
         sprintBacklog = gm.getSprintBacklog();
 
         //replace this with adding bugs based on the stories !!!
