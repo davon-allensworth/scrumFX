@@ -79,7 +79,6 @@ public class Arena extends Scene {
         bugs.add(new Bug(gc, centerx));
         bugs.add(new Bug(gc, centerx/3));
 
-
         double x = 0;
         for(Story story : sprintBacklog){
             if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
@@ -120,7 +119,7 @@ public class Arena extends Scene {
                         System.out.println("updated story");
                     }
                     // Check if bug is hit by swatter
-                    if(player.moveCode() == 3 & e.collidesWith(player)){
+                    if(player.moveCode() == 3 && e.collidesWith(player)){
                         ((Bug)e).kill();
                     }
                 }

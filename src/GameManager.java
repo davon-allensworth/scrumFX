@@ -4,6 +4,7 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GameManager {
@@ -11,7 +12,7 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    public static final boolean debugMode = false;
+    public static final boolean DEBUG_MODE = false;
 
     private int totalScore;
     private int currentSprint;
@@ -27,13 +28,12 @@ public class GameManager {
     private int musicVolume = 100;
     private int soundVolume = 100;
 
+    private Font font = null;
 
     private GameManager() {
         productBacklog = new ArrayList<>();
         sprintBacklog = new ArrayList<>();
     }
-
-
 
     public GameManager(GraphicsContext gc){
         this.gc = gc;
@@ -43,6 +43,7 @@ public class GameManager {
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
         this.sprintBacklog = new ArrayList<>();
+        this.font = gc.getFont();
     }
 
     public static GameManager getInstance() {
@@ -59,18 +60,22 @@ public class GameManager {
     public List<Story> getSprintBacklog() {
         // replace with values set by storyselect screen
         sprintBacklog = new ArrayList<Story>();
-        sprintBacklog.add(new Story(gc, "filler text", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 2", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 3", 3, 0, 0));
+        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
+        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
+        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
 
         return sprintBacklog;
     }
 
     public void changeScene(String sceneName) {
         Group root = new Group();
+        
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         this.gc = canvas.getGraphicsContext2D();
+
+        gc.setFont(font); //retain the same font
+
         Scene scene = null;
 
         switch(sceneName) {
