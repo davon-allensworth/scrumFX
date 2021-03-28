@@ -13,9 +13,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
-    Button startGameButton = null;
-    Button settingsButton = null;
-    GraphicsContext gc;
+    private Button startGameButton = null;
+    private Button settingsButton = null;
+    private GraphicsContext gc;
 
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
