@@ -62,7 +62,7 @@ public class Entity {
     
     public void draw() {
         sprite.draw(x, y);
-        if(GameManager.debugMode){
+        if(GameManager.DEBUG_MODE){
             gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
     }
@@ -97,17 +97,14 @@ public class Entity {
     }
 
     public boolean collidesWith(Entity other) {
-        //check corners of this
-        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left of this
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right of this
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right of this
-        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left of this
-        //check corners of other
-        if(this.collidesWith(other.hitboxX,other.hitboxY))return true; //top left of other
-        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY))return true; //top right of other
-        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY+other.hitboxHeight))return true; //bottom right of other
-        if(this.collidesWith(other.hitboxX,other.hitboxY+other.hitboxHeight))return true; //bottom left of other
-        return false;
+        if(this.hitboxX+this.hitboxWidth < other.hitboxX ||
+            other.hitboxX+other.hitboxWidth < this.hitboxX ||
+            this.hitboxY+this.hitboxHeight < other.hitboxY ||
+            other.hitboxY+other.hitboxHeight < this.hitboxY){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public boolean collidesWith(double x2, double y2) {

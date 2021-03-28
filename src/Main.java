@@ -1,6 +1,8 @@
 import java.io.File;
 import java.nio.file.Files;
 
+import org.mockito.internal.matchers.Null;
+
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,6 +20,8 @@ import javafx.util.Duration;
 
 public class Main extends Application {
 
+    private static final int FONT_SIZE = 10;
+    
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("S.C.R.U.M.");
@@ -26,6 +30,10 @@ public class Main extends Application {
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        Font font = Font.loadFont( getClass().getResourceAsStream("assets/fonts/prstartk.ttf"), FONT_SIZE);
+        gc.setFont(font);
+
         GameManager gm = new GameManager(gc);
 
         stage.setScene(new MainMenu(root, gc, gm));

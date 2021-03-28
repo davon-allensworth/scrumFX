@@ -1,7 +1,8 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Font;
 
 public class Story extends Entity {
-    String storyText = null;
+    String text = null;
     private int completion;
     private boolean green = true;
     private boolean completed = false;
@@ -14,22 +15,26 @@ public class Story extends Entity {
     private static final int PROGRESS_TIME = 1000;
     private static final int DECREASE_TIME = 4000;
 
+    private static final int TEXT_OFFSET_X = 20;
+    private static final int TEXT_OFFSET_Y = 60;
+
     private static final String ASSET_PATH = "assets/stories/";
     private String levelPath;
     private static final String FILE_EXT = ".png";
 
-    public Story(GraphicsContext gc, String text, int level,
+    public Story(GraphicsContext gc, String words, int level,
                   double x, double y) {
         super(gc, ASSET_PATH+"level "+level+"/story "+level+FILE_EXT, x, y, 1);
+        this.text = words;
         this.level = level;
         this.levelPath = "level "+level+"/story "+level;
-        storyText = text;
         completion = 0;
     }
 
     @Override
     public void draw() {
         super.draw();
+        gc.fillText(this.text, x + TEXT_OFFSET_X, y + TEXT_OFFSET_Y);
     }
 
     public void setLocation(double x, double y){
