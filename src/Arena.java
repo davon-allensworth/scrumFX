@@ -84,7 +84,6 @@ public class Arena extends Scene {
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
             this.entities.add(story);
-            System.out.println(this.entities.size());
             x += screenWidth/sprintBacklog.size();
         }
 
