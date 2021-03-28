@@ -10,6 +10,8 @@ public class Button extends Entity {
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
 
+    static Sound buttonClick = new Sound("assets/sounds/explosion.wav");
+
     public Button(GraphicsContext gc, String buttonName,
                   double x, double y, double w, double h) {
         super(gc, ASSET_PATH+buttonName+FILE_EXT, x, y, w, h, 1);
@@ -30,6 +32,8 @@ public class Button extends Entity {
     }
 
     public void pressed() {
+        buttonClick.stop();
+        buttonClick.play();
         this.updateSprite(ASSET_PATH+pressedButton+FILE_EXT);
     }
 }

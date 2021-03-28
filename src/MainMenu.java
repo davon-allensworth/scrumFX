@@ -17,7 +17,7 @@ public class MainMenu extends Scene {
     Button settingsButton = null;
     GraphicsContext gc;
 
-    MediaPlayer musicPlayer;
+    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
     public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -40,8 +40,9 @@ public class MainMenu extends Scene {
                         System.out.println("startgameButton pressed");
                         gm.changeScene("arena");
                     }
-
+                    
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
+                        settingsButton.pressed();
                         gm.changeScene("settings");
                     }
                 }
@@ -64,20 +65,12 @@ public class MainMenu extends Scene {
         Entity title = new Entity(gc, "assets/S.C.R.U.M..gif",centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
         this.entities.add(title);
 
-        Media sound = new Media(new File("src/assets/music/music1.mp3").toURI().toString());
-        musicPlayer = new MediaPlayer(sound);
-        musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        musicPlayer.setAutoPlay(true);
-
-        System.out.println(musicPlayer.cycleDurationProperty());
-        System.out.println(sound.getDuration());
-        System.out.println();
-        
+        music.play();
     }
 
     @Override
     public void teardown() {
-        musicPlayer.stop();
+        music.stop();
     }
 
     @Override
