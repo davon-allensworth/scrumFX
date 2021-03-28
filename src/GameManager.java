@@ -12,7 +12,7 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    public static final boolean debugMode = true;
+    public static final boolean DEBUG = true;
 
     private int totalScore;
     private int currentSprint;
@@ -81,6 +81,10 @@ public class GameManager {
         switch(sceneName) {
             case "arena":
                 scene = new Arena(root, gc, this);
+                break;
+
+            case "story select":
+                scene = new StorySelect(root, gc, this);
                 break;
 
             // Yet to be implemented

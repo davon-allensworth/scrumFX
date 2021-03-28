@@ -62,7 +62,7 @@ public class Entity {
     
     public void draw() {
         sprite.draw(x, y);
-        if(GameManager.DEBUG_MODE){
+        if(GameManager.DEBUG){
             gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
     }
