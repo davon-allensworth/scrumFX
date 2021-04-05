@@ -2,6 +2,8 @@
 /workspace.xml
 /bin/
 .idea/
+.DS_Store
+
 
 # vscode
 .vscode/
