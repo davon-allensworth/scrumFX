@@ -14,11 +14,12 @@ public class GameManager {
 
     public static final boolean DEBUG = true;
 
-    private int totalScore;
+    public int totalScore;
     private int currentSprint;
     private int amountOfSprints;
     private int sprintTimeLimit;
     private int currentSprintTime;
+    public boolean iterationsComplete;
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
@@ -40,6 +41,7 @@ public class GameManager {
         this.totalScore = 0;
         this.currentSprint = 0;
         this.amountOfSprints = 4;
+        this.iterationsComplete = false;
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
         this.sprintBacklog = new ArrayList<>();
@@ -59,7 +61,7 @@ public class GameManager {
 
     public List<Story> getSprintBacklog() {
         // replace with values set by storyselect screen
-        sprintBacklog = new ArrayList<Story>();
+        sprintBacklog = new ArrayList<>();
         sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
         sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
         sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
@@ -87,9 +89,13 @@ public class GameManager {
                 scene = new StorySelect(root, gc, this);
                 break;
 
-            // Yet to be implemented
-            case "score":
+            case "retrospective":
                 System.out.println("User score was: " + totalScore);
+                scene = new SprintRetrospective(root, gc, this);
+                break;
+
+            case "results":
+                scene = new Results(root, gc, this);
                 break;
             
             case "main menu":
@@ -136,15 +142,12 @@ public class GameManager {
             }
         }
 
-        System.out.println("End of the sprint. User score was: " + this.totalScore);
-
         // Check if last iteration
         if(currentSprint < amountOfSprints) {
             currentSprint++;
-            changeScene("arena");
         } else {
-            System.out.println("The game should end at this point.");
-            System.exit(0);
+            iterationsComplete = true;
         }
+        changeScene("retrospective");
     }
 }
