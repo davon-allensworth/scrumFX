@@ -1,5 +1,8 @@
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
+
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Results extends Scene{
@@ -13,18 +16,32 @@ public class Results extends Scene{
 
         // Mouse event handler
         this.setOnMouseClicked(
-                e -> {
-                    //
-                    if (menuButton.collidesWith(e.getX(), e.getY())) {
-                        menuButton.pressed();
-                        // Here is where the score needs to be added.
+        e -> {
+            if (menuButton.collidesWith(e.getX(), e.getY())) {
+                menuButton.pressed();
 
-                        // Return to main menu
-                        gm.changeScene("main menu");
-                    }
-                });
+                // Here we need to get user's name input and sanitize
 
+                // Add the score to history
+                addScore(gm.totalScore, "Tester");
+
+                // Return to main menu
+                gm.changeScene("main menu");
+            }
+        });
     }
+
+    private void addScore(int score, String user){
+        try{
+            PrintWriter scoreDoc = new PrintWriter(new FileWriter("scores.txt",true));
+            scoreDoc.append("").append(String.valueOf(score)).append(":").append(user).append("\n");
+            scoreDoc.close();
+        } catch (Exception e) {
+            System.out.println("Error adding score to file");
+            System.exit(2);
+        }
+    }
+
     @Override
     public void draw() {
         this.drawBackground();

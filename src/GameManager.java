@@ -1,5 +1,8 @@
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -23,6 +26,7 @@ public class GameManager {
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
+    public ArrayList<Score> scores;
 
     private Stage stage;
 
@@ -46,6 +50,8 @@ public class GameManager {
         this.productBacklog = new ArrayList<>();
         this.sprintBacklog = new ArrayList<>();
         this.font = gc.getFont();
+        this.scores = new ArrayList<>();
+        loadScores();
     }
 
     public static GameManager getInstance() {
@@ -114,6 +120,37 @@ public class GameManager {
 
         scene.setup();
         stage.setScene(scene);
+    }
+
+    private void loadScores(){
+        try {
+        File scoreFile = new File("scores.txt");
+        if(scoreFile.createNewFile())
+            System.out.println("New score history created in directory.");
+        } catch (Exception e) {
+            System.out.println("Could not create file.");
+            System.exit(2);
+        }
+        try {
+            Scanner infile = new Scanner(new File("scores.txt"));
+            while (infile.hasNext()) {
+                String[] splitLine = infile.nextLine().split(":");
+                Score s = new Score(Integer.parseInt(splitLine[0]), splitLine[1]);
+                scores.add(s);
+            }
+            infile.close();
+        } catch (Exception e) {
+            System.out.println("Error in score file formatting");
+            System.exit(2);
+        }
+        // Sort scores in descending order
+        Collections.sort(scores);
+
+        // TESTING: Print every value
+        System.out.println("*** HIGH SCORES ***");
+        for(Score s : scores){
+            System.out.println(s.player + " " + s.value);
+        }
     }
 
     public void setStage(Stage _stage) {
