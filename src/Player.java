@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity {
@@ -6,6 +9,7 @@ public class Player extends Entity {
     private boolean spray = false;
     private double sprayPower = 1;
     private SprayParticleGenerator sprayer = null;
+    private Swatter swatter = null;
     private long powerTimeCheck = -1;
 
     private static final int POWER_TIME = 120;
@@ -35,7 +39,7 @@ public class Player extends Entity {
     private static final double PLAYER_WIDTH = 46;
     private static final double PLAYER_HEIGHT = 32;
     private static final double PLAYER_HITBOX_OFFSET_X = 90;
-    private static final double PLAYER_HITBOX_OFFSET_Y = 30;
+    private static final double PLAYER_HITBOX_OFFSET_Y = 200;
     private static final double PLAYER_HITBOX_WIDTH = 143;
     private static final double PLAYER_HITBOX_HEIGHT = 38;
     private static final double PLAYER_Y_OFFSET = 120;
@@ -48,6 +52,17 @@ public class Player extends Entity {
         super(gc, IDLE, x, y, PLAYER_WIDTH, PLAYER_HEIGHT, 1, 
             x + PLAYER_HITBOX_OFFSET_X, y + PLAYER_HITBOX_OFFSET_Y,
             PLAYER_HITBOX_WIDTH, PLAYER_HITBOX_HEIGHT);
+
+        swatter = new Swatter(this.gc, x, y);
+    }
+
+    public List<SprayParticle> getParticles(){
+        if(sprayer == null) return new LinkedList<>();
+        return sprayer.getParticles();
+    }
+
+    public Swatter getSwatter(){
+        return swatter;
     }
 
     @Override
@@ -56,6 +71,9 @@ public class Player extends Entity {
             for(SprayParticle particle : sprayer.getParticles()){
                 particle.draw();
             }
+        }
+        if(swatter != null){
+            swatter.draw();
         }
         super.draw();
     }
@@ -137,6 +155,10 @@ public class Player extends Entity {
 
         if(sprayer != null){
             sprayer.update();
+        }
+
+        if(swatter != null){
+            swatter.setPosition(x, y);
         }
     }
 }

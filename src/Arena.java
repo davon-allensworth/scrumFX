@@ -121,9 +121,19 @@ public class Arena extends Scene {
                             ((Story)other).hit();
                         }
                     }
-                    // Check if bug is hit by swatter
-                    if(player.moveCode() == Player.SWAT_CODE && e.collidesWith(player)){
-                        ((Bug)e).kill();
+                    // check if bug is hit by swatter
+                    if(player.getSwatter() != null){
+                        if(player.moveCode() == Player.SWAT_CODE && e.collidesWith(player.getSwatter())){
+                            ((Bug)e).kill();
+                        }
+                    }
+                    // check if bug hit by particle
+                    if(player.getParticles() != null){
+                        for(SprayParticle particle : player.getParticles()){
+                            if(e.collidesWith(particle)){
+                                ((Bug)e).kill();
+                            }
+                        }
                     }
                 }
             }else if(e instanceof Player){
