@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 public class Arena extends Scene {
     Player player = null;
@@ -15,7 +14,7 @@ public class Arena extends Scene {
     GameManager gm;
     List<Story> sprintBacklog;
     List<Bug> bugs = new ArrayList<>();
-    List<Entity> entities;
+    List<Spray> sprays = new ArrayList<>();
 
     public Arena(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -78,6 +77,9 @@ public class Arena extends Scene {
         bugs.add(new Bug(gc, centerx));
         bugs.add(new Bug(gc, centerx/3));
 
+        //replace this with adding sprays that spawn randomly
+        sprays.add(new Spray(gc, centerx/2));
+
         double x = 0;
         for(Story story : sprintBacklog){
             if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
@@ -90,6 +92,11 @@ public class Arena extends Scene {
         for(Bug bug : bugs){
             this.entities.add(bug);
             bug.startMoving();
+        }
+
+        for(Spray spray : sprays){
+            this.entities.add(spray);
+            spray.startMoving();
         }
 
         this.entities.add(player);
@@ -113,12 +120,22 @@ public class Arena extends Scene {
                             ((Bug)e).startAbsorb();
                             ((Story)other).hit();
                         }
-                    } else if (other instanceof Story) {
-                        System.out.println("updated story");
                     }
                     // Check if bug is hit by swatter
-                    if(player.moveCode() == 3 && e.collidesWith(player)){
+                    if(player.moveCode() == Player.SWAT_CODE && e.collidesWith(player)){
                         ((Bug)e).kill();
+                    }
+                }
+            }else if(e instanceof Player){
+                for(Entity other : entities){
+                    //don't equip spray unless you are done swatting
+                    if(((Player)e).moveCode() != Player.SWAT_CODE && ((Player)e).moveCode() != Player.PRESWAT_CODE){
+                        if(other instanceof Spray){ //with spray
+                            if(e.collidesWith(other)){
+                                ((Player)e).equipSpray();
+                                ((Spray)other).stop();
+                            }
+                        }
                     }
                 }
             }

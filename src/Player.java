@@ -3,7 +3,15 @@ import javafx.scene.canvas.GraphicsContext;
 public class Player extends Entity {
     private int moveCode = 0; // 0 for idle, -1 for left, 1 for right, 2 for preswat, 3 for swat
     private long timeCheck = -1; //to make swat last a while
+    private boolean spray = false;
+    private double sprayPower = 1;
+    private SprayParticleGenerator sprayer = null;
+    private long powerTimeCheck = -1;
 
+    private static final int POWER_TIME = 120;
+    private static final double POWER_MAX = 3;
+    private static final double POWER_INCREASE = 0.1;
+    
     public static final int IDLE_CODE = 0;
     public static final int LEFT_CODE = -1;
     public static final int RIGHT_CODE = 1;
@@ -16,14 +24,20 @@ public class Player extends Entity {
     private static final String PRESWAT = "assets/Player/player preswat.gif";
     private static final String SWAT = "assets/Player/player swat.png";
 
+    private static final String IDLE_SPRAY = "assets/Player/player idle spray.png";
+    private static final String MOVE_LEFT_SPRAY = "assets/Player/player move left spray.gif";
+    private static final String MOVE_RIGHT_SPRAY = "assets/Player/player move right spray.gif";
+    private static final String PRESWAT_SPRAY = "assets/Player/player preswat spray.gif";
+    private static final String SWAT_SPRAY = "assets/Player/player swat spray.png";
+
     private static final int SWAT_TIME = 500;
     private static final double VELOCITY = 6;
-    private static final double PLAYER_WIDTH = 46;//not correct yet
-    private static final double PLAYER_HEIGHT = 32;//not correct yet
+    private static final double PLAYER_WIDTH = 46;
+    private static final double PLAYER_HEIGHT = 32;
     private static final double PLAYER_HITBOX_OFFSET_X = 90;
-    private static final double PLAYER_HITBOX_OFFSET_Y = 30;//not correct yet
+    private static final double PLAYER_HITBOX_OFFSET_Y = 30;
     private static final double PLAYER_HITBOX_WIDTH = 143;
-    private static final double PLAYER_HITBOX_HEIGHT = 38;//not correct yet
+    private static final double PLAYER_HITBOX_HEIGHT = 38;
     private static final double PLAYER_Y_OFFSET = 120;
 
     public Player(GraphicsContext gc) {
@@ -38,36 +52,63 @@ public class Player extends Entity {
 
     @Override
     public void draw() {
+        if(sprayer != null){
+            for(SprayParticle particle : sprayer.getParticles()){
+                particle.draw();
+            }
+        }
         super.draw();
     }
 
     public void idle(){
         moveCode = IDLE_CODE;
-        this.updateSprite(IDLE);
+        if(spray) this.updateSprite(IDLE_SPRAY);
+        else this.updateSprite(IDLE);
     }
 
     public void moveLeft(){
         moveCode = -1;
-        this.updateSprite(MOVE_LEFT);
+        if(spray) this.updateSprite(MOVE_LEFT_SPRAY);
+        else this.updateSprite(MOVE_LEFT);
     }
 
     public void moveRight(){
         moveCode = 1;
-        this.updateSprite(MOVE_RIGHT);
+        if(spray) this.updateSprite(MOVE_RIGHT_SPRAY);
+        else this.updateSprite(MOVE_RIGHT);
     }
 
     public void preswat(){
         moveCode = 2;
-        this.updateSprite(PRESWAT);
+        if(spray) this.updateSprite(PRESWAT_SPRAY);
+        else this.updateSprite(PRESWAT);
     }
 
     public void swat(){
         moveCode = 3;
-        this.updateSprite(SWAT);
+        if(spray){
+            powerTimeCheck = -1;
+            this.updateSprite(SWAT_SPRAY);
+            sprayer = new SprayParticleGenerator(this.gc, x, y, sprayPower);
+        }
+        else this.updateSprite(SWAT);
+        sprayPower = 1;
     }
 
     public int moveCode(){ // 0 for idle, -1 for left, 1 for right, 2 for preswat, 3 for swat
         return moveCode;
+    }
+
+    public void equipSpray(){
+        spray = true;
+        //force update for animation
+        if(moveCode == Player.IDLE_CODE) idle();
+        else if(moveCode == Player.LEFT_CODE) moveLeft();
+        else if(moveCode == Player.RIGHT_CODE) moveRight();
+    }
+
+    public void unequipSpray(){
+        spray = false;
     }
 
     @Override
@@ -82,6 +123,20 @@ public class Player extends Entity {
                 timeCheck = -1;
                 idle();
             }
+        }
+
+        //power up the spray
+        if(moveCode == PRESWAT_CODE && spray && sprayPower < POWER_MAX){
+            if(powerTimeCheck < 0){
+                powerTimeCheck = System.currentTimeMillis();
+            }else if(System.currentTimeMillis() - powerTimeCheck > POWER_TIME){
+                this.sprayPower += POWER_INCREASE;
+                powerTimeCheck = System.currentTimeMillis();
+            }
+        }
+
+        if(sprayer != null){
+            sprayer.update();
         }
     }
 }
