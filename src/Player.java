@@ -111,7 +111,6 @@ public class Player extends Entity {
         }
         else this.updateSprite(SWAT);
         sprayPower = 1;
-        unequipSpray();
     }
 
     public int moveCode(){ // 0 for idle, -1 for left, 1 for right, 2 for preswat, 3 for swat
@@ -144,6 +143,7 @@ public class Player extends Entity {
             if(timeCheck == -1) timeCheck = System.currentTimeMillis();
             if(System.currentTimeMillis() - timeCheck > SWAT_TIME){ //if 1 second passes
                 timeCheck = -1;
+                unequipSpray(); //unequip spray after spraying
                 idle();
             }
         }

@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 
 public class Arena extends Scene {
     Player player = null;
@@ -237,5 +238,8 @@ public class Arena extends Scene {
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.LIGHTSKYBLUE);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(gm.getTextColor());
     }
 }
