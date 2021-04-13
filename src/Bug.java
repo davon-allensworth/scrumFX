@@ -1,5 +1,3 @@
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public class Bug extends Entity{

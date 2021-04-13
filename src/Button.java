@@ -7,8 +7,10 @@ import javafx.scene.canvas.GraphicsContext;
 public class Button extends Entity {
     String pressedButton = null;
     String idleButton = null;
+    
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
+    private static final Sound buttonClick = new Sound("assets/sounds/explosion.wav");
 
     public Button(GraphicsContext gc, String buttonName,
                   double x, double y, double w, double h) {
@@ -30,6 +32,8 @@ public class Button extends Entity {
     }
 
     public void pressed() {
+        buttonClick.stop();
+        buttonClick.play();
         this.updateSprite(ASSET_PATH+pressedButton+FILE_EXT);
     }
 }

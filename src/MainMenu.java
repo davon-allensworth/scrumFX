@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,12 +8,16 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
-    Button startGameButton = null;
-    Button settingsButton = null;
-    GraphicsContext gc;
+    private Button startGameButton = null;
+    private Button settingsButton = null;
+    private GraphicsContext gc;
+
+    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
     public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -33,10 +38,11 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
-                        gm.changeScene("arena");
+                        gm.changeScene("story select");
                     }
-
+                    
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
+                        settingsButton.pressed();
                         gm.changeScene("settings");
                     }
                 }
@@ -50,20 +56,21 @@ public class MainMenu extends Scene {
         
         startGameButton = new Button(gc, "start button", "start button pressed", centerx /*- centerx/1.5*/, centery /*+ centery/6*/);
         startGameButton.updateX(-(startGameButton.getWidth()/2));
-        settingsButton = new Button(gc, "settings button", "settings button", centerx, centery);
+        settingsButton = new Button(gc, "menu button", "menu button pressed", centerx, centery);
         settingsButton.updateX(-(settingsButton.getWidth()/2));
         settingsButton.updateY((startGameButton.getHeight() + 30));
         this.entities.add(startGameButton);
         this.entities.add(settingsButton);
 
-        Entity title = new Entity(gc, centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
+        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif",centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
         this.entities.add(title);
 
+        music.play();
     }
 
     @Override
     public void teardown() {
-        
+        music.stop();
     }
 
     @Override

@@ -11,23 +11,31 @@ public class Entity {
     private Sprite sprite;
     private double xspeed, yspeed;
     private double scale;
+    protected boolean visible = true;
     GraphicsContext gc;
 
+    /*
     public Entity(GraphicsContext gc) {
         this(gc, 0, 0, 0, 0, 1);
     }
+
+     */
 
     //for hitbox set to same as sprite dimensions
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
         this(gc, filename, x, y, 1, 1, scale);
         setDimensionsToSprite();
+        this.hitboxWidth *= scale;
+        this.hitboxHeight *= scale;
     }
 
+    /*
     public Entity(GraphicsContext gc, double x, double y, double w, double h, double scale) {
         this(gc, "https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif",
              x, y, h, w, scale);
         System.out.println("default entity asset constructor called");
     }
+     */
     
     //for hitbox set same as sprite explicitly
     public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, 
@@ -38,10 +46,10 @@ public class Entity {
         this.y = y;
         this.hitboxX = x;
         this.hitboxY = y;
-        this.width = w;
-        this.height = h;
-        this.hitboxWidth = width;
-        this.hitboxHeight = height;
+        this.width = w*scale;
+        this.height = h*scale;
+        this.hitboxWidth = width*scale;
+        this.hitboxHeight = height*scale;
         this.scale = scale;
     }
 
@@ -51,12 +59,15 @@ public class Entity {
         this(gc, filename, x, y, w, h, scale);
         this.hitboxX = hX;
         this.hitboxY = hY;
-        this.hitboxHeight = hH;
-        this.hitboxWidth = hW;
+        this.hitboxHeight = hH*scale;
+        this.hitboxWidth = hW*scale;
     }
     
     public void draw() {
-        sprite.draw(x, y);
+        if(this.visible) sprite.draw(x, y);
+        if(GameManager.DEBUG){
+            gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+        }
     }
 
     public void update() {
@@ -64,6 +75,14 @@ public class Entity {
     }
 
     private void move() {
+    }
+
+    public boolean isVisible(){
+        return visible;
+    }
+
+    public void setVisibility(boolean newVis){
+        visible = newVis;
     }
 
     public void updateX(double amount){
@@ -89,17 +108,14 @@ public class Entity {
     }
 
     public boolean collidesWith(Entity other) {
-        //check corners of this
-        if(other.collidesWith(this.hitboxX,this.hitboxY))return true; //top left of this
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY))return true; //top right of this
-        if(other.collidesWith(this.hitboxX+this.hitboxWidth,this.hitboxY+this.hitboxHeight))return true; //bottom right of this
-        if(other.collidesWith(this.hitboxX,this.hitboxY+this.hitboxHeight))return true; //bottom left of this
-        //check corners of other
-        if(this.collidesWith(other.hitboxX,other.hitboxY))return true; //top left of other
-        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY))return true; //top right of other
-        if(this.collidesWith(other.hitboxX+other.hitboxWidth,other.hitboxY+other.hitboxHeight))return true; //bottom right of other
-        if(this.collidesWith(other.hitboxX,other.hitboxY+other.hitboxHeight))return true; //bottom left of other
-        return false;
+        if(this.hitboxX+this.hitboxWidth < other.hitboxX ||
+            other.hitboxX+other.hitboxWidth < this.hitboxX ||
+            this.hitboxY+this.hitboxHeight < other.hitboxY ||
+            other.hitboxY+other.hitboxHeight < this.hitboxY){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public boolean collidesWith(double x2, double y2) {

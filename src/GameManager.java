@@ -1,9 +1,13 @@
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GameManager {
@@ -11,36 +15,43 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    private int totalScore;
+    public static final boolean DEBUG = true;
+
+    public int totalScore;
     private int currentSprint;
     private int amountOfSprints;
     private int sprintTimeLimit;
     private int currentSprintTime;
+    public boolean iterationsComplete;
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
+    public ArrayList<Score> scores;
 
     private Stage stage;
 
     private int musicVolume = 100;
     private int soundVolume = 100;
 
+    private Font font = null;
 
     private GameManager() {
         productBacklog = new ArrayList<>();
         sprintBacklog = new ArrayList<>();
     }
 
-
-
     public GameManager(GraphicsContext gc){
         this.gc = gc;
         this.totalScore = 0;
         this.currentSprint = 0;
         this.amountOfSprints = 4;
+        this.iterationsComplete = false;
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
         this.sprintBacklog = new ArrayList<>();
+        this.font = gc.getFont();
+        this.scores = new ArrayList<>();
+        loadScores();
     }
 
     public static GameManager getInstance() {
@@ -56,19 +67,23 @@ public class GameManager {
 
     public List<Story> getSprintBacklog() {
         // replace with values set by storyselect screen
-        sprintBacklog = new ArrayList<Story>();
-        sprintBacklog.add(new Story(gc, "filler text", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 2", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "filler text 3", 3, 0, 0));
+        sprintBacklog = new ArrayList<>();
+        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
+        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
+        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
 
         return sprintBacklog;
     }
 
     public void changeScene(String sceneName) {
         Group root = new Group();
+        
         Canvas canvas = new Canvas(600, 600);
         root.getChildren().add(canvas);
         this.gc = canvas.getGraphicsContext2D();
+
+        gc.setFont(font); //retain the same font
+
         Scene scene = null;
 
         switch(sceneName) {
@@ -76,9 +91,17 @@ public class GameManager {
                 scene = new Arena(root, gc, this);
                 break;
 
-            // Yet to be implemented
-            case "score":
+            case "story select":
+                scene = new StorySelect(root, gc, this);
+                break;
+
+            case "retrospective":
                 System.out.println("User score was: " + totalScore);
+                scene = new SprintRetrospective(root, gc, this);
+                break;
+
+            case "results":
+                scene = new Results(root, gc, this);
                 break;
             
             case "main menu":
@@ -92,8 +115,42 @@ public class GameManager {
             default:
             return;
         }
+
+        ((Scene) stage.getScene()).teardown();
+
         scene.setup();
         stage.setScene(scene);
+    }
+
+    private void loadScores(){
+        try {
+        File scoreFile = new File("scores.txt");
+        if(scoreFile.createNewFile())
+            System.out.println("New score history created in directory.");
+        } catch (Exception e) {
+            System.out.println("Could not create file.");
+            System.exit(2);
+        }
+        try {
+            Scanner infile = new Scanner(new File("scores.txt"));
+            while (infile.hasNext()) {
+                String[] splitLine = infile.nextLine().split(":");
+                Score s = new Score(Integer.parseInt(splitLine[0]), splitLine[1]);
+                scores.add(s);
+            }
+            infile.close();
+        } catch (Exception e) {
+            System.out.println("Error in score file formatting");
+            System.exit(2);
+        }
+        // Sort scores in descending order
+        Collections.sort(scores);
+
+        // TESTING: Print every value
+        System.out.println("*** HIGH SCORES ***");
+        for(Score s : scores){
+            System.out.println(s.player + " " + s.value);
+        }
     }
 
     public void setStage(Stage _stage) {
@@ -114,15 +171,20 @@ public class GameManager {
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
-        System.out.println("End of the sprint. User score was: " + this.totalScore);
+
+        // add sprint score to user total.
+        for(Story s : sprintBacklog){
+            if (s.isCompleted()){
+                totalScore += s.getLevel();
+            }
+        }
 
         // Check if last iteration
         if(currentSprint < amountOfSprints) {
             currentSprint++;
-            changeScene("arena");
         } else {
-            System.out.println("The game should end at this point.");
-            System.exit(0);
+            iterationsComplete = true;
         }
+        changeScene("retrospective");
     }
 }
