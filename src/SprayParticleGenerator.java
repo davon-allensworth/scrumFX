@@ -39,7 +39,7 @@ public class SprayParticleGenerator extends Entity{
             randomDouble = Math.pow(power,2)*(MIN_RANDOM + (MAX_RANDOM - MIN_RANDOM) * r.nextDouble());
             yVel = -(Math.abs(BASE_SPEED+randomDouble));
 
-            randomDouble = power*(MIN_RANDOM + (MAX_RANDOM - MIN_RANDOM) * r.nextDouble());
+            randomDouble = power*(MAX_RANDOM * r.nextDouble());
             size = BASE_SIZE+randomDouble;
 
             particles.add(new SprayParticle(this.gc, this.x, this.y, xVel, yVel, size, r));
