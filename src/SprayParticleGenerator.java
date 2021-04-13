@@ -7,10 +7,10 @@ import javafx.scene.canvas.GraphicsContext;
 public class SprayParticleGenerator extends Entity{
     private boolean active = true;
     private double power = 1;
-    private List<SprayParticle> particles;
+    private List<SprayParticle> particles = new ArrayList<>();
 
     private static final String PATH = "assets/Particles/spray.png";
-    private static final double POWER_MULTIPLIER = 10;
+    private static final double POWER_MULTIPLIER = 5;
     private static final double X_OFFSET = 210;
     private static final double Y_OFFSET = 100;
     private static final double MIN_RANDOM = -1;

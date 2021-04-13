@@ -9,7 +9,7 @@ public class SprayParticle extends Entity{
     private long speedChangeTimeCheck = 0;
     private int activeTime;
 
-    private static final int BASE_ACTIVE_TIME = 5000;
+    private static final int BASE_ACTIVE_TIME = 6000;
     private static final int SPEED_CHANGE_TIME = 100;
     
     private static final double SPEED_DIVISOR = 1.1;

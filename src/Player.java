@@ -12,8 +12,8 @@ public class Player extends Entity {
     private Swatter swatter = null;
     private long powerTimeCheck = -1;
 
-    private static final int POWER_TIME = 120;
-    private static final double POWER_MAX = 3;
+    private static final int POWER_TIME = 100;
+    private static final double POWER_MAX = 5;
     private static final double POWER_INCREASE = 0.1;
     
     public static final int IDLE_CODE = 0;
@@ -111,6 +111,7 @@ public class Player extends Entity {
         }
         else this.updateSprite(SWAT);
         sprayPower = 1;
+        unequipSpray();
     }
 
     public int moveCode(){ // 0 for idle, -1 for left, 1 for right, 2 for preswat, 3 for swat
@@ -127,6 +128,10 @@ public class Player extends Entity {
 
     public void unequipSpray(){
         spray = false;
+    }
+
+    public boolean hasSpray(){
+        return spray;
     }
 
     @Override

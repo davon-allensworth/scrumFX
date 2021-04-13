@@ -2,7 +2,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Spray extends Entity{
     private boolean move = false;
-    private double velocity = 3;
+    private double velocity = 2;
 
     private static final int END_ZONE = 10000;
 
