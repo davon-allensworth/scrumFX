@@ -1,12 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.ToIntFunction;
-=======
 import java.util.Random;
->>>>>>> main
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -14,28 +11,24 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-<<<<<<< HEAD
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-=======
->>>>>>> main
 
 public class Arena extends Scene {
     Player player = null;
-    Group root;
     GraphicsContext gc;
     GameManager gm;
     List<Story> sprintBacklog;
     List<Bug> bugs = new ArrayList<>();
-<<<<<<< HEAD
     List<Entity> entities;
+    List<Spray> sprays = new ArrayList<>();
+    Random r = new Random();
+
+    //ArenaTimer arenaTimer;
     Timer timer;
     TimerTask timerTask;
     Integer timerCounter;
     Text text;
-=======
-    List<Spray> sprays = new ArrayList<>();
-    Random r = new Random();
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
@@ -48,7 +41,6 @@ public class Arena extends Scene {
     private static final int ITEM_SPAWN_TIME_BASE = 7000;
     private static final double ITEM_SPAWN_RAND_MAX = 150;
     private static final double ITEM_TIME_RAND_MAX = 3000;
->>>>>>> main
 
     public Arena(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -115,35 +107,25 @@ public class Arena extends Scene {
             x += screenWidth/sprintBacklog.size();
         }
 
-<<<<<<< HEAD
         for(Bug bug : bugs){
             this.entities.add(bug);
             bug.startMoving();
         }
-
-        /*Incomplete
-        timerCounter = 60;
+ 
+        timerCounter = 60; //Will change this later
         timer = new Timer();
         text = new Text();
         timerTask = new TimerTask(){
             @Override
             public void run(){
                 timerCounter--;
-                text.setText(timerCounter.toString());
-                text.setX(100);
-                text.setY(100);
-                //System.out.println(timerCounter);
                 if(timerCounter == 0 || gm.storiesDone()){
-                    //System.out.println("Timer has reached 0.");
                     timer.cancel();
                 }
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, 1000);
-        */
 
-=======
->>>>>>> main
+        timer.schedule(timerTask, 0, 1000);
         this.entities.add(player);
     }
 
@@ -252,6 +234,7 @@ public class Arena extends Scene {
         for(Entity e : this.entities)
             if(!(e instanceof Player)) e.draw();  
         player.draw(); //draw player on top
+        gc.fillText(timerCounter.toString(), 10, 20);
     }
 
     private void drawBackground() {
