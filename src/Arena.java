@@ -1,21 +1,30 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.ToIntFunction;
 
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 public class Arena extends Scene {
     Player player = null;
+    Group root;
     GraphicsContext gc;
     GameManager gm;
     List<Story> sprintBacklog;
     List<Bug> bugs = new ArrayList<>();
     List<Entity> entities;
+    Timer timer;
+    TimerTask timerTask;
+    Integer timerCounter;
+    Text text;
 
     public Arena(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
@@ -94,6 +103,27 @@ public class Arena extends Scene {
             this.entities.add(bug);
             bug.startMoving();
         }
+
+        /*Incomplete
+        timerCounter = 60;
+        timer = new Timer();
+        text = new Text();
+        timerTask = new TimerTask(){
+            @Override
+            public void run(){
+                timerCounter--;
+                text.setText(timerCounter.toString());
+                text.setX(100);
+                text.setY(100);
+                //System.out.println(timerCounter);
+                if(timerCounter == 0 || gm.storiesDone()){
+                    //System.out.println("Timer has reached 0.");
+                    timer.cancel();
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, 0, 1000);
+        */
 
         this.entities.add(player);
     }
