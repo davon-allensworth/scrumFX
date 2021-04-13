@@ -71,6 +71,9 @@ public class GameManager {
         sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
         sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
         sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
+        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
+        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
+        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
 
         return sprintBacklog;
     }

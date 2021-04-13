@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,15 +14,18 @@ public class Arena extends Scene {
     GraphicsContext gc;
     GameManager gm;
     List<Story> sprintBacklog;
+    List<Story> activeStories;
     List<Bug> bugs = new ArrayList<>();
     List<Spray> sprays = new ArrayList<>();
     Random r = new Random();
+
+    private static final double MAX_ACTIVE_STORIES = 3;
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
     private static final int BUG_SPAWN_TIME_BASE = 4000;
     private static final double BUG_SPAWN_RAND_MAX = 180;
-    private static final double BUG_TIME_RAND_MAX = 4000;
+    private static final double BUG_TIME_RAND_MAX = 3500;
 
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;
@@ -34,6 +38,7 @@ public class Arena extends Scene {
         this.entities = new ArrayList<>();
         this.gc = gc;
         this.sprintBacklog = gm.sprintBacklog;
+        this.activeStories = new LinkedList<>();
         this.gm = gm;
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
@@ -81,19 +86,24 @@ public class Arena extends Scene {
         double screenWidth = gc.getCanvas().getWidth();
         double screenHeight = gc.getCanvas().getHeight();
         
-        player = new Player(gc);
-
-        sprintBacklog = gm.getSprintBacklog();
+        this.sprintBacklog = gm.getSprintBacklog();
+        for(Story story : sprintBacklog){
+            if(activeStories.size() >= MAX_ACTIVE_STORIES){
+                break; //we have reached our current max
+            }
+            activeStories.add(story);
+        }
 
         double x = 0;
-        for(Story story : sprintBacklog){
-            if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
+        for(Story story : activeStories){
+            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth());
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
             this.entities.add(story);
-            x += screenWidth/sprintBacklog.size();
+            x += screenWidth/activeStories.size();
         }
 
+        player = new Player(gc);
         this.entities.add(player);
     }
 
@@ -151,10 +161,28 @@ public class Arena extends Scene {
             gm.endSprint();
         }
 
+        //check for completed stories
+        for(int i = 0; i < activeStories.size(); i++){
+            if(activeStories.get(i).isCompleted()){
+                for(Story story : sprintBacklog){ //fill in the stories
+                    if(!activeStories.contains(story) && !story.isCompleted()){
+                        Story removedStory = activeStories.remove(i);//remove completed story
+                        entities.remove(removedStory);
+                        double removedStoryX = removedStory.x;
+                        double removedStoryY = removedStory.y;
+                        story.setLocation(removedStoryX, removedStoryY);
+                        activeStories.add(i, story);//add new story
+                        entities.add(story);
+                    }
+                }
+            }
+        }
+
         //spawn bugs
         if(bugSpawnTimeCheck < 0){
             double randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
-            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble) / sprintBacklog.size();
+            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
+            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }else if(System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime){
             double screenWidth = gc.getCanvas().getWidth();
@@ -171,7 +199,8 @@ public class Arena extends Scene {
             bug.startMoving();
 
             randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
-            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble) / sprintBacklog.size();
+            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
+            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }
 
