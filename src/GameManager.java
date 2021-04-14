@@ -159,7 +159,7 @@ public class GameManager {
                 break;
                 
             default:
-            return;
+                return;
         }
 
         ((Scene) stage.getScene()).teardown();
