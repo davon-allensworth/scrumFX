@@ -11,6 +11,7 @@ public class Entity {
     private Sprite sprite;
     private double xspeed, yspeed;
     private double scale;
+    protected boolean visible = true;
     GraphicsContext gc;
 
     /*
@@ -24,6 +25,8 @@ public class Entity {
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
         this(gc, filename, x, y, 1, 1, scale);
         setDimensionsToSprite();
+        this.hitboxWidth *= scale;
+        this.hitboxHeight *= scale;
     }
 
     /*
@@ -43,10 +46,10 @@ public class Entity {
         this.y = y;
         this.hitboxX = x;
         this.hitboxY = y;
-        this.width = w;
-        this.height = h;
-        this.hitboxWidth = width;
-        this.hitboxHeight = height;
+        this.width = w*scale;
+        this.height = h*scale;
+        this.hitboxWidth = width*scale;
+        this.hitboxHeight = height*scale;
         this.scale = scale;
     }
 
@@ -56,12 +59,12 @@ public class Entity {
         this(gc, filename, x, y, w, h, scale);
         this.hitboxX = hX;
         this.hitboxY = hY;
-        this.hitboxHeight = hH;
-        this.hitboxWidth = hW;
+        this.hitboxHeight = hH*scale;
+        this.hitboxWidth = hW*scale;
     }
     
     public void draw() {
-        sprite.draw(x, y);
+        if(this.visible) sprite.draw(x, y);
         if(GameManager.DEBUG){
             gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }
@@ -74,6 +77,14 @@ public class Entity {
     private void move() {
     }
 
+    public boolean isVisible(){
+        return visible;
+    }
+
+    public void setVisibility(boolean newVis){
+        visible = newVis;
+    }
+
     public void updateX(double amount){
         this.x += amount;
         this.hitboxX += amount;
@@ -82,6 +93,16 @@ public class Entity {
     public void updateY(double amount){
         this.y += amount;
         this.hitboxY += amount;
+    }
+
+    public void centerX(){
+        this.x = gc.getCanvas().getWidth()/2 - (this.getWidth() / 2);
+        this.hitboxX = x;
+    }
+
+    public void centerY(){
+        this.x = gc.getCanvas().getHeight()/2 - (this.getHeight() / 2);
+        this.hitboxY = y;
     }
 
     public Sprite getSprite(){

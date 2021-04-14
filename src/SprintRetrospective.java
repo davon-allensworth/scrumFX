@@ -1,5 +1,7 @@
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 public class SprintRetrospective extends Scene {
@@ -51,6 +53,9 @@ public class SprintRetrospective extends Scene {
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.LIGHTCORAL);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(gm.getTextColor());
     }
 
 }

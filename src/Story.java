@@ -12,7 +12,7 @@ public class Story extends Entity {
     private long decreaseTimeCheck = 0; //to make progress bar move slowly
     private int level;
 
-    private static final int PROGRESS_TIME = 1000;
+    private static final int PROGRESS_TIME = 2500;
     private static final int DECREASE_TIME = 4000;
 
     private static final int TEXT_OFFSET_X = 20;

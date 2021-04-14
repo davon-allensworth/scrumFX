@@ -10,12 +10,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
     private Button startGameButton = null;
     private Button settingsButton = null;
     private GraphicsContext gc;
+    private GameManager gm;
 
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
@@ -23,6 +25,8 @@ public class MainMenu extends Scene {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
+        this.gm = gm;
+        
 
         // Iterator<String> fonts = Font.getFamilies().iterator();
 
@@ -62,7 +66,8 @@ public class MainMenu extends Scene {
         this.entities.add(startGameButton);
         this.entities.add(settingsButton);
 
-        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif",centerx - 960*0.5/2, centery - 300, 500, 300, 0.5);
+        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, centery/4, 1);
+        title.centerX();
         this.entities.add(title);
 
         music.play();
@@ -82,5 +87,8 @@ public class MainMenu extends Scene {
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.LIGHTSKYBLUE);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(gm.getTextColor());
     }
 }
