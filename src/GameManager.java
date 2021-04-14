@@ -25,7 +25,7 @@ public class GameManager {
     private int currentSprintTime;
     public boolean iterationsComplete;
 
-    private Color TEXT_COLOR = Color.BLACK;
+    private static Color TEXT_COLOR = Color.BLACK;
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
@@ -33,8 +33,8 @@ public class GameManager {
 
     private Stage stage;
 
-    private int musicVolume = 100;
-    private int soundVolume = 100;
+    private static double musicVolume = 0.1;
+    private static double soundVolume = 0.1;
 
     private Font font = null;
 
@@ -68,7 +68,37 @@ public class GameManager {
         return null;
     }
 
-    public Color getTextColor(){
+    public static double getMusicVolume(){
+        return musicVolume;
+    }
+
+    public static void setMusicVolume(int volume){
+        if(volume > 0)
+            musicVolume = (100.0 / volume);
+        else
+            musicVolume = 0;
+    }
+
+    public static void setMusicVolume(double volume){
+        musicVolume = volume;
+    }
+
+    public static double getSoundVolume(){
+        return soundVolume;
+    }
+
+    public static void setSoundVolume(int volume){
+        if(volume > 0)
+            soundVolume = (100.0 / volume);
+        else
+            soundVolume = 0;
+    }
+    
+    public static void setSoundVolume(double volume){
+        soundVolume = volume;
+    }
+
+    public static Color getTextColor(){
         return TEXT_COLOR;
     }
 

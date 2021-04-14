@@ -5,14 +5,22 @@ import javafx.scene.media.MediaPlayer;
 
 public class Sound {
     MediaPlayer mediaPlayer;
+    private boolean isMusic;
 
-    public Sound(String filepath) {
-        this(filepath, false);
+    public Sound(String filepath, boolean isMusic) {
+        this(filepath, isMusic, false);
     }
 
-    public Sound(String filepath, boolean loop) {
+    public Sound(String filepath, boolean isMusic, boolean loop) {
         Media sound = new Media(new File("src/" + filepath).toURI().toString());
+        this.isMusic = isMusic;
         mediaPlayer = new MediaPlayer(sound);
+
+        if(this.isMusic)
+            mediaPlayer.setVolume(GameManager.getMusicVolume());
+        else
+            mediaPlayer.setVolume(GameManager.getSoundVolume());
+
         if (loop)
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }

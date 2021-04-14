@@ -1,7 +1,3 @@
-import java.io.IOException;
-
-import javafx.event.EventDispatchChain;
-import javafx.event.EventTarget;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Button extends Entity {
@@ -10,7 +6,7 @@ public class Button extends Entity {
     
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
-    private static final Sound buttonClick = new Sound("assets/sounds/explosion.wav");
+    private static final Sound buttonClick = new Sound("assets/sounds/explosion.wav", false);
 
     public Button(GraphicsContext gc, String buttonName,
                   double x, double y, double w, double h) {
