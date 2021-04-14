@@ -1,5 +1,4 @@
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.text.Font;
 
 public class Story extends Entity {
     String text = null;

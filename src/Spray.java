@@ -1,5 +1,3 @@
-import java.beans.Visibility;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public class Spray extends Entity{
