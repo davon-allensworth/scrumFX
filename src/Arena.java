@@ -1,13 +1,19 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.function.ToIntFunction;
 import java.util.Random;
 
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 
 public class Arena extends Scene {
@@ -17,9 +23,15 @@ public class Arena extends Scene {
     List<Story> sprintBacklog;
     List<Story> activeStories;
     List<Bug> bugs = new ArrayList<>();
+    List<Entity> entities;
     List<Spray> sprays = new ArrayList<>();
     Random r = new Random();
 
+    //ArenaTimer arenaTimer;
+    Timer timer;
+    TimerTask timerTask;
+    Integer timerCounter;
+    Text text;
     private static final double MAX_ACTIVE_STORIES = 3;
 
     private long bugSpawnTimeCheck = -1;
@@ -104,6 +116,25 @@ public class Arena extends Scene {
             x += screenWidth/activeStories.size();
         }
 
+        for(Bug bug : bugs){
+            this.entities.add(bug);
+            bug.startMoving();
+        }
+ 
+        timerCounter = 60; //Will change this later
+        timer = new Timer();
+        text = new Text();
+        timerTask = new TimerTask(){
+            @Override
+            public void run(){
+                timerCounter--;
+                if(timerCounter == 0 || gm.storiesDone()){
+                    timer.cancel();
+                }
+            }
+        };
+
+        timer.schedule(timerTask, 0, 1000);
         player = new Player(gc);
         this.entities.add(player);
     }
@@ -234,6 +265,7 @@ public class Arena extends Scene {
         for(Entity e : this.entities)
             if(!(e instanceof Player)) e.draw();  
         player.draw(); //draw player on top
+        gc.fillText(timerCounter.toString(), 10, 20);
     }
 
     private void drawBackground() {

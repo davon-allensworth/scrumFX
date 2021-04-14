@@ -1,24 +1,18 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class MainMenu extends Scene {
     private Button startGameButton = null;
     private Button settingsButton = null;
     private GraphicsContext gc;
 
-    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
+    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
 
     public MainMenu(Parent root, GraphicsContext gc) {
         super(root);
