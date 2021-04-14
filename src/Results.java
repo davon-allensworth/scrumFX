@@ -1,5 +1,6 @@
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -8,11 +9,13 @@ import java.util.ArrayList;
 public class Results extends Scene{
     Button menuButton = null;
     GraphicsContext gc;
+    GameManager gm;
 
     public Results(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
         this.entities = new ArrayList<>();
         this.gc = gc;
+        this.gm = gm;
 
         // Mouse event handler
         this.setOnMouseClicked(
@@ -66,6 +69,9 @@ public class Results extends Scene{
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.LIGHTCORAL);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(gm.getTextColor());
     }
 
 }

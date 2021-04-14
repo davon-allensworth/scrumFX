@@ -7,6 +7,7 @@ import java.util.Scanner;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -23,6 +24,8 @@ public class GameManager {
     private int sprintTimeLimit;
     private int currentSprintTime;
     public boolean iterationsComplete;
+
+    private Color TEXT_COLOR = Color.BLACK;
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
@@ -65,12 +68,19 @@ public class GameManager {
         return null;
     }
 
+    public Color getTextColor(){
+        return TEXT_COLOR;
+    }
+
     public List<Story> getSprintBacklog() {
         // replace with values set by storyselect screen
         sprintBacklog = new ArrayList<>();
         sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
         sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
         sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
+        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
 
         return sprintBacklog;
     }

@@ -1,10 +1,12 @@
+import java.beans.Visibility;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class Spray extends Entity{
     private boolean move = false;
     private double velocity = 2;
 
-    private static final int END_ZONE = 10000;
+    private static final int END_ZONE = 1000;
 
     private static final String PATH = "assets/PowerUps/bug spray.png";
 
@@ -23,6 +25,10 @@ public class Spray extends Entity{
     public void stop(){
         move = false;
         this.setVisibility(false);
+    }
+
+    public boolean isActive(){
+        return visible;
     }
 
     @Override

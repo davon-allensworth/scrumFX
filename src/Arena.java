@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,12 +14,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
 
 public class Arena extends Scene {
     Player player = null;
     GraphicsContext gc;
     GameManager gm;
     List<Story> sprintBacklog;
+    List<Story> activeStories;
     List<Bug> bugs = new ArrayList<>();
     List<Entity> entities;
     List<Spray> sprays = new ArrayList<>();
@@ -29,17 +32,18 @@ public class Arena extends Scene {
     TimerTask timerTask;
     Integer timerCounter;
     Text text;
+    private static final double MAX_ACTIVE_STORIES = 3;
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
-    private static final int BUG_SPAWN_TIME_BASE = 3000;
-    private static final double BUG_SPAWN_RAND_MAX = 150;
-    private static final double BUG_TIME_RAND_MAX = 3000;
+    private static final int BUG_SPAWN_TIME_BASE = 4000;
+    private static final double BUG_SPAWN_RAND_MAX = 180;
+    private static final double BUG_TIME_RAND_MAX = 3500;
 
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;
     private static final int ITEM_SPAWN_TIME_BASE = 7000;
-    private static final double ITEM_SPAWN_RAND_MAX = 150;
+    private static final double ITEM_SPAWN_RAND_MAX = 180;
     private static final double ITEM_TIME_RAND_MAX = 3000;
 
     public Arena(Parent root, GraphicsContext gc, GameManager gm) {
@@ -47,6 +51,7 @@ public class Arena extends Scene {
         this.entities = new ArrayList<>();
         this.gc = gc;
         this.sprintBacklog = gm.sprintBacklog;
+        this.activeStories = new LinkedList<>();
         this.gm = gm;
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
@@ -94,17 +99,21 @@ public class Arena extends Scene {
         double screenWidth = gc.getCanvas().getWidth();
         double screenHeight = gc.getCanvas().getHeight();
         
-        player = new Player(gc);
-
-        sprintBacklog = gm.getSprintBacklog();
+        this.sprintBacklog = gm.getSprintBacklog();
+        for(Story story : sprintBacklog){
+            if(activeStories.size() >= MAX_ACTIVE_STORIES){
+                break; //we have reached our current max
+            }
+            activeStories.add(story);
+        }
 
         double x = 0;
-        for(Story story : sprintBacklog){
-            if(x==0) x = (screenWidth/sprintBacklog.size()-story.getWidth());
+        for(Story story : activeStories){
+            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth());
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
             this.entities.add(story);
-            x += screenWidth/sprintBacklog.size();
+            x += screenWidth/activeStories.size();
         }
 
         for(Bug bug : bugs){
@@ -126,6 +135,7 @@ public class Arena extends Scene {
         };
 
         timer.schedule(timerTask, 0, 1000);
+        player = new Player(gc);
         this.entities.add(player);
     }
 
@@ -140,7 +150,7 @@ public class Arena extends Scene {
         // update entities and check for collisions
         for(Entity e : entities){
             e.update();
-            if(e instanceof Bug && ((Bug)e).isAlive()){ //check for bug collisions
+            if(e instanceof Bug && ((Bug)e).isAlive() && !((Bug)e).isAbsorbing()){ //check for bug collisions
                 for(Entity other : entities){
                     if(other instanceof Story){ //with story
                         if(e.collidesWith(other)){
@@ -157,7 +167,7 @@ public class Arena extends Scene {
                     // check if bug hit by particle
                     if(player.getParticles() != null){
                         for(SprayParticle particle : player.getParticles()){
-                            if(particle.isActive() && particle.collidesWith(particle)){
+                            if(particle.isActive() && particle.collidesWith(e)){
                                 ((Bug)e).kill();
                             }
                         }
@@ -168,7 +178,7 @@ public class Arena extends Scene {
                     //don't equip spray unless you are done swatting
                     if(((Player)e).moveCode() != Player.SWAT_CODE && ((Player)e).moveCode() != Player.PRESWAT_CODE){
                         if(other instanceof Spray){ //with spray
-                            if(e.collidesWith(other)){
+                            if(((Spray)other).isActive() && e.collidesWith(other)){
                                 ((Player)e).equipSpray();
                                 ((Spray)other).stop();
                             }
@@ -183,10 +193,28 @@ public class Arena extends Scene {
             gm.endSprint();
         }
 
+        //check for completed stories
+        for(int i = 0; i < activeStories.size(); i++){
+            if(activeStories.get(i).isCompleted()){
+                for(Story story : sprintBacklog){ //fill in the stories
+                    if(!activeStories.contains(story) && !story.isCompleted()){
+                        Story removedStory = activeStories.remove(i);//remove completed story
+                        entities.remove(removedStory);
+                        double removedStoryX = removedStory.x;
+                        double removedStoryY = removedStory.y;
+                        story.setLocation(removedStoryX, removedStoryY);
+                        activeStories.add(i, story);//add new story
+                        entities.add(story);
+                    }
+                }
+            }
+        }
+
         //spawn bugs
         if(bugSpawnTimeCheck < 0){
             double randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
             bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
+            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }else if(System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime){
             double screenWidth = gc.getCanvas().getWidth();
@@ -195,13 +223,16 @@ public class Arena extends Scene {
             double randomDouble = (-BUG_SPAWN_RAND_MAX) + (BUG_SPAWN_RAND_MAX - (-BUG_SPAWN_RAND_MAX)) * r.nextDouble();
             double spawnX = centerx + randomDouble;
 
-            Bug bug = new Bug(gc, spawnX);
+            int randomLevel = sprintBacklog.get(r.nextInt(sprintBacklog.size())).getLevel();
+
+            Bug bug = new Bug(gc, spawnX,(randomLevel));
 
             this.entities.add(bug);
             bug.startMoving();
 
             randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
             bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
+            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }
 
@@ -239,5 +270,8 @@ public class Arena extends Scene {
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.LIGHTSKYBLUE);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(gm.getTextColor());
     }
 }

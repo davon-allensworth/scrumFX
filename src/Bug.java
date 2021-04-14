@@ -4,19 +4,21 @@ public class Bug extends Entity{
     public boolean alive = true;
     private boolean move = false;
     private boolean startAbsorb = false;
-    private double velocity = 3;
+    private double velocity = 2;
     private long timeCheck = 0; //to make absorb animate slowly
+    private int type;
 
     private static final int ABSORB_TIME = 100;
 
-    private static final String MOVE = "assets/Bugs/bug move.gif";
-    private static final String DEAD = "assets/Bugs/bug splatter.png";
+    private static final String MOVE = "assets/Bugs/bug move ";
+    private static final String DEAD = "assets/Bugs/bug splatter ";
     private static final String ABSORB = "assets/Bugs/bug absorb ";
 
     private int absorbState = 0;
 
-    public Bug(GraphicsContext gc, double x) {
-        super(gc, MOVE, x, -300, 1);
+    public Bug(GraphicsContext gc, double x, int type) {
+        super(gc, MOVE+type+".gif", x, -300, 1);
+        this.type = type;
     }
 
     public void startMoving(){
@@ -30,7 +32,7 @@ public class Bug extends Entity{
     public void kill(){
         move = false;
         alive = false;
-        this.updateSprite(DEAD);
+        this.updateSprite(DEAD+type+".png");
     }
 
     public void setVelocity(double velocity) {
@@ -39,6 +41,10 @@ public class Bug extends Entity{
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public boolean isAbsorbing(){
+        return startAbsorb;
     }
 
     public void startAbsorb(){
@@ -62,6 +68,6 @@ public class Bug extends Entity{
     @Override
     public void update(){
         if(startAbsorb) absorb(); 
-        else if(move && alive) updateY(velocity);
+        else if(move && alive) updateY(velocity*type);
     }
 }

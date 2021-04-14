@@ -95,6 +95,16 @@ public class Entity {
         this.hitboxY += amount;
     }
 
+    public void centerX(){
+        this.x = gc.getCanvas().getWidth()/2 - (this.getWidth() / 2);
+        this.hitboxX = x;
+    }
+
+    public void centerY(){
+        this.x = gc.getCanvas().getHeight()/2 - (this.getHeight() / 2);
+        this.hitboxY = y;
+    }
+
     public Sprite getSprite(){
         return this.sprite;
     }
