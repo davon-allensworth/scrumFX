@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 public class Settings extends Scene {
     Button backButton = null;
     GraphicsContext gc;
+    
     public Settings(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();

@@ -17,7 +17,6 @@ public class MainMenu extends Scene {
     private Button startGameButton = null;
     private Button settingsButton = null;
     private GraphicsContext gc;
-    private GameManager gm;
 
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
@@ -25,8 +24,6 @@ public class MainMenu extends Scene {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
-        this.gm = gm;
-        
 
         // Iterator<String> fonts = Font.getFamilies().iterator();
 
@@ -89,6 +86,6 @@ public class MainMenu extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTSKYBLUE);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getInstance().getTextColor());
     }
 }

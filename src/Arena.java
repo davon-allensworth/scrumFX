@@ -240,6 +240,6 @@ public class Arena extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTSKYBLUE);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getInstance().getTextColor());
     }
 }

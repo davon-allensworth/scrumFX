@@ -9,13 +9,11 @@ import javafx.scene.paint.Color;
 public class StorySelect extends Scene {
     private Button startSprintButton = null;
     private GraphicsContext gc;
-    private GameManager gm;
 
     public StorySelect(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
-        this.gm = gm;
 
         this.setOnMouseClicked(
             new EventHandler<MouseEvent>()
@@ -57,6 +55,6 @@ public class StorySelect extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTCORAL);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getInstance().getTextColor());
     }
 }
