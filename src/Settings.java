@@ -8,7 +8,8 @@ import javafx.scene.input.MouseEvent;
 public class Settings extends Scene {
     Button backButton = null;
     GraphicsContext gc;
-    public Settings(Parent root, GraphicsContext gc, GameManager gm) {
+    
+    public Settings(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -19,7 +20,7 @@ public class Settings extends Scene {
                 public void handle(MouseEvent e){
                     if(backButton.collidesWith(e.getX(), e.getY())){
                         backButton.pressed();
-                        gm.changeScene("main menu");
+                        GameManager.getInstance().changeScene("main menu");
                     }
                 }
             });

@@ -3,16 +3,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.ToIntFunction;
 import java.util.Random;
 
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 
@@ -46,13 +43,13 @@ public class Arena extends Scene {
     private static final double ITEM_SPAWN_RAND_MAX = 180;
     private static final double ITEM_TIME_RAND_MAX = 3000;
 
-    public Arena(Parent root, GraphicsContext gc, GameManager gm) {
+    public Arena(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<>();
         this.gc = gc;
-        this.sprintBacklog = gm.sprintBacklog;
+        this.gm = GameManager.getInstance();
+        this.sprintBacklog = GameManager.getInstance().sprintBacklog;
         this.activeStories = new LinkedList<>();
-        this.gm = gm;
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
         this.setOnKeyPressed(
@@ -272,6 +269,6 @@ public class Arena extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTSKYBLUE);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getTextColor());
     }
 }
