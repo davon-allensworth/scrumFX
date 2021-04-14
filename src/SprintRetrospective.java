@@ -55,7 +55,7 @@ public class SprintRetrospective extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTCORAL);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getTextColor());
     }
 
 }
