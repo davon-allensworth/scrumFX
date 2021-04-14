@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
@@ -11,15 +10,13 @@ public class MainMenu extends Scene {
     private Button startGameButton = null;
     private Button settingsButton = null;
     private GraphicsContext gc;
-    private GameManager gm;
 
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
 
-    public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
+    public MainMenu(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
-        this.gm = gm;
 
         // Iterator<String> fonts = Font.getFamilies().iterator();
 
@@ -35,12 +32,12 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
-                        gm.changeScene("story select");
+                        GameManager.getInstance().changeScene("story select");
                     }
                     
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
                         settingsButton.pressed();
-                        gm.changeScene("settings");
+                        GameManager.getInstance().changeScene("settings");
                     }
                 }
             });
@@ -82,6 +79,6 @@ public class MainMenu extends Scene {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(Color.LIGHTSKYBLUE);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(gm.getTextColor());
+        gc.setFill(GameManager.getTextColor());
     }
 }

@@ -1,5 +1,3 @@
-import java.time.Year;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -14,13 +12,6 @@ public class Entity {
     protected boolean visible = true;
     GraphicsContext gc;
 
-    /*
-    public Entity(GraphicsContext gc) {
-        this(gc, 0, 0, 0, 0, 1);
-    }
-
-     */
-
     //for hitbox set to same as sprite dimensions
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
         this(gc, filename, x, y, 1, 1, scale);
@@ -28,14 +19,6 @@ public class Entity {
         this.hitboxWidth *= scale;
         this.hitboxHeight *= scale;
     }
-
-    /*
-    public Entity(GraphicsContext gc, double x, double y, double w, double h, double scale) {
-        this(gc, "https://cdn.discordapp.com/attachments/801173300415037504/815023513903169546/S.C.R.U.M..gif",
-             x, y, h, w, scale);
-        System.out.println("default entity asset constructor called");
-    }
-     */
     
     //for hitbox set same as sprite explicitly
     public Entity(GraphicsContext gc, String filename, double x, double y, double w, double h, 

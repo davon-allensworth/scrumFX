@@ -43,7 +43,7 @@ public class GameManager {
         sprintBacklog = new ArrayList<>();
     }
 
-    public GameManager(GraphicsContext gc){
+    private GameManager(GraphicsContext gc){
         this.gc = gc;
         this.totalScore = 0;
         this.currentSprint = 0;
@@ -57,9 +57,15 @@ public class GameManager {
         loadScores();
     }
 
+    public static void init(GraphicsContext gc) {
+        instance = new GameManager(gc);
+    }
+
     public static GameManager getInstance() {
-        if (instance == null)
-            instance = new GameManager();
+        if (instance == null) {
+            System.err.println("ERROR: Gamemanager requested before init");
+            System.exit(1);
+        }
 
         return instance;
     }
@@ -128,32 +134,32 @@ public class GameManager {
 
         switch(sceneName) {
             case "arena":
-                scene = new Arena(root, gc, this);
+                scene = new Arena(root, gc);
                 break;
 
             case "story select":
-                scene = new StorySelect(root, gc, this);
+                scene = new StorySelect(root, gc);
                 break;
 
             case "retrospective":
                 System.out.println("User score was: " + totalScore);
-                scene = new SprintRetrospective(root, gc, this);
+                scene = new SprintRetrospective(root, gc);
                 break;
 
             case "results":
-                scene = new Results(root, gc, this);
+                scene = new Results(root, gc);
                 break;
             
             case "main menu":
-                scene = new MainMenu(root, gc, this);
+                scene = new MainMenu(root, gc);
                 break;
 
             case "settings":
-                scene = new Settings(root, gc, this);
+                scene = new Settings(root, gc);
                 break;
                 
             default:
-            return;
+                return;
         }
 
         ((Scene) stage.getScene()).teardown();
