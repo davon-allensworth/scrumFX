@@ -19,12 +19,12 @@ public class Results extends Scene{
     GameManager gm;
     private Parent root;
 
-    public Results(Parent root, GraphicsContext gc, GameManager gm) {
+    public Results(Parent root, GraphicsContext gc) {
         super(root);
         this.root = root;
         this.entities = new ArrayList<>();
         this.gc = gc;
-        this.gm = gm;
+        this.gm = GameManager.getInstance();
         this.nameField = new TextField();
         this.saveButton = new javafx.scene.control.Button("Save");
 
@@ -119,6 +119,7 @@ public class Results extends Scene{
         menuButton.updateY((menuButton.getHeight() + 30));
         this.entities.add(menuButton);
 
+        // name enter field
         ((Group) this.root).getChildren().add(nameField);
         nameField.setPromptText("Enter your name!");
         Font font = Font.loadFont( getClass().getResourceAsStream("assets/fonts/nokiafc22.ttf"), 24);
@@ -131,7 +132,7 @@ public class Results extends Scene{
         nameField.relocate(centerx, centery);
         nameField.setTranslateX( -nameField.getMinWidth() / 2 - 75);
         
-        
+        // save button
         ((Group) this.root).getChildren().add(saveButton);
         saveButton.setFont(font);
 

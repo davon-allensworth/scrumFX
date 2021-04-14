@@ -19,7 +19,7 @@ public class MainMenu extends Scene {
 
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3");
 
-    public MainMenu(Parent root, GraphicsContext gc, GameManager gm) {
+    public MainMenu(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -38,12 +38,12 @@ public class MainMenu extends Scene {
                         // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
-                        gm.changeScene("story select");
+                        GameManager.getInstance().changeScene("story select");
                     }
                     
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
                         settingsButton.pressed();
-                        gm.changeScene("settings");
+                        GameManager.getInstance().changeScene("settings");
                     }
                 }
             });

@@ -9,7 +9,7 @@ public class StorySelect extends Scene {
     private Button startSprintButton = null;
     private GraphicsContext gc;
 
-    public StorySelect(Parent root, GraphicsContext gc, GameManager gm) {
+    public StorySelect(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -22,7 +22,7 @@ public class StorySelect extends Scene {
                     if (startSprintButton.collidesWith( e.getX(), e.getY() ) )
                     {
                         startSprintButton.pressed();
-                        gm.changeScene("arena");
+                        GameManager.getInstance().changeScene("arena");
                     }
                 }
             });

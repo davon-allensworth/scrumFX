@@ -2,14 +2,16 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 
-public class SprintRetrospective extends Scene{
+public class SprintRetrospective extends Scene {
     Button nextScreen = null;
     GraphicsContext gc;
+    GameManager gm;
 
-    public SprintRetrospective(Parent root, GraphicsContext gc, GameManager gm) {
+    public SprintRetrospective(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<>();
         this.gc = gc;
+        gm = GameManager.getInstance();
 
         // Mouse event handler
         this.setOnMouseClicked(

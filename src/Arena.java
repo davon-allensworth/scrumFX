@@ -17,12 +17,12 @@ public class Arena extends Scene {
     List<Bug> bugs = new ArrayList<>();
     List<Entity> entities;
 
-    public Arena(Parent root, GraphicsContext gc, GameManager gm) {
+    public Arena(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<>();
         this.gc = gc;
-        this.sprintBacklog = gm.sprintBacklog;
-        this.gm = gm;
+        this.gm = GameManager.getInstance();
+        this.sprintBacklog = GameManager.getInstance().sprintBacklog;
 
         this.setOnKeyPressed(
             new EventHandler<KeyEvent>()

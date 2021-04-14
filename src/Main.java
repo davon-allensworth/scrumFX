@@ -34,21 +34,19 @@ public class Main extends Application {
         Font font = Font.loadFont( getClass().getResourceAsStream("assets/fonts/prstartk.ttf"), FONT_SIZE);
         gc.setFont(font);
 
-        GameManager gm = new GameManager(gc);
+        GameManager.init(gc);
+        GameManager gm = GameManager.getInstance();
 
-        stage.setScene(new MainMenu(root, gc, gm));
+        stage.setScene(new MainMenu(root, gc));
         stage.setResizable(false);
         ((Scene) stage.getScene()).setup();
 
-        // GameManager gm = new GameManager(root);
         gm.setStage(stage);
 
         // Set up game loop
         Timeline gameLoop = new Timeline();
         gameLoop.setCycleCount( Timeline.INDEFINITE );
-        
-        final long timeStart = System.currentTimeMillis();
-        
+                
         KeyFrame kf = new KeyFrame(
             Duration.seconds(0.033),
             new EventHandler<ActionEvent>()
