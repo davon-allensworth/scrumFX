@@ -11,7 +11,9 @@ public class Results extends Scene{
     GraphicsContext gc;
     GameManager gm;
 
-    public Results(Parent root, GraphicsContext gc, GameManager gm) {
+    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
+
+    public Results(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<>();
         this.gc = gc;
@@ -54,13 +56,16 @@ public class Results extends Scene{
 
     @Override
     public void teardown() {
-
+        music.stop();
     }
-
+    
     @Override
     public void setup() {
         double centerx = gc.getCanvas().getWidth() / 2;
         double centery = gc.getCanvas().getHeight() / 2;
+
+        music.play();
+
         menuButton = new Button(gc, "menu button", "menu button pressed", centerx, centery);
         menuButton.updateX(-(menuButton.getWidth()/2));
         menuButton.updateY((menuButton.getHeight() + 30));
