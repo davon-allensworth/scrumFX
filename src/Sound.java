@@ -2,6 +2,7 @@ import java.io.File;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 
 public class Sound {
     MediaPlayer mediaPlayer;
@@ -35,5 +36,9 @@ public class Sound {
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public boolean isPlaying(){
+        return mediaPlayer.getStatus().equals(Status.PLAYING);
     }
 }

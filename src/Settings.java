@@ -8,8 +8,6 @@ import javafx.scene.input.MouseEvent;
 public class Settings extends Scene {
     Button backButton = null;
     GraphicsContext gc;
-    
-    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
 
     public Settings(Parent root, GraphicsContext gc) {
         super(root);
@@ -38,14 +36,13 @@ public class Settings extends Scene {
     
     @Override
     public void teardown() {
-        music.stop();
+
     }
     
     @Override
     public void setup() {
         backButton = new Button(gc, "exit button", "exit button pressed", 0, 0);
         this.entities.add(backButton);
-        music.play();
     }
 
     private void drawBackground() {

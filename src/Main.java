@@ -34,6 +34,7 @@ public class Main extends Application {
         ((Scene) stage.getScene()).setup();
 
         gm.setStage(stage);
+        gm.changeScene("main menu");
 
         // Set up game loop
         Timeline gameLoop = new Timeline();

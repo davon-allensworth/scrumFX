@@ -7,6 +7,8 @@ import java.util.Scanner;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -35,6 +37,7 @@ public class GameManager {
 
     private static double musicVolume = 0.1;
     private static double soundVolume = 0.1;
+    public  static Sound menuMusic;
 
     private Font font = null;
 
@@ -59,6 +62,11 @@ public class GameManager {
 
     public static void init(GraphicsContext gc) {
         instance = new GameManager(gc);
+
+        // Initialize menu music
+        menuMusic = new Sound("assets/music/Main_Menu.mp3", true);
+        menuMusic.getMediaPlayer().setAutoPlay(true);
+        menuMusic.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
     }
 
     public static GameManager getInstance() {
@@ -138,6 +146,7 @@ public class GameManager {
                 break;
 
             case "story select":
+                if(menuMusic.isPlaying()) menuMusic.stop();
                 scene = new StorySelect(root, gc);
                 break;
 
@@ -151,6 +160,7 @@ public class GameManager {
                 break;
             
             case "main menu":
+                if(menuMusic.isPlaying() == false) menuMusic.play();
                 scene = new MainMenu(root, gc);
                 break;
 
