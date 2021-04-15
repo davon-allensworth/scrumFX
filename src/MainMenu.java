@@ -1,30 +1,28 @@
-import java.util.ArrayList;
-
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import java.util.ArrayList;
 
 public class MainMenu extends Scene {
     private Button startGameButton = null;
     private Button settingsButton = null;
     private GraphicsContext gc;
-
+    GameManager gm;
+    Text text;
+    StringBuilder highScores;
     Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
 
     public MainMenu(Parent root, GraphicsContext gc) {
         super(root);
-        this.entities = new ArrayList<Entity>();
+        this.entities = new ArrayList<>();
         this.gc = gc;
+        gm = GameManager.getInstance();
 
         // Iterator<String> fonts = Font.getFamilies().iterator();
 
         this.setOnMouseClicked(
-            new EventHandler<MouseEvent>()
-            {
-                public void handle(MouseEvent e)
-                {
+                e -> {
                     if ( startGameButton.collidesWith( e.getX(), e.getY() ) )
                     {
                         // Font newFont = new Font(fonts.next(), 50);
@@ -34,19 +32,18 @@ public class MainMenu extends Scene {
                         System.out.println("startgameButton pressed");
                         GameManager.getInstance().changeScene("story select");
                     }
-                    
+
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
                         settingsButton.pressed();
                         GameManager.getInstance().changeScene("settings");
                     }
-                }
-            });
+                });
     }
     
     @Override
     public void setup() {
-        double centerx = (double)gc.getCanvas().getWidth() / 2;
-        double centery = (double)gc.getCanvas().getHeight() / 2;
+        double centerx = gc.getCanvas().getWidth() / 2;
+        double centery = gc.getCanvas().getHeight() / 2;
         
         startGameButton = new Button(gc, "start button", "start button pressed", centerx /*- centerx/1.5*/, centery /*+ centery/6*/);
         startGameButton.updateX(-(startGameButton.getWidth()/2));
@@ -56,11 +53,31 @@ public class MainMenu extends Scene {
         this.entities.add(startGameButton);
         this.entities.add(settingsButton);
 
-        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, centery/4, 1);
+        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, (centery/4) + 20, 1);
         title.centerX();
         this.entities.add(title);
-
         music.play();
+        text = new Text();
+        this.highScores = new StringBuilder("HIGH SCORES:\n\n");
+
+        // Display top 3 high scores
+        for(int i = 0; i < 3; i++){
+            if(i < gm.scores.size()){
+                Score s = gm.scores.get(i);
+                String score = String.format("%-13s%s%n", s.player, s.value);
+                switch(i){
+                    case 0:
+                        highScores.append("1st ").append(score).append("\n");
+                        break;
+                    case 1:
+                        highScores.append("2nd ").append(score).append("\n");
+                        break;
+                    case 2:
+                        highScores.append("3rd ").append(score).append("\n");
+                }
+            }
+        }
+
     }
 
     @Override
@@ -72,7 +89,8 @@ public class MainMenu extends Scene {
     public void draw() {
         this.drawBackground();
         for(Entity e : this.entities)
-            e.draw();  
+            e.draw();
+        gc.fillText(this.highScores.toString(), 10, 20);
     }
 
     private void drawBackground() {

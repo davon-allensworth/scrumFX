@@ -127,6 +127,7 @@ public class Arena extends Scene {
                 timerCounter--;
                 if(timerCounter == 0 || gm.storiesDone()){
                     timer.cancel();
+
                 }
             }
         };
@@ -215,7 +216,7 @@ public class Arena extends Scene {
             bugSpawnTimeCheck = System.currentTimeMillis();
         }else if(System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime){
             double screenWidth = gc.getCanvas().getWidth();
-            double centerx = (double)screenWidth / 2;
+            double centerx = screenWidth / 2;
 
             double randomDouble = (-BUG_SPAWN_RAND_MAX) + (BUG_SPAWN_RAND_MAX - (-BUG_SPAWN_RAND_MAX)) * r.nextDouble();
             double spawnX = centerx + randomDouble;
@@ -240,7 +241,7 @@ public class Arena extends Scene {
             itemSpawnTimeCheck = System.currentTimeMillis();
         }else if(System.currentTimeMillis() - itemSpawnTimeCheck > itemSpawnTime){
             double screenWidth = gc.getCanvas().getWidth();
-            double centerx = (double)screenWidth / 2;
+            double centerx = screenWidth / 2;
 
             double randomDouble = (-ITEM_SPAWN_RAND_MAX) + (ITEM_SPAWN_RAND_MAX - (-ITEM_SPAWN_RAND_MAX)) * r.nextDouble();
             double spawnX = centerx + randomDouble;
