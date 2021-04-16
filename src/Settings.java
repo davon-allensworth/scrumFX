@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -15,16 +17,18 @@ import javafx.scene.text.Font;
 
 public class Settings extends Scene {
     Button backButton = null;
-    Slider vSlider;
+    Slider mSlider;
     Slider sfxSlider;
     Group root;
     GraphicsContext gc;
+    GameManager gm;
 
-    public Settings(Parent root, GraphicsContext gc) {
+    public Settings(Parent root, GraphicsContext gc, GameManager gm) {
         super(root);
         this.root = (Group)root;
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
+        this.gm = gm;
 
         //Mouse event handler
         this.setOnMouseClicked(
@@ -56,10 +60,10 @@ public class Settings extends Scene {
         backButton = new Button(gc, "exit button", "exit button pressed", 0, 0);
         this.entities.add(backButton);
 
-        vSlider = new Slider();
+        mSlider = new Slider();
         sfxSlider = new Slider();
 
-        vSlider.setPrefWidth(400);
+        mSlider.setPrefWidth(400);
         sfxSlider.setPrefWidth(400);
 
         //Create a VBox for sliders
@@ -68,17 +72,38 @@ public class Settings extends Scene {
         Font font = Font.loadFont( getClass().getResourceAsStream("assets/fonts/prstartk.ttf"), 10);
 
         //Music volume label and slider
-        Label vLabel = new Label("Music Volume:");
-        vLabel.setFont(font);
-        vbox.getChildren().add(vLabel);
-        vbox.getChildren().add(vSlider);
+        Label mLabel = new Label("Music Volume:");
+        mLabel.setFont(font);
+        vbox.getChildren().add(mLabel);
+        mSlider.setMin(0.0);
+        mSlider.setMax(1.0);
+        mSlider.setValue(GameManager.getMusicVolume());
+        mSlider.valueProperty().addListener(
+            new ChangeListener<Number>(){
+                public void changed(ObservableValue <? extends Number> observable, Number oldNum, Number newNum){
+                    gm.getMenuMusic().setVolume(newNum); // Will change getMenuMusic to static method later
+                    GameManager.setMusicVolume(newNum.doubleValue());
+                }
+            }
+        );
+        vbox.getChildren().add(mSlider);
 
         //SFX volume label and slider
         Label sfxLabel = new Label("SFX Volume:");
         sfxLabel.setFont(font);
         vbox.getChildren().add(sfxLabel);
+        sfxSlider.setMin(0.0);
+        sfxSlider.setMax(1.0);
+        sfxSlider.setValue(GameManager.getSoundVolume());
+        sfxSlider.valueProperty().addListener(
+            new ChangeListener<Number>(){
+                public void changed(ObservableValue <? extends Number> observable, Number oldNum, Number newNum){
+                    // TODO
+                }
+            }
+        );
         vbox.getChildren().add(sfxSlider);
-        
+
         vbox.setPadding(new Insets(gc.getCanvas().getHeight()/2 - 130, 100, 
         gc.getCanvas().getHeight()/2 - 130, 100));  
         vbox.setSpacing(60);

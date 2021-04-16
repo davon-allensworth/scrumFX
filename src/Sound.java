@@ -41,4 +41,13 @@ public class Sound {
     public boolean isPlaying(){
         return mediaPlayer.getStatus().equals(Status.PLAYING);
     }
+
+    public void setVolume(Number num){
+        mediaPlayer.setVolume(num.doubleValue());
+        if(isMusic){
+            GameManager.setMusicVolume(num.doubleValue());
+        }else{
+            GameManager.setSoundVolume(num.doubleValue());
+        }
+    }
 }

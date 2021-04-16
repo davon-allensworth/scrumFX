@@ -37,7 +37,7 @@ public class GameManager {
 
     private static double musicVolume = 0.1;
     private static double soundVolume = 0.1;
-    public  static Sound menuMusic;
+    private static Sound menuMusic;
 
     private Font font = null;
 
@@ -64,9 +64,7 @@ public class GameManager {
         instance = new GameManager(gc);
 
         // Initialize menu music
-        menuMusic = new Sound("assets/music/Main_Menu.mp3", true);
-        menuMusic.getMediaPlayer().setAutoPlay(true);
-        menuMusic.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
+        menuMusic = new Sound("assets/music/Main_Menu.mp3", true, true);
     }
 
     public static GameManager getInstance() {
@@ -165,7 +163,7 @@ public class GameManager {
                 break;
 
             case "settings":
-                scene = new Settings(root, gc);
+                scene = new Settings(root, gc, this);
                 break;
                 
             default:
@@ -176,6 +174,10 @@ public class GameManager {
 
         scene.setup();
         stage.setScene(scene);
+    }
+
+    public Sound getMenuMusic(){
+        return menuMusic;
     }
 
     private void loadScores(){
