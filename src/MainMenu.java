@@ -11,7 +11,6 @@ public class MainMenu extends Scene {
     GameManager gm;
     Text text;
     StringBuilder highScores;
-    Sound music = new Sound("assets/music/A_Typical_Ride_Out.mp3", true);
 
     public MainMenu(Parent root, GraphicsContext gc) {
         super(root);
@@ -56,7 +55,6 @@ public class MainMenu extends Scene {
         Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, (centery/4) + 20, 1);
         title.centerX();
         this.entities.add(title);
-        music.play();
         text = new Text();
         this.highScores = new StringBuilder("HIGH SCORES:\n\n");
 
@@ -82,7 +80,6 @@ public class MainMenu extends Scene {
 
     @Override
     public void teardown() {
-        music.stop();
     }
 
     @Override
