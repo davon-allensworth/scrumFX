@@ -16,7 +16,6 @@ public class SprayParticle extends Entity{
 
     private static final String PATH = "assets/Particles/spray.png";
 
-
     public SprayParticle(GraphicsContext gc, double x, double y, double xVel, double yVel, double size, Random r) {
         super(gc, PATH, x, y, size);
         this.startParticle(xVel, yVel);

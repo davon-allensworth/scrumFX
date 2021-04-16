@@ -17,11 +17,17 @@ public class Bug extends Entity{
     private static final String DEAD = "assets/Bugs/bug splatter ";
     private static final String ABSORB = "assets/Bugs/bug absorb ";
 
+    private static Sprite[] deadSprite;
+
     private int absorbState = 0;
 
     public Bug(GraphicsContext gc, double x, int type) {
         super(gc, MOVE+type+".gif", x, -300, 1);
         this.type = type;
+
+        //it helps runtime to have some sprites be static
+        if(deadSprite == null) deadSprite = new Sprite[43];
+        if(deadSprite[type] == null) deadSprite[type] = new Sprite(gc, DEAD+type+".png");
     }
 
     public void startMoving(){
@@ -35,7 +41,7 @@ public class Bug extends Entity{
     public void kill(){
         move = false;
         alive = false;
-        this.updateSprite(DEAD+type+".png");
+        this.updateSprite(deadSprite[type]);
     }
 
     public void setVelocity(double velocity) {
@@ -57,8 +63,7 @@ public class Bug extends Entity{
     private void absorb(){
         if(System.currentTimeMillis() - timeCheck > ABSORB_TIME){
             if(absorbState > 4){
-                this.getSprite().visible = false;
-                this.alive = false;
+                this.despawn = true;
             }else{
                 this.updateSprite(ABSORB+absorbState+".png");
             }

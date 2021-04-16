@@ -124,6 +124,10 @@ public class Entity {
         this.sprite = new Sprite(gc, filename, scale);
     }
 
+    public void updateSprite(Sprite sprite){
+        this.sprite = sprite;
+    }
+
     public boolean changeSprite(Sprite newSprite) {
         return false;
     }
