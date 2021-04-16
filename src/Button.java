@@ -6,7 +6,7 @@ public class Button extends Entity {
     
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
-    private static final Sound buttonClick = new Sound("assets/sounds/explosion.wav", false);
+    private static final Sound buttonClick = new Sound("assets/sounds/click.wav", false);
 
     public Button(GraphicsContext gc, String buttonName,
                   double x, double y, double w, double h) {
