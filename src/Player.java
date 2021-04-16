@@ -13,7 +13,7 @@ public class Player extends Entity {
     private long powerTimeCheck = -1;
 
     private static final int POWER_TIME = 100;
-    private static final double POWER_MAX = 5;
+    private static final double POWER_MAX = 3;
     private static final double POWER_INCREASE = 0.1;
     
     public static final int IDLE_CODE = 0;

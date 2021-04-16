@@ -20,7 +20,7 @@ public class Arena extends Scene {
     List<Story> sprintBacklog;
     List<Story> activeStories;
     List<Bug> bugs = new ArrayList<>();
-    List<Entity> entities;
+    List<Entity> despawnList = new ArrayList<>();
     List<Spray> sprays = new ArrayList<>();
     Random r = new Random();
 
@@ -167,10 +167,14 @@ public class Arena extends Scene {
                         for(SprayParticle particle : player.getParticles()){
                             if(particle.isActive() && particle.collidesWith(e)){
                                 ((Bug)e).kill();
+                            }else if(!particle.isActive()){
+                                despawnList.add(particle); //despawn this particle
                             }
                         }
                     }
                 }
+            }else if(e instanceof Bug && ((Bug)e).shouldDespawn()){ //check for despawning bug
+                despawnList.add(e); //add for despawning
             }else if(e instanceof Player){
                 for(Entity other : entities){
                     //don't equip spray unless you are done swatting
@@ -183,6 +187,15 @@ public class Arena extends Scene {
                         }
                     }
                 }
+            }
+        }
+
+        //despawn things
+        for(Entity e : despawnList){
+            if(e instanceof SprayParticle){
+                player.getParticles().remove(((SprayParticle)e));
+            }else{
+                entities.remove(e);
             }
         }
 

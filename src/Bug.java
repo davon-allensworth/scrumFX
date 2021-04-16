@@ -7,7 +7,10 @@ public class Bug extends Entity{
     private double velocity = 2;
     private long timeCheck = 0; //to make absorb animate slowly
     private int type;
+    private boolean despawn = false;
+    private long despawnTimeCheck = -1;
 
+    private static final int DESPAWN_TIME = 3000;
     private static final int ABSORB_TIME = 100;
 
     private static final String MOVE = "assets/Bugs/bug move ";
@@ -65,9 +68,20 @@ public class Bug extends Entity{
         }
     }
 
+    public boolean shouldDespawn(){
+        return this.despawn;
+    }
+
     @Override
     public void update(){
         if(startAbsorb) absorb(); 
         else if(move && alive) updateY(velocity*type);
+        else{
+            if(despawnTimeCheck < 0){
+                despawnTimeCheck = System.currentTimeMillis();
+            }else if(System.currentTimeMillis() - despawnTimeCheck > DESPAWN_TIME){
+                this.despawn = true;
+            }
+        }
     }
 }
