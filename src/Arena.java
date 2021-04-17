@@ -33,9 +33,9 @@ public class Arena extends Scene {
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
-    private static final int BUG_SPAWN_TIME_BASE = 4000;
+    private static final int BUG_SPAWN_TIME_BASE = 3000;
     private static final double BUG_SPAWN_RAND_MAX = 180;
-    private static final double BUG_TIME_RAND_MAX = 3500;
+    private static final double BUG_TIME_RAND_MAX = 2500;
 
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;

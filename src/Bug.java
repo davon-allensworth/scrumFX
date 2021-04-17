@@ -10,7 +10,7 @@ public class Bug extends Entity{
     private boolean despawn = false;
     private long despawnTimeCheck = -1;
 
-    private static final int DESPAWN_TIME = 3000;
+    private static final int DESPAWN_TIME = 10000;
     private static final int ABSORB_TIME = 100;
 
     private static final String MOVE = "assets/Bugs/bug move ";
@@ -26,7 +26,7 @@ public class Bug extends Entity{
         this.type = type;
 
         //it helps runtime to have some sprites be static
-        if(deadSprite == null) deadSprite = new Sprite[43];
+        if(deadSprite == null || deadSprite[type] != null && deadSprite[type].gc != gc) deadSprite = new Sprite[4];
         if(deadSprite[type] == null) deadSprite[type] = new Sprite(gc, DEAD+type+".png");
     }
 

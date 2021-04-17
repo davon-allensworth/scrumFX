@@ -19,9 +19,14 @@ public class Sprite {
     public Sprite(GraphicsContext gc, String filename, double scale) {
         this.gc = gc;
         this.scale = scale * SCALE_MULTIPLIER;
+        imageName = filename;
         image = new Image(filename);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
+    }
+
+    public String getImageName(){
+        return imageName;
     }
 
     public void draw(double x, double y) {
