@@ -102,6 +102,7 @@ public class Story extends Entity {
     public void hit(){
         green = false;
         decreaseTimeCheck = System.currentTimeMillis();
+        timeCheck = 0; //this will make the color switch quickly
     }
 
     @Override 

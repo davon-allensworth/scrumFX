@@ -9,15 +9,22 @@ public class Bug extends Entity{
     private int type;
     private boolean despawn = false;
     private long despawnTimeCheck = -1;
+    private boolean inSpray = false;
+    private long sprayTimeCheck = 0; //to make bug die in spray slower
 
     private static final int DESPAWN_TIME = 10000;
     private static final int ABSORB_TIME = 100;
+    private static final int SPRAY_DEATH_TIME = 200;
+
+    private static final double IN_SPRAY_SPEED_RECUCTION = 8;
 
     private static final String MOVE = "assets/Bugs/bug move ";
     private static final String DEAD = "assets/Bugs/bug splatter ";
+    private static final String DEAD2 = "assets/Bugs/buggy dead ";
     private static final String ABSORB = "assets/Bugs/bug absorb ";
 
     private static Sprite[] deadSprite;
+    private static Sprite[] deadSprite2;
 
     private int absorbState = 0;
 
@@ -28,6 +35,9 @@ public class Bug extends Entity{
         //it helps runtime to have some sprites be static
         if(deadSprite == null || deadSprite[type] != null && deadSprite[type].gc != gc) deadSprite = new Sprite[4];
         if(deadSprite[type] == null) deadSprite[type] = new Sprite(gc, DEAD+type+".png");
+
+        if(deadSprite2 == null || deadSprite2[type] != null && deadSprite2[type].gc != gc) deadSprite2 = new Sprite[4];
+        if(deadSprite2[type] == null) deadSprite2[type] = new Sprite(gc, DEAD2+type+".png");
     }
 
     public void startMoving(){
@@ -41,7 +51,8 @@ public class Bug extends Entity{
     public void kill(){
         move = false;
         alive = false;
-        this.updateSprite(deadSprite[type]);
+        if(inSpray) this.updateSprite(deadSprite2[type]);
+        else this.updateSprite(deadSprite[type]);
     }
 
     public void setVelocity(double velocity) {
@@ -58,6 +69,11 @@ public class Bug extends Entity{
 
     public void startAbsorb(){
         this.startAbsorb = true;
+    }
+
+    public void inSpray(){
+        inSpray = true;
+        sprayTimeCheck = System.currentTimeMillis();
     }
 
     private void absorb(){
@@ -80,8 +96,17 @@ public class Bug extends Entity{
     @Override
     public void update(){
         if(startAbsorb) absorb(); 
-        else if(move && alive) updateY(velocity*type);
-        else{
+        else if(move && alive){
+            if(inSpray){
+                updateY((velocity*type)/IN_SPRAY_SPEED_RECUCTION);
+            }else{
+                updateY(velocity*type);
+            }
+            //check for spray death
+            if(inSpray && System.currentTimeMillis() - sprayTimeCheck > SPRAY_DEATH_TIME){
+                this.kill();
+            }
+        }else{
             if(despawnTimeCheck < 0){
                 despawnTimeCheck = System.currentTimeMillis();
             }else if(System.currentTimeMillis() - despawnTimeCheck > DESPAWN_TIME){

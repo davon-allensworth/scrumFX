@@ -2,10 +2,10 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Swatter extends Entity{
     private static final String PATH = "assets/Player/player idle.png"; //not necessary cause its invisible
-    private static final double SWATTER_HITBOX_OFFSET_X = 145;
-    private static final double SWATTER_HITBOX_OFFSET_Y = 30;
-    private static final double SWATTER_HITBOX_WIDTH = 70;
-    private static final double SWATTER_HITBOX_HEIGHT = 130;
+    private static final double SWATTER_HITBOX_OFFSET_X = 160;
+    private static final double SWATTER_HITBOX_OFFSET_Y = 40;
+    private static final double SWATTER_HITBOX_WIDTH = 60;
+    private static final double SWATTER_HITBOX_HEIGHT = 90;
     private static final double SWATTER_Y_OFFSET = 120;
 
     public Swatter(GraphicsContext gc, double x, double y) {

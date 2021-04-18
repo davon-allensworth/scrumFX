@@ -33,9 +33,9 @@ public class Arena extends Scene {
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
-    private static final int BUG_SPAWN_TIME_BASE = 3000;
+    private static final int BUG_SPAWN_TIME_BASE = 5000;
     private static final double BUG_SPAWN_RAND_MAX = 180;
-    private static final double BUG_TIME_RAND_MAX = 2500;
+    private static final double BUG_TIME_RAND_MAX = 4000;
 
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;
@@ -166,8 +166,10 @@ public class Arena extends Scene {
                     if(player.getParticles() != null){
                         for(SprayParticle particle : player.getParticles()){
                             if(particle.isActive() && particle.collidesWith(e)){
-                                ((Bug)e).kill();
-                            }else if(!particle.isActive()){
+                                ((Bug)e).inSpray();
+                                //((Bug)e).kill();
+                            }
+                            if(!particle.isActive()){
                                 despawnList.add(particle); //despawn this particle
                             }
                         }
