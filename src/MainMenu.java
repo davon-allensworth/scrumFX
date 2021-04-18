@@ -18,23 +18,16 @@ public class MainMenu extends Scene {
         this.gc = gc;
         gm = GameManager.getInstance();
 
-        // Iterator<String> fonts = Font.getFamilies().iterator();
-
         this.setOnMouseClicked(
                 e -> {
                     if ( startGameButton.collidesWith( e.getX(), e.getY() ) )
                     {
-                        // Font newFont = new Font(fonts.next(), 50);
-                        // System.out.println(newFont.getName());
-                        // gc.setFont(newFont);
                         startGameButton.pressed();
                         System.out.println("startgameButton pressed");
-                        GameManager.getInstance().changeScene("story select");
                     }
 
                     if(settingsButton.collidesWith(e.getX(), e.getY())){
                         settingsButton.pressed();
-                        GameManager.getInstance().changeScene("settings");
                     }
                 });
     }
@@ -76,6 +69,15 @@ public class MainMenu extends Scene {
             }
         }
 
+    }
+
+    @Override
+    public void update() {
+        startGameButton.update();
+        settingsButton.update();
+
+        if(startGameButton.isTriggered()) GameManager.getInstance().changeScene("story select");
+        else if(settingsButton.isTriggered()) GameManager.getInstance().changeScene("settings");
     }
 
     @Override

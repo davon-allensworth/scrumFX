@@ -20,11 +20,6 @@ public class SprintRetrospective extends Scene {
                 e -> {
                     if (nextScreen.collidesWith(e.getX(), e.getY())) {
                         nextScreen.pressed();
-                        if (gm.iterationsComplete) {
-                            gm.changeScene("results");
-                        } else {
-                            gm.changeScene("arena");
-                        }
                     }
                 });
 
@@ -49,6 +44,19 @@ public class SprintRetrospective extends Scene {
         nextScreen.updateX(-(nextScreen.getWidth()/2));
         nextScreen.updateY((nextScreen.getHeight() + 30));
         this.entities.add(nextScreen);
+    }
+
+    @Override
+    public void update() {
+        nextScreen.update();
+
+        if(nextScreen.isTriggered()){
+            if (gm.iterationsComplete) {
+                gm.changeScene("results");
+            } else {
+                gm.changeScene("story select");
+            }
+        }
     }
 
     private void drawBackground() {

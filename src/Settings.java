@@ -36,7 +36,6 @@ public class Settings extends Scene {
                 public void handle(MouseEvent e){
                     if(backButton.collidesWith(e.getX(), e.getY())){
                         backButton.pressed();
-                        GameManager.getInstance().changeScene("main menu");
                     }
                 }
             });
@@ -109,6 +108,8 @@ public class Settings extends Scene {
         vbox.setSpacing(60);
         root.getChildren().add(vbox);
     }
+
+    
 
     private void drawBackground() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());

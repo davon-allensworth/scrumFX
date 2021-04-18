@@ -23,7 +23,6 @@ public class StorySelect extends Scene {
                     if (startSprintButton.collidesWith( e.getX(), e.getY() ) )
                     {
                         startSprintButton.pressed();
-                        GameManager.getInstance().changeScene("arena");
                     }
                 }
             });
@@ -49,6 +48,13 @@ public class StorySelect extends Scene {
         this.drawBackground();
         for(Entity e : this.entities)
             e.draw();  
+    }
+
+    @Override
+    public void update() {
+        startSprintButton.update();
+
+        if(startSprintButton.isTriggered()) GameManager.getInstance().changeScene("arena");
     }
 
     private void drawBackground() {

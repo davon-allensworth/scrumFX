@@ -3,6 +3,14 @@ import javafx.scene.canvas.GraphicsContext;
 public class Button extends Entity {
     String pressedButton = null;
     String idleButton = null;
+
+    public boolean triggered = false;
+
+    private boolean pressed = false;
+
+    //allow pressed button sprite too show for a little
+    private static double BUTTON_DELAY = 100;
+    private double buttonTimeCheck = -1;
     
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
@@ -27,9 +35,23 @@ public class Button extends Entity {
         super.draw();
     }
 
+    @Override
+    public void update(){
+        if(pressed && buttonTimeCheck < 0){
+            buttonTimeCheck = System.currentTimeMillis();
+        }else if(pressed && System.currentTimeMillis() - buttonTimeCheck > BUTTON_DELAY){
+            triggered = true;
+        }
+    }
+
+    public boolean isTriggered(){
+        return triggered;
+    }
+
     public void pressed() {
         buttonClick.stop();
         buttonClick.play();
         this.updateSprite(ASSET_PATH+pressedButton+FILE_EXT);
+        pressed = true;
     }
 }
