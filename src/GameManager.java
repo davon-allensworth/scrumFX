@@ -38,6 +38,8 @@ public class GameManager {
     private static double musicVolume = 0.1;
     private static double soundVolume = 0.1;
     private static Sound menuMusic;
+    private static Sound arenaMusic;
+    private static Sound victoryMusic;
 
     private Font font = null;
 
@@ -65,6 +67,8 @@ public class GameManager {
 
         // Initialize menu music
         menuMusic = new Sound("assets/music/Main_Menu.mp3", true, true);
+        arenaMusic = new Sound("assets/music/arena.wav", true, true);
+        victoryMusic = new Sound("assets/music/sprint complete.wav", true, false);
     }
 
     public static GameManager getInstance() {
@@ -140,15 +144,21 @@ public class GameManager {
 
         switch(sceneName) {
             case "arena":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(arenaMusic.isPlaying() == false) arenaMusic.play();
                 scene = new Arena(root, gc);
                 break;
 
             case "story select":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
                 if(menuMusic.isPlaying()) menuMusic.stop();
+                if(arenaMusic.isPlaying()) arenaMusic.stop();
                 scene = new StorySelect(root, gc);
                 break;
 
             case "retrospective":
+                if(arenaMusic.isPlaying()) arenaMusic.stop();
+                if(victoryMusic.isPlaying() == false) victoryMusic.play();
                 System.out.println("User score was: " + totalScore);
                 scene = new SprintRetrospective(root, gc);
                 break;
@@ -158,6 +168,7 @@ public class GameManager {
                 break;
             
             case "main menu":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
                 if(menuMusic.isPlaying() == false) menuMusic.play();
                 scene = new MainMenu(root, gc);
                 break;

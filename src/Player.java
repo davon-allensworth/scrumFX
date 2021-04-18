@@ -12,6 +12,11 @@ public class Player extends Entity {
     private Swatter swatter = null;
     private long powerTimeCheck = -1;
 
+    private static final Sound preswatSound = new Sound("assets/sounds/preswat.wav", false);
+    private static final Sound swatSound = new Sound("assets/sounds/swat.wav", false);
+    private static final Sound prespraySound = new Sound("assets/sounds/prespray.wav", false, true);
+    private static final Sound spraySound = new Sound("assets/sounds/spray.wav", false);
+
     private static final int POWER_TIME = 100;
     private static final double POWER_MAX = 3;
     private static final double POWER_INCREASE = 0.1;
@@ -95,21 +100,34 @@ public class Player extends Entity {
         if(spray) this.updateSprite(MOVE_RIGHT_SPRAY);
         else this.updateSprite(MOVE_RIGHT);
     }
-
     public void preswat(){
         moveCode = 2;
-        if(spray) this.updateSprite(PRESWAT_SPRAY);
-        else this.updateSprite(PRESWAT);
+        if(spray){
+            prespraySound.stop();
+            prespraySound.play();
+            this.updateSprite(PRESWAT_SPRAY);
+        }else {
+            preswatSound.stop();
+            preswatSound.play();
+            this.updateSprite(PRESWAT);
+        }
     }
 
     public void swat(){
         moveCode = 3;
         if(spray){
+            prespraySound.stop();//stop prespray sound loop
+            spraySound.stop();
+            spraySound.play();
             powerTimeCheck = -1;
             this.updateSprite(SWAT_SPRAY);
             sprayer = new SprayParticleGenerator(this.gc, x, y, sprayPower);
         }
-        else this.updateSprite(SWAT);
+        else{
+            swatSound.stop();
+            swatSound.play();
+            this.updateSprite(SWAT);
+        }
         sprayPower = 1;
     }
 
