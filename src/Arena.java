@@ -216,7 +216,7 @@ public class Arena extends Scene {
 
         //check for completed stories
         for(int i = 0; i < activeStories.size(); i++){
-            if(activeStories.get(i).isCompleted()){
+            if(activeStories.get(i).shouldSwitchOut()){
                 for(Story story : sprintBacklog){ //fill in the stories
                     if(!activeStories.contains(story) && !story.isCompleted()){
                         Story removedStory = activeStories.remove(i);//remove completed story
@@ -226,6 +226,8 @@ public class Arena extends Scene {
                         story.setLocation(removedStoryX, removedStoryY);
                         activeStories.add(i, story);//add new story
                         entities.add(story);
+                        story.inArena(true);
+                        story.startProgress();
                     }
                 }
             }

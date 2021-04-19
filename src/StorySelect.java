@@ -34,15 +34,17 @@ public class StorySelect extends Scene {
 
                     for(Story story : productBacklog){
                         if(story.collidesWith( e.getX(), e.getY())){
-                            if(!story.isSelected()){
+                            if(!story.isSelected() && !story.isCompleted()){
                                 gm.addToSprintBacklog(story);
                                 story.select();
-                            }else{
+                            }else if(!story.isCompleted()){
                                 gm.removeFromSprintBacklog(story);
                                 story.deselect();
                             }
-                            text.stopAutoAnimation();
-                            text.updateSprite("assets/stories/other/pick stories 0.png");
+                            if(!gm.getSprintBacklog().isEmpty()){
+                                text.stopAutoAnimation();
+                                text.updateSprite("assets/stories/other/pick stories 0.png");
+                            }
                         }
                     }
                 }
@@ -67,22 +69,33 @@ public class StorySelect extends Scene {
         this.entities.add(startSprintButton);
 
         for(Story story : gm.getProductBacklog()){
-            story.inArena(false); //tell them they are not in the arena
             story.updateGraphicsContext(gc);
+            story.inArena(false); //tell them they are not in the arena
+            story.setVisibility(true);
+            if(story.isCompleted()){
+                story.deselect();
+                gm.removeFromSprintBacklog(story);
+            }
         }
 
         final int STORIES_PER_ROW = 4;
         final int STORIES_PER_COL = 3;
-        double x = 0, y = centery - centery/1.3;
+        double x = 0, y = centery - centery/1.35;
         Story story;
         for(int i = 0; i < productBacklog.size(); i++){
             story = productBacklog.get(i);
             if(i % STORIES_PER_ROW == 0){
                 x = (screenWidth/STORIES_PER_ROW-story.getWidth());
-                y +=  (screenHeight/STORIES_PER_COL)-(story.getHeight()/1.7);
+                y +=  (screenHeight/STORIES_PER_COL)-(story.getHeight()/1.8);
             }
             story.setLocation(x, y);
             this.entities.add(story);
+
+            if(story.isCompleted()){
+                Entity checkmark = new Entity(gc, "assets/stories/other/checkmark.png", x, y, 1);
+                this.entities.add(checkmark);
+            }
+
             x += screenWidth/STORIES_PER_ROW + 1;
         }
     }

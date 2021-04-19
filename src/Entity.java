@@ -131,6 +131,11 @@ public class Entity {
         this.sprite = new Sprite(gc, filename, scale);
     }
 
+    public void updateSprite(String filename, boolean updateHitbox){
+        this.sprite = new Sprite(gc, filename, scale);
+        if(updateHitbox) setDimensionsToSprite();
+    }
+
     public void updateSprite(Sprite sprite){
         this.sprite = sprite;
     }

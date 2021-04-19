@@ -82,18 +82,19 @@ public class GameManager {
 
     public List<Story> generateStories() {
         //replace with grabbing random stories from a json file or something
-        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
-        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
-        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
+        productBacklog.add(new Story(gc, "think\n\nof cool\n\nvar\n\nnames", 1, 0, 0));
+        productBacklog.add(new Story(gc, "stare\n\nat\n\ncode", 2, 0, 0));
+        productBacklog.add(new Story(gc, "hack\n\nthe\n\nmain-\n\nframe", 3, 0, 0));
+        productBacklog.add(new Story(gc, "speak\n\nin\n\nbinary", 3, 0, 0));
+        productBacklog.add(new Story(gc, "impress\n\nfriends\n\nby\n\nediting\n\n html", 1, 0, 0));
+        productBacklog.add(new Story(gc, "drink\n\ntoo\n\nmuch\n\ncoffee", 2, 0, 0));
+        productBacklog.add(new Story(gc, "explain\n\nhashmap\n\nto mom\n\nfor no\n\n reason", 3, 0, 0));
+        productBacklog.add(new Story(gc, "google\n\nhow to\n\ncode", 3, 0, 0));
+        productBacklog.add(new Story(gc, "talk\n\nin\n\nepic\n\nbuzz\n\n words", 1, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\n world", 2, 0, 0));
         productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
         productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
-        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
-        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
-        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
-        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
-        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
-        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
-        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        Collections.shuffle(productBacklog);
         return productBacklog;
     }
 
@@ -136,6 +137,10 @@ public class GameManager {
             productBacklog = generateStories();
         }
         return productBacklog;
+    }
+
+    public void resetProductBacklog(){
+        productBacklog = new ArrayList<>();
     }
 
     public List<Story> getSprintBacklog() {
@@ -184,6 +189,7 @@ public class GameManager {
 
             case "results":
                 scene = new Results(root, gc);
+                resetProductBacklog();
                 break;
             
             case "main menu":
