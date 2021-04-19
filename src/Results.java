@@ -71,6 +71,7 @@ public class Results extends Scene{
                 System.out.println("Successfully saved score for user: " + name);
                 nameField.clear();
                 nameField.setPromptText("Saved!");
+                gm.totalScore = 0;
 
                 saveButton.setDisable(true);
                 nameField.setDisable(true);

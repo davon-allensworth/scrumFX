@@ -144,7 +144,6 @@ public class GameManager {
         productBacklog = new ArrayList<>();
         sprintBacklog = new ArrayList<>();
         this.currentSprint = 0; //and reset the sprint count
-        this.totalScore = 0; //and score
     }
 
     public List<Story> getSprintBacklog() {
