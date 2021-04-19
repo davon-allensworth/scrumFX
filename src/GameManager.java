@@ -20,7 +20,8 @@ public class GameManager {
 
     public static final boolean DEBUG = true;
 
-    public int totalScore;
+    public int totalPoints;     // Story points completed by the user
+    public int totalScore;      // Score accumulated throughout game
     public int currentSprint;
     private int amountOfSprints;
     private int sprintTimeLimit;
@@ -50,6 +51,7 @@ public class GameManager {
 
     private GameManager(GraphicsContext gc){
         this.gc = gc;
+        this.totalPoints = 0;
         this.totalScore = 0;
         this.currentSprint = 0;
         this.amountOfSprints = 4;
@@ -143,7 +145,9 @@ public class GameManager {
     public void resetBacklogs(){
         productBacklog = new ArrayList<>();
         sprintBacklog = new ArrayList<>();
-        this.currentSprint = 0; //and reset the sprint count
+        this.currentSprint = 0; // and reset the sprint count
+        this.totalScore = 0;    // reset the score
+        this.totalPoints = 0;   // reser the points
     }
 
     public List<Story> getSprintBacklog() {
@@ -172,7 +176,7 @@ public class GameManager {
         switch(sceneName) {
             case "arena":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(arenaMusic.isPlaying() == false) arenaMusic.play();
+                if(!arenaMusic.isPlaying()) arenaMusic.play();
                 scene = new Arena(root, gc);
                 break;
 
@@ -185,19 +189,18 @@ public class GameManager {
 
             case "retrospective":
                 if(arenaMusic.isPlaying()) arenaMusic.stop();
-                if(victoryMusic.isPlaying() == false) victoryMusic.play();
+                if(!victoryMusic.isPlaying()) victoryMusic.play();
                 System.out.println("User score was: " + totalScore);
                 scene = new SprintRetrospective(root, gc);
                 break;
 
             case "results":
                 scene = new Results(root, gc);
-                resetBacklogs();
                 break;
             
             case "main menu":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(menuMusic.isPlaying() == false) menuMusic.play();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new MainMenu(root, gc);
                 break;
 
@@ -287,10 +290,21 @@ public class GameManager {
     // and check to see if last iteration.
     public void endSprint(){
 
-        // add sprint score to user total.
+        // add point values
         for(Story s : sprintBacklog){
             if (s.isCompleted()){
-                totalScore += s.getLevel();
+                totalPoints += s.getLevel();
+            }
+        }
+
+        // add score to overall
+        int sprintMultiplier = (amountOfSprints - currentSprint);
+        int workloadMultiplier = sprintBacklog.size();
+        for(Story s : sprintBacklog){
+            if (s.isCompleted()){
+                totalScore += s.getLevel() + sprintMultiplier + workloadMultiplier;
+            } else {
+                totalScore -= s.getLevel();
             }
         }
 

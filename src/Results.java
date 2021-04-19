@@ -71,7 +71,9 @@ public class Results extends Scene{
                 System.out.println("Successfully saved score for user: " + name);
                 nameField.clear();
                 nameField.setPromptText("Saved!");
-                gm.totalScore = 0;
+
+                // Reset all point/story values
+                gm.resetBacklogs();
 
                 saveButton.setDisable(true);
                 nameField.setDisable(true);
