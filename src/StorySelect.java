@@ -61,10 +61,10 @@ public class StorySelect extends Scene {
 
         text = new Entity(gc, "assets/stories/other/pick stories 0.png", 0, 0, 1);
         entities.add(text);
-        text.autoAnimate(12, 100, "assets/stories/other/pick stories ");
+        if(gm.getSprintBacklog().isEmpty()) text.autoAnimate(12, 100, "assets/stories/other/pick stories ");
         
         startSprintButton = new Button(gc, "start button", "start button pressed", centerx, centery - (centery/1.225));
-        startSprintButton.setVisibility(false);
+        if(gm.getSprintBacklog().isEmpty()) startSprintButton.setVisibility(false);
         startSprintButton.updateX(-(startSprintButton.getWidth()/3));
         this.entities.add(startSprintButton);
 

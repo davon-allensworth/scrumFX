@@ -95,6 +95,7 @@ public class GameManager {
         productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
         productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
         Collections.shuffle(productBacklog);
+
         return productBacklog;
     }
 
@@ -139,8 +140,9 @@ public class GameManager {
         return productBacklog;
     }
 
-    public void resetProductBacklog(){
+    public void resetBacklogs(){
         productBacklog = new ArrayList<>();
+        sprintBacklog = new ArrayList<>();
     }
 
     public List<Story> getSprintBacklog() {
@@ -189,7 +191,7 @@ public class GameManager {
 
             case "results":
                 scene = new Results(root, gc);
-                resetProductBacklog();
+                resetBacklogs();
                 break;
             
             case "main menu":
@@ -269,6 +271,17 @@ public class GameManager {
         return result;
     }
 
+    public boolean productBacklogDone(){
+        boolean result = true;
+        for (Story s: productBacklog){
+            if (!s.isCompleted()){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
@@ -281,7 +294,7 @@ public class GameManager {
         }
 
         // Check if last iteration
-        if(currentSprint < amountOfSprints) {
+        if(currentSprint < amountOfSprints && !productBacklogDone()) {
             currentSprint++;
         } else {
             iterationsComplete = true;
