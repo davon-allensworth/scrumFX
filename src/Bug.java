@@ -14,7 +14,7 @@ public class Bug extends Entity{
 
     private static final int DESPAWN_TIME = 10000;
     private static final int ABSORB_TIME = 100;
-    private static final int SPRAY_DEATH_TIME = 200;
+    private static final int SPRAY_DEATH_TIME = 1000;
 
     private static final double IN_SPRAY_SPEED_RECUCTION = 8;
 
@@ -22,6 +22,8 @@ public class Bug extends Entity{
     private static final String DEAD = "assets/Bugs/bug splatter ";
     private static final String DEAD2 = "assets/Bugs/buggy dead ";
     private static final String ABSORB = "assets/Bugs/bug absorb ";
+
+    private static final Sound absorbSound = new Sound("assets/sounds/bug absorb.wav", false);
 
     private static Sprite[] deadSprite;
     private static Sprite[] deadSprite2;
@@ -69,11 +71,13 @@ public class Bug extends Entity{
 
     public void startAbsorb(){
         this.startAbsorb = true;
+        absorbSound.stop();
+        absorbSound.play();
     }
 
     public void inSpray(){
+        if(!inSpray)sprayTimeCheck = System.currentTimeMillis();
         inSpray = true;
-        sprayTimeCheck = System.currentTimeMillis();
     }
 
     private void absorb(){
