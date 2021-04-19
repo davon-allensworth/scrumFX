@@ -7,6 +7,7 @@ import java.util.Scanner;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.Axis;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
@@ -21,8 +22,9 @@ public class GameManager {
     public static final boolean DEBUG = true;
 
     public int totalScore;
-    private int currentSprint;
-    private int amountOfSprints;
+    public int currentSprint;
+    public int amountOfSprints;
+    public int totalStoryPoints;
     private int sprintTimeLimit;
     private int currentSprintTime;
     public boolean iterationsComplete;
@@ -31,6 +33,8 @@ public class GameManager {
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
+
+    public int[] velocities;
     public ArrayList<Score> scores;
 
     private Stage stage;
@@ -59,6 +63,13 @@ public class GameManager {
         this.sprintBacklog = new ArrayList<>();
         this.font = gc.getFont();
         this.scores = new ArrayList<>();
+        // this.velocities = new int[this.amountOfSprints]; 
+        this.velocities = new int[] {12, 9, 12}; // TODO delete before release, uncomment prev line
+        
+        // for (Story s : productBacklog)
+        //     this.totalStoryPoints += s.getLevel();
+        this.totalStoryPoints = 70; // TODO delete before release, uncomment prev loop
+
         loadScores();
     }
 
@@ -240,13 +251,16 @@ public class GameManager {
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
-
+        int score = 0;
         // add sprint score to user total.
         for(Story s : sprintBacklog){
             if (s.isCompleted()){
-                totalScore += s.getLevel();
+                score += s.getLevel();
             }
         }
+        totalScore += score;
+        velocities[currentSprint] = score;
+        
 
         // Check if last iteration
         if(currentSprint < amountOfSprints) {
