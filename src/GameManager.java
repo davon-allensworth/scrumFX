@@ -80,8 +80,23 @@ public class GameManager {
         return instance;
     }
 
-    public Story[] generateStories() {
-        return null;
+    public List<Story> generateStories() {
+        //replace with grabbing random stories from a json file or something
+        productBacklog.add(new Story(gc, "think\n\nof cool\n\nvar\n\nnames", 1, 0, 0));
+        productBacklog.add(new Story(gc, "stare\n\nat\n\ncode", 2, 0, 0));
+        productBacklog.add(new Story(gc, "hack\n\nthe\n\nmain-\n\nframe", 3, 0, 0));
+        productBacklog.add(new Story(gc, "speak\n\nin\n\nbinary", 3, 0, 0));
+        productBacklog.add(new Story(gc, "impress\n\nfriends\n\nby\n\nediting\n\n html", 1, 0, 0));
+        productBacklog.add(new Story(gc, "drink\n\ntoo\n\nmuch\n\ncoffee", 2, 0, 0));
+        productBacklog.add(new Story(gc, "explain\n\nhashmap\n\nto mom\n\nfor no\n\n reason", 3, 0, 0));
+        productBacklog.add(new Story(gc, "google\n\nhow to\n\ncode", 3, 0, 0));
+        productBacklog.add(new Story(gc, "talk\n\nin\n\nepic\n\nbuzz\n\n words", 1, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\n world", 2, 0, 0));
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        Collections.shuffle(productBacklog);
+
+        return productBacklog;
     }
 
     public static double getMusicVolume(){
@@ -118,23 +133,34 @@ public class GameManager {
         return TEXT_COLOR;
     }
 
-    public List<Story> getSprintBacklog() {
-        // replace with values set by storyselect screen
-        sprintBacklog = new ArrayList<>();
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
+    public List<Story> getProductBacklog(){
+        if(productBacklog.isEmpty()){
+            productBacklog = generateStories();
+        }
+        return productBacklog;
+    }
 
+    public void resetBacklogs(){
+        productBacklog = new ArrayList<>();
+        sprintBacklog = new ArrayList<>();
+    }
+
+    public List<Story> getSprintBacklog() {
         return sprintBacklog;
+    }
+
+    public void addToSprintBacklog(Story story){
+        sprintBacklog.add(story);
+    }
+
+    public void removeFromSprintBacklog(Story story){
+        sprintBacklog.remove(story);
     }
 
     public void changeScene(String sceneName) {
         Group root = new Group();
         
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(640, 600);
         root.getChildren().add(canvas);
         this.gc = canvas.getGraphicsContext2D();
 
@@ -165,6 +191,7 @@ public class GameManager {
 
             case "results":
                 scene = new Results(root, gc);
+                resetBacklogs();
                 break;
             
             case "main menu":
@@ -244,6 +271,17 @@ public class GameManager {
         return result;
     }
 
+    public boolean productBacklogDone(){
+        boolean result = true;
+        for (Story s: productBacklog){
+            if (!s.isCompleted()){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
@@ -256,7 +294,7 @@ public class GameManager {
         }
 
         // Check if last iteration
-        if(currentSprint < amountOfSprints) {
+        if(currentSprint < amountOfSprints && !productBacklogDone()) {
             currentSprint++;
         } else {
             iterationsComplete = true;

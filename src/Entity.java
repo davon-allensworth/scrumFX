@@ -12,6 +12,12 @@ public class Entity {
     protected boolean visible = true;
     GraphicsContext gc;
 
+    private boolean autoAnimate = false;
+    private int autoAnimFrame, autoAnimEnd;
+    private double autoAnimTimeCheck = -1;
+    private double autoAnimTime;
+    private String autoAnimPath;
+
     //for hitbox set to same as sprite dimensions
     public Entity(GraphicsContext gc, String filename, double x, double y, double scale) {
         this(gc, filename, x, y, 1, 1, scale);
@@ -55,6 +61,7 @@ public class Entity {
 
     public void update() {
         move();
+        if(autoAnimate) this.autoAnimate(autoAnimEnd, autoAnimTime, autoAnimPath);
     }
 
     private void move() {
@@ -124,12 +131,40 @@ public class Entity {
         this.sprite = new Sprite(gc, filename, scale);
     }
 
+    public void updateSprite(String filename, boolean updateHitbox){
+        this.sprite = new Sprite(gc, filename, scale);
+        if(updateHitbox) setDimensionsToSprite();
+    }
+
     public void updateSprite(Sprite sprite){
         this.sprite = sprite;
     }
 
-    public boolean changeSprite(Sprite newSprite) {
-        return false;
+    public void autoAnimate(int endNum, double frameTime, String path){
+        if(!autoAnimate){
+            autoAnimate = true;
+            autoAnimFrame = 0;
+            autoAnimEnd = endNum;
+            autoAnimTime = frameTime;
+            autoAnimPath = path;
+            autoAnimTimeCheck = System.currentTimeMillis();
+        }else if(System.currentTimeMillis() - autoAnimTimeCheck > frameTime){
+            this.updateSprite(path+autoAnimFrame+".png");
+            autoAnimFrame++;
+            autoAnimTimeCheck = System.currentTimeMillis();
+        }
+
+        if(autoAnimFrame > endNum){
+            autoAnimate = false;
+        }
+    }
+
+    public void stopAutoAnimation(){
+        autoAnimate = false;
+    }
+
+    public void updateGraphicsContext(GraphicsContext newGc){
+        this.gc = newGc;
     }
 
     public void setDimensionsToSprite(){

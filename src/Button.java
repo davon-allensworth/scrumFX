@@ -5,13 +5,14 @@ public class Button extends Entity {
     String idleButton = null;
 
     public boolean triggered = false;
-
+    private boolean ghosted = false;
     private boolean pressed = false;
 
     //allow pressed button sprite too show for a little
     private static double BUTTON_DELAY = 100;
     private double buttonTimeCheck = -1;
     
+    private String buttonName;
     private static final String ASSET_PATH = "assets/buttons/";
     private static final String FILE_EXT = ".png";
     private static final Sound buttonClick = new Sound("assets/sounds/click.wav", false);
@@ -27,12 +28,27 @@ public class Button extends Entity {
 
         //this constructor automatically sets the height and width to match the sprite
         super(gc, ASSET_PATH+buttonName+FILE_EXT, x, y, 1); 
+        this.buttonName = buttonName;
         idleButton = buttonName;
         pressedButton = pressedButtonName;
     }
 
     public void draw() {
         super.draw();
+    }
+
+    public void ghost(boolean ghostly){
+        if(ghostly){
+            updateSprite(ASSET_PATH+buttonName+" ghost"+FILE_EXT);
+            ghosted = true;
+        }else{
+            updateSprite(ASSET_PATH+buttonName+FILE_EXT);
+            ghosted = false;
+        }
+    }
+
+    public boolean isGhosted(){
+        return ghosted;
     }
 
     @Override

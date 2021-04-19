@@ -5,21 +5,28 @@ public class Story extends Entity {
     private int completion;
     private boolean green = true;
     private boolean completed = false;
+    private boolean shouldSwitchOut = false;
     private boolean progress = true; //should the progress bar go up
-    private boolean inArena = true; //is the story in the arena
+    private boolean inArena = false; //is the story in the arena
     private long timeCheck = 0; //to make progress bar move slowly
     private long decreaseTimeCheck = 0; //to make progress bar move slowly
+    private long switchTimeCheck = -1; //pause before switching
     private int level;
+    private boolean selected = false;
 
     private static final int PROGRESS_TIME = 2500;
     private static final int DECREASE_TIME = 4000;
+    private static final int SWITCH_TIME = 2000;
 
-    private static final int TEXT_OFFSET_X = 20;
-    private static final int TEXT_OFFSET_Y = 60;
+    private static final int TEXT_OFFSET_X = 15;
+    private static final int ARENA_TEXT_OFFSET_Y = 60;
+    private static final int NORMAL_TEXT_OFFSET_Y = 28;
 
     private static final String ASSET_PATH = "assets/stories/";
     private String levelPath;
     private static final String FILE_EXT = ".png";
+
+    private static final Sound storyClick = new Sound("assets/sounds/click.wav", false);
 
     public Story(GraphicsContext gc, String words, int level,
                   double x, double y) {
@@ -33,7 +40,8 @@ public class Story extends Entity {
     @Override
     public void draw() {
         super.draw();
-        gc.fillText(this.text, x + TEXT_OFFSET_X, y + TEXT_OFFSET_Y);
+        if(inArena) gc.fillText(this.text, x + TEXT_OFFSET_X, y + ARENA_TEXT_OFFSET_Y);
+        else gc.fillText(this.text, x + TEXT_OFFSET_X, y + NORMAL_TEXT_OFFSET_Y);
     }
 
     public void setLocation(double x, double y){
@@ -43,12 +51,44 @@ public class Story extends Entity {
         this.hitboxY = y;
     }
 
+    public void inArena(boolean answer){
+        inArena = answer;
+        if(answer == false){
+            progress = false;
+            if(selected){
+                this.updateSprite(ASSET_PATH+levelPath+" selected"+FILE_EXT,true);
+            }else{
+                this.updateSprite(ASSET_PATH+levelPath+FILE_EXT,true);
+            }
+        }else{
+            this.updateSprite(ASSET_PATH+levelPath+" green "+completion+FILE_EXT, true);
+        }
+    }
+
+    public boolean shouldSwitchOut(){
+        return shouldSwitchOut;
+    }
+
     public void select(){
+        if(!selected){
+            storyClick.stop();
+            storyClick.play();
+        }
+        selected = true;
         this.updateSprite(ASSET_PATH+levelPath+" selected"+FILE_EXT);
     }
 
     public void deselect(){
+        if(selected){
+            storyClick.stop();
+            storyClick.play();
+        }
+        selected = false;
         this.updateSprite(ASSET_PATH+levelPath+FILE_EXT);
+    }
+
+    public boolean isSelected(){
+        return selected;
     }
 
     public void startProgress(){
@@ -112,6 +152,13 @@ public class Story extends Entity {
                 timeCheck = System.currentTimeMillis();
                 if(green) increase();
                 else decrease();
+            }
+        }
+        if(this.isCompleted() && !this.shouldSwitchOut()){
+            if(switchTimeCheck < 0){
+                switchTimeCheck = System.currentTimeMillis();
+            }else if(System.currentTimeMillis() - switchTimeCheck > SWITCH_TIME){
+                shouldSwitchOut = true;
             }
         }
     }

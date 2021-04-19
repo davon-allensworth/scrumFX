@@ -30,7 +30,7 @@ public class Arena extends Scene {
     TimerTask timerTask;
     Integer timerCounter;
     Text text;
-    private static final double MAX_ACTIVE_STORIES = 3;
+    private static final double MAX_ACTIVE_STORIES = 4;
 
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
@@ -97,6 +97,11 @@ public class Arena extends Scene {
         double screenWidth = gc.getCanvas().getWidth();
         double screenHeight = gc.getCanvas().getHeight();
         
+        for(Story story : gm.getProductBacklog()){
+            story.inArena(true); //tell them they should be in arena mode
+            story.updateGraphicsContext(gc);
+        }
+
         this.sprintBacklog = gm.getSprintBacklog();
         for(Story story : sprintBacklog){
             if(activeStories.size() >= MAX_ACTIVE_STORIES){
@@ -104,7 +109,7 @@ public class Arena extends Scene {
             }
             activeStories.add(story);
         }
-
+        
         double x = 0;
         for(Story story : activeStories){
             if(x==0) x = (screenWidth/activeStories.size()-story.getWidth());
@@ -211,7 +216,7 @@ public class Arena extends Scene {
 
         //check for completed stories
         for(int i = 0; i < activeStories.size(); i++){
-            if(activeStories.get(i).isCompleted()){
+            if(activeStories.get(i).shouldSwitchOut()){
                 for(Story story : sprintBacklog){ //fill in the stories
                     if(!activeStories.contains(story) && !story.isCompleted()){
                         Story removedStory = activeStories.remove(i);//remove completed story
@@ -221,6 +226,8 @@ public class Arena extends Scene {
                         story.setLocation(removedStoryX, removedStoryY);
                         activeStories.add(i, story);//add new story
                         entities.add(story);
+                        story.inArena(true);
+                        story.startProgress();
                     }
                 }
             }
