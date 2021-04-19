@@ -90,6 +90,8 @@ public class Results extends Scene{
         } catch (Exception e) {
             result = false;
         }
+        gm.scores = new ArrayList<>();
+        gm.loadScores();
         return result;
     }
 
