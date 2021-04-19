@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
@@ -124,11 +125,13 @@ public class Arena extends Scene {
         timerTask = new TimerTask(){
             @Override
             public void run(){
-                timerCounter--;
-                if(timerCounter == 0 || gm.storiesDone()){
-                    timer.cancel();
-
-                }
+                Platform.runLater(() -> {
+                    timerCounter--;
+                    if(timerCounter == 0 || gm.storiesDone()){
+                        timer.cancel();
+                        gm.endSprint();
+                    }
+                });
             }
         };
 
