@@ -82,12 +82,14 @@ public class Settings extends Scene {
         mLabel.setFont(font);
         vbox.getChildren().add(mLabel);
         mSlider.setMin(0.0);
-        mSlider.setMax(1.0);
+        mSlider.setMax(0.15);
         mSlider.setValue(GameManager.getMusicVolume());
         mSlider.valueProperty().addListener(
             new ChangeListener<Number>(){
                 public void changed(ObservableValue <? extends Number> observable, Number oldNum, Number newNum){
-                    gm.getMenuMusic().setVolume(newNum); // Will change getMenuMusic to static method later
+                    GameManager.getMusic("menu").setVolume(newNum);
+                    GameManager.getMusic("arena").setVolume(newNum);
+                    GameManager.getMusic("victory").setVolume(newNum);
                     GameManager.setMusicVolume(newNum.doubleValue());
                 }
             }
@@ -99,7 +101,7 @@ public class Settings extends Scene {
         sfxLabel.setFont(font);
         vbox.getChildren().add(sfxLabel);
         sfxSlider.setMin(0.0);
-        sfxSlider.setMax(1.0);
+        sfxSlider.setMax(0.15);
         sfxSlider.setValue(GameManager.getSoundVolume());
         sfxSlider.valueProperty().addListener(
             new ChangeListener<Number>(){
