@@ -23,7 +23,7 @@ public class Arena extends Scene {
     List<Bug> bugs = new ArrayList<>();
     List<Entity> despawnList = new ArrayList<>();
     List<Spray> sprays = new ArrayList<>();
-    Random r = new Random();
+    Random r = new Random(System.currentTimeMillis());
 
     //ArenaTimer arenaTimer;
     Timer timer;
