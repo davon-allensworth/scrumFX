@@ -206,6 +206,8 @@ public class GameManager {
                 break;
 
             case "results":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new Results(root, gc);
                 break;
             
