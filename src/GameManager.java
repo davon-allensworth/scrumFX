@@ -35,7 +35,7 @@ public class GameManager {
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
 
-    public int[] velocities;
+    public ArrayList<Integer> velocities;
     public ArrayList<Score> scores;
 
     private Stage stage;
@@ -65,12 +65,10 @@ public class GameManager {
         this.sprintBacklog = new ArrayList<>();
         this.font = gc.getFont();
         this.scores = new ArrayList<>();
-        // this.velocities = new int[this.amountOfSprints]; 
-        this.velocities = new int[] {12, 9, 12}; // TODO delete before release, uncomment prev line
+        this.velocities = new ArrayList<Integer>(this.amountOfSprints);
+        // this.velocities = new int[] {12, 9, 12}; // TODO demo
         
-        // for (Story s : productBacklog)
-        //     this.totalStoryPoints += s.getLevel();
-        this.totalStoryPoints = 70; // TODO delete before release, uncomment prev loop
+        this.totalStoryPoints = 0;
 
         loadScores();
     }
@@ -108,6 +106,10 @@ public class GameManager {
         productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
         productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
         Collections.shuffle(productBacklog);
+
+        for (Story s : productBacklog)
+            this.totalStoryPoints += s.getLevel();
+        // this.totalStoryPoints = 70; // TODO demo
 
         return productBacklog;
     }
@@ -310,7 +312,7 @@ public class GameManager {
             }
         }
         totalScore += score;
-        velocities[currentSprint] = score;
+        velocities.add(score);
 
         // add score to overall
         int sprintMultiplier = (amountOfSprints - currentSprint);

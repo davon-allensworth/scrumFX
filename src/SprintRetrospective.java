@@ -59,9 +59,9 @@ public class SprintRetrospective extends Scene {
 
         int remainingStoryPoints = gm.totalStoryPoints;
         burndown.getData().add(new Data<Number, Number>(0, remainingStoryPoints)); // add sprint 0 backlog size
-        for (int i = 1; i <= gm.velocities.length; i++) {
-            velocity.getData().add(new Data<Number, Number>(i, gm.velocities[i-1]));
-            remainingStoryPoints -= gm.velocities[i-1];
+        for (int i = 1; i <= gm.velocities.size(); i++) {
+            velocity.getData().add(new Data<Number, Number>(i, gm.velocities.get(i-1)));
+            remainingStoryPoints -= gm.velocities.get(i-1);
             burndown.getData().add(new Data<Number, Number>(i, remainingStoryPoints));
         }
 
