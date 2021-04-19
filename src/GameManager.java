@@ -206,8 +206,15 @@ public class GameManager {
         stage.setScene(scene);
     }
 
-    public Sound getMenuMusic(){
-        return menuMusic;
+    public static Sound getMusic(String name){
+        if(name.equals("menu")){
+            return menuMusic;
+        }else if(name.equals("arena")){
+            return arenaMusic;
+        }else if(name.equals("victory")){
+            return victoryMusic;
+        }
+        return null;
     }
 
     private void loadScores(){
