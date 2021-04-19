@@ -21,7 +21,8 @@ public class GameManager {
 
     public static final boolean DEBUG = true;
 
-    public int totalScore;
+    public int totalPoints;     // Story points completed by the user
+    public int totalScore;      // Score accumulated throughout game
     public int currentSprint;
     public int amountOfSprints;
     public int totalStoryPoints;
@@ -54,6 +55,7 @@ public class GameManager {
 
     private GameManager(GraphicsContext gc){
         this.gc = gc;
+        this.totalPoints = 0;
         this.totalScore = 0;
         this.currentSprint = 0;
         this.amountOfSprints = 4;
@@ -91,8 +93,23 @@ public class GameManager {
         return instance;
     }
 
-    public Story[] generateStories() {
-        return null;
+    public List<Story> generateStories() {
+        //replace with grabbing random stories from a json file or something
+        productBacklog.add(new Story(gc, "think\n\nof cool\n\nvar\n\nnames", 1, 0, 0));
+        productBacklog.add(new Story(gc, "stare\n\nat\n\ncode", 2, 0, 0));
+        productBacklog.add(new Story(gc, "hack\n\nthe\n\nmain-\n\nframe", 3, 0, 0));
+        productBacklog.add(new Story(gc, "speak\n\nin\n\nbinary", 3, 0, 0));
+        productBacklog.add(new Story(gc, "impress\n\nfriends\n\nby\n\nediting\n\n html", 1, 0, 0));
+        productBacklog.add(new Story(gc, "drink\n\ntoo\n\nmuch\n\ncoffee", 2, 0, 0));
+        productBacklog.add(new Story(gc, "explain\n\nhashmap\n\nto mom\n\nfor no\n\n reason", 3, 0, 0));
+        productBacklog.add(new Story(gc, "google\n\nhow to\n\ncode", 3, 0, 0));
+        productBacklog.add(new Story(gc, "talk\n\nin\n\nepic\n\nbuzz\n\n words", 1, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\n world", 2, 0, 0));
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        Collections.shuffle(productBacklog);
+
+        return productBacklog;
     }
 
     public static double getMusicVolume(){
@@ -129,23 +146,37 @@ public class GameManager {
         return TEXT_COLOR;
     }
 
-    public List<Story> getSprintBacklog() {
-        // replace with values set by storyselect screen
-        sprintBacklog = new ArrayList<>();
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
+    public List<Story> getProductBacklog(){
+        if(productBacklog.isEmpty()){
+            productBacklog = generateStories();
+        }
+        return productBacklog;
+    }
 
+    public void resetBacklogs(){
+        productBacklog = new ArrayList<>();
+        sprintBacklog = new ArrayList<>();
+        this.currentSprint = 0; // and reset the sprint count
+        this.totalScore = 0;    // reset the score
+        this.totalPoints = 0;   // reser the points
+    }
+
+    public List<Story> getSprintBacklog() {
         return sprintBacklog;
+    }
+
+    public void addToSprintBacklog(Story story){
+        sprintBacklog.add(story);
+    }
+
+    public void removeFromSprintBacklog(Story story){
+        sprintBacklog.remove(story);
     }
 
     public void changeScene(String sceneName) {
         Group root = new Group();
         
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(640, 600);
         root.getChildren().add(canvas);
         this.gc = canvas.getGraphicsContext2D();
 
@@ -156,7 +187,7 @@ public class GameManager {
         switch(sceneName) {
             case "arena":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(arenaMusic.isPlaying() == false) arenaMusic.play();
+                if(!arenaMusic.isPlaying()) arenaMusic.play();
                 scene = new Arena(root, gc);
                 break;
 
@@ -169,7 +200,7 @@ public class GameManager {
 
             case "retrospective":
                 if(arenaMusic.isPlaying()) arenaMusic.stop();
-                if(victoryMusic.isPlaying() == false) victoryMusic.play();
+                if(!victoryMusic.isPlaying()) victoryMusic.play();
                 System.out.println("User score was: " + totalScore);
                 scene = new SprintRetrospective(root, gc);
                 break;
@@ -180,7 +211,7 @@ public class GameManager {
             
             case "main menu":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(menuMusic.isPlaying() == false) menuMusic.play();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new MainMenu(root, gc);
                 break;
 
@@ -198,11 +229,18 @@ public class GameManager {
         stage.setScene(scene);
     }
 
-    public Sound getMenuMusic(){
-        return menuMusic;
+    public static Sound getMusic(String name){
+        if(name.equals("menu")){
+            return menuMusic;
+        }else if(name.equals("arena")){
+            return arenaMusic;
+        }else if(name.equals("victory")){
+            return victoryMusic;
+        }
+        return null;
     }
 
-    private void loadScores(){
+    public void loadScores(){
         try {
         File scoreFile = new File("scores.txt");
         if(scoreFile.createNewFile())
@@ -248,11 +286,22 @@ public class GameManager {
         return result;
     }
 
+    public boolean productBacklogDone(){
+        boolean result = true;
+        for (Story s: productBacklog){
+            if (!s.isCompleted()){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
         int score = 0;
-        // add sprint score to user total.
+        // add point values
         for(Story s : sprintBacklog){
             if (s.isCompleted()){
                 score += s.getLevel();
@@ -260,10 +309,21 @@ public class GameManager {
         }
         totalScore += score;
         velocities[currentSprint] = score;
+
+        // add score to overall
+        int sprintMultiplier = (amountOfSprints - currentSprint);
+        int workloadMultiplier = sprintBacklog.size();
+        for(Story s : sprintBacklog){
+            if (s.isCompleted()){
+                totalScore += s.getLevel() + sprintMultiplier + workloadMultiplier;
+            } else {
+                totalScore -= s.getLevel();
+            }
+        }
         
 
         // Check if last iteration
-        if(currentSprint < amountOfSprints) {
+        if(currentSprint < amountOfSprints && !productBacklogDone()) {
             currentSprint++;
         } else {
             iterationsComplete = true;

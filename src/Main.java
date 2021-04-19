@@ -19,7 +19,7 @@ public class Main extends Application {
         stage.setTitle("S.C.R.U.M.");
 
         Group root = new Group();
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(700, 600);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 

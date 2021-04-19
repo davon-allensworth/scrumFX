@@ -9,13 +9,16 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class SprintRetrospective extends Scene {
     Button nextScreen = null;
     GraphicsContext gc;
     GameManager gm;
-    LineChart<Number, Number> chart = null;
     Parent root;
+    LineChart<Number, Number> chart = null;
+    Text text;
+    StringBuilder victoryText;
 
     public SprintRetrospective(Parent root, GraphicsContext gc) {
         super(root);
@@ -25,7 +28,8 @@ public class SprintRetrospective extends Scene {
         gm = GameManager.getInstance();
 
         // Mouse event handler
-        this.setOnMouseClicked(e -> {
+        this.setOnMouseClicked(
+        e -> {
             if (nextScreen.collidesWith(e.getX(), e.getY())) {
                 nextScreen.pressed();
             }
@@ -70,6 +74,10 @@ public class SprintRetrospective extends Scene {
         this.drawBackground();
         for (Entity e : this.entities)
             e.draw();
+
+        // Display Sprint Success
+        // Current Score
+        gc.fillText(this.victoryText.toString(), 10, 20);
     }
 
     @Override
@@ -81,9 +89,17 @@ public class SprintRetrospective extends Scene {
     public void setup() {
         double centerx = gc.getCanvas().getWidth() / 2;
         double centery = gc.getCanvas().getHeight() / 2;
+
         nextScreen = new Button(gc, "next button", "next button pressed", centerx, centery);
         nextScreen.updateX(-(nextScreen.getWidth() / 2));
         nextScreen.updateY((nextScreen.getHeight() + 80));
+
+
+        // Text setup
+        text = new Text();
+        this.victoryText = new StringBuilder("Congratulations!\n\nYou have successfully completed sprint " + gm.currentSprint + "!\n\n");
+        victoryText.append("Your current score: ").append(gm.totalScore);
+
         this.entities.add(nextScreen);
 
         setupCharts();
@@ -114,5 +130,4 @@ public class SprintRetrospective extends Scene {
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.setFill(GameManager.getTextColor());
     }
-
 }

@@ -19,17 +19,17 @@ public class MainMenu extends Scene {
         gm = GameManager.getInstance();
 
         this.setOnMouseClicked(
-                e -> {
-                    if ( startGameButton.collidesWith( e.getX(), e.getY() ) )
-                    {
-                        startGameButton.pressed();
-                        System.out.println("startgameButton pressed");
-                    }
+        e -> {
+            if ( startGameButton.collidesWith( e.getX(), e.getY() ) )
+            {
+                startGameButton.pressed();
+                System.out.println("startgameButton pressed");
+            }
 
-                    if(settingsButton.collidesWith(e.getX(), e.getY())){
-                        settingsButton.pressed();
-                    }
-                });
+            if(settingsButton.collidesWith(e.getX(), e.getY())){
+                settingsButton.pressed();
+            }
+        });
     }
     
     @Override

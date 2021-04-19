@@ -72,6 +72,9 @@ public class Results extends Scene{
                 nameField.clear();
                 nameField.setPromptText("Saved!");
 
+                // Reset all point/story values
+                gm.resetBacklogs();
+
                 saveButton.setDisable(true);
                 nameField.setDisable(true);
             } else {
@@ -90,6 +93,8 @@ public class Results extends Scene{
         } catch (Exception e) {
             result = false;
         }
+        gm.scores = new ArrayList<>();
+        gm.loadScores();
         return result;
     }
 
