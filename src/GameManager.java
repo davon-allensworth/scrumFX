@@ -21,7 +21,7 @@ public class GameManager {
     public static final boolean DEBUG = true;
 
     public int totalScore;
-    private int currentSprint;
+    public int currentSprint;
     private int amountOfSprints;
     private int sprintTimeLimit;
     private int currentSprintTime;
@@ -225,7 +225,7 @@ public class GameManager {
         return null;
     }
 
-    private void loadScores(){
+    public void loadScores(){
         try {
         File scoreFile = new File("scores.txt");
         if(scoreFile.createNewFile())

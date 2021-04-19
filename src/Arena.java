@@ -134,6 +134,7 @@ public class Arena extends Scene {
                     timerCounter--;
                     if(timerCounter == 0 || gm.storiesDone()){
                         timer.cancel();
+                        timerTask.cancel();
                         gm.endSprint();
                     }
                 });
@@ -207,11 +208,6 @@ public class Arena extends Scene {
             }else{
                 entities.remove(e);
             }
-        }
-
-        // check if the sprint is over
-        if(gm.storiesDone()){
-            gm.endSprint();
         }
 
         //check for completed stories
