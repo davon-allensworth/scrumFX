@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -9,20 +10,40 @@ import javafx.scene.paint.Color;
 public class StorySelect extends Scene {
     private Button startSprintButton = null;
     private GraphicsContext gc;
+    private GameManager gm;
+    private List<Story> productBacklog;
+    private Entity text;
 
     public StorySelect(Parent root, GraphicsContext gc) {
         super(root);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
+        this.gm = GameManager.getInstance();
+
+        this.productBacklog = gm.getProductBacklog();
 
         this.setOnMouseClicked(
             new EventHandler<MouseEvent>()
             {
                 public void handle(MouseEvent e)
                 {
-                    if (startSprintButton.collidesWith( e.getX(), e.getY() ) )
+                    if (!gm.getSprintBacklog().isEmpty() && startSprintButton.collidesWith( e.getX(), e.getY() ) )
                     {
                         startSprintButton.pressed();
+                    }
+
+                    for(Story story : productBacklog){
+                        if(story.collidesWith( e.getX(), e.getY())){
+                            if(!story.isSelected()){
+                                gm.addToSprintBacklog(story);
+                                story.select();
+                            }else{
+                                gm.removeFromSprintBacklog(story);
+                                story.deselect();
+                            }
+                            text.stopAutoAnimation();
+                            text.updateSprite("assets/stories/other/pick stories 0.png");
+                        }
                     }
                 }
             });
@@ -31,12 +52,39 @@ public class StorySelect extends Scene {
 
     @Override
     public void setup() {
-        double centerx = (double)gc.getCanvas().getWidth() / 2;
-        double centery = (double)gc.getCanvas().getHeight() / 2;
+        double screenWidth = gc.getCanvas().getWidth();
+        double screenHeight = gc.getCanvas().getHeight();
+        double centerx = (double)screenWidth / 2;
+        double centery = (double)screenHeight / 2;
+
+        text = new Entity(gc, "assets/stories/other/pick stories 0.png", 0, 0, 1);
+        entities.add(text);
+        text.autoAnimate(12, 100, "assets/stories/other/pick stories ");
         
-        startSprintButton = new Button(gc, "next button", "next button pressed", centerx, centery);
-        startSprintButton.updateX(-(startSprintButton.getWidth()/2));
+        startSprintButton = new Button(gc, "start button", "start button pressed", centerx, centery - (centery/1.225));
+        startSprintButton.setVisibility(false);
+        startSprintButton.updateX(-(startSprintButton.getWidth()/3));
         this.entities.add(startSprintButton);
+
+        for(Story story : gm.getProductBacklog()){
+            story.inArena(false); //tell them they are not in the arena
+            story.updateGraphicsContext(gc);
+        }
+
+        final int STORIES_PER_ROW = 4;
+        final int STORIES_PER_COL = 3;
+        double x = 0, y = centery - centery/1.3;
+        Story story;
+        for(int i = 0; i < productBacklog.size(); i++){
+            story = productBacklog.get(i);
+            if(i % STORIES_PER_ROW == 0){
+                x = (screenWidth/STORIES_PER_ROW-story.getWidth());
+                y +=  (screenHeight/STORIES_PER_COL)-(story.getHeight()/1.7);
+            }
+            story.setLocation(x, y);
+            this.entities.add(story);
+            x += screenWidth/STORIES_PER_ROW + 1;
+        }
     }
 
     @Override
@@ -52,8 +100,17 @@ public class StorySelect extends Scene {
 
     @Override
     public void update() {
-        startSprintButton.update();
-
+        for(Entity entity : entities){
+            entity.update();
+        }
+        if(gm.getSprintBacklog().isEmpty()){
+            if(!startSprintButton.isGhosted()) startSprintButton.ghost(true);
+        }else{
+            if(startSprintButton.isGhosted()){
+                startSprintButton.setVisibility(true);
+                startSprintButton.ghost(false);
+            }
+        }
         if(startSprintButton.isTriggered()) GameManager.getInstance().changeScene("arena");
     }
 

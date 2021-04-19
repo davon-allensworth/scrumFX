@@ -6,10 +6,11 @@ public class Story extends Entity {
     private boolean green = true;
     private boolean completed = false;
     private boolean progress = true; //should the progress bar go up
-    private boolean inArena = true; //is the story in the arena
+    private boolean inArena = false; //is the story in the arena
     private long timeCheck = 0; //to make progress bar move slowly
     private long decreaseTimeCheck = 0; //to make progress bar move slowly
     private int level;
+    private boolean selected = false;
 
     private static final int PROGRESS_TIME = 2500;
     private static final int DECREASE_TIME = 4000;
@@ -43,12 +44,26 @@ public class Story extends Entity {
         this.hitboxY = y;
     }
 
+    public void inArena(boolean answer){
+        inArena = answer;
+        if(answer == false){
+            if(selected) select();
+            else deselect();
+        }
+    }
+
     public void select(){
+        selected = true;
         this.updateSprite(ASSET_PATH+levelPath+" selected"+FILE_EXT);
     }
 
     public void deselect(){
+        selected = false;
         this.updateSprite(ASSET_PATH+levelPath+FILE_EXT);
+    }
+
+    public boolean isSelected(){
+        return selected;
     }
 
     public void startProgress(){

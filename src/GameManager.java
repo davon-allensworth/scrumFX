@@ -80,8 +80,21 @@ public class GameManager {
         return instance;
     }
 
-    public Story[] generateStories() {
-        return null;
+    public List<Story> generateStories() {
+        //replace with grabbing random stories from a json file or something
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        productBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
+        productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
+        productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
+        return productBacklog;
     }
 
     public static double getMusicVolume(){
@@ -118,23 +131,29 @@ public class GameManager {
         return TEXT_COLOR;
     }
 
-    public List<Story> getSprintBacklog() {
-        // replace with values set by storyselect screen
-        sprintBacklog = new ArrayList<>();
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 2, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
-        sprintBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
-        sprintBacklog.add(new Story(gc, "code\n\nup a\n\npretty\n\nhello\n\nworld", 2, 0, 0));
+    public List<Story> getProductBacklog(){
+        if(productBacklog.isEmpty()){
+            productBacklog = generateStories();
+        }
+        return productBacklog;
+    }
 
+    public List<Story> getSprintBacklog() {
         return sprintBacklog;
+    }
+
+    public void addToSprintBacklog(Story story){
+        sprintBacklog.add(story);
+    }
+
+    public void removeFromSprintBacklog(Story story){
+        sprintBacklog.remove(story);
     }
 
     public void changeScene(String sceneName) {
         Group root = new Group();
         
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(640, 600);
         root.getChildren().add(canvas);
         this.gc = canvas.getGraphicsContext2D();
 
