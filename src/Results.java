@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -19,6 +20,8 @@ public class Results extends Scene{
     GraphicsContext gc;
     GameManager gm;
     private Parent root;
+    Text text;
+    StringBuilder resultsText;
 
     public Results(Parent root, GraphicsContext gc) {
         super(root);
@@ -109,6 +112,7 @@ public class Results extends Scene{
         this.drawBackground();
         for(Entity e : this.entities)
             e.draw();
+        gc.fillText(this.resultsText.toString(), 80, 90);
     }
 
     @Override
@@ -147,6 +151,21 @@ public class Results extends Scene{
         saveButton.setMinHeight(50);
         saveButton.relocate(centerx, centery);
         saveButton.setTranslateX( -saveButton.getMinWidth() / 2 + nameField.getMinWidth() /2);
+
+        // Text setup
+        text = new Text();
+        Font resultsFont = Font.loadFont( getClass().getResourceAsStream("assets/fonts/nokiafc22.ttf"), 20);
+        text.setFont(resultsFont);
+
+        this.resultsText = new StringBuilder("Congratulations!\n\n\n");
+        if(gm.productBacklogDone()){
+            resultsText.append("You were able to successfully complete all ").append(gm.productBacklog.size()).append(" stories!\n\n");
+        } else{
+            resultsText.append("You were able to complete ").append(gm.storiesCompleted()).append(" out of ").append(gm.productBacklog.size()).append(" stories!\n\n");
+            resultsText.append("Pacing yourself properly is the key to being Agile.\n\n");
+            resultsText.append("Be sure to not take on too many stories at once!\n\n");
+        }
+        resultsText.append("\nYour final score: ").append(gm.totalScore);
 
         saveButton.setDefaultButton(true);
     }

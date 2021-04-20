@@ -9,6 +9,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class SprintRetrospective extends Scene {
@@ -77,7 +78,7 @@ public class SprintRetrospective extends Scene {
 
         // Display Sprint Success
         // Current Score
-        gc.fillText(this.victoryText.toString(), 10, 20);
+        gc.fillText(this.victoryText.toString(), 120, 70);
     }
 
     @Override
@@ -97,6 +98,8 @@ public class SprintRetrospective extends Scene {
 
         // Text setup
         text = new Text();
+        Font resultsFont = Font.loadFont( getClass().getResourceAsStream("assets/fonts/nokiafc22.ttf"), 24);
+        text.setFont(resultsFont);
         this.victoryText = new StringBuilder("Congratulations!\n\nYou have successfully completed sprint " + gm.currentSprint + "!\n\n");
         victoryText.append("Your current score: ").append(gm.totalScore);
 
