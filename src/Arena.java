@@ -35,8 +35,9 @@ public class Arena extends Scene {
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
     private static final int BUG_SPAWN_TIME_BASE = 5000;
-    private static final double BUG_SPAWN_RAND_MAX = 180;
-    private static final double BUG_TIME_RAND_MAX = 4000;
+    private static final double BUG_SPAWN_RAND_MAX = 280;
+    private static final double BUG_TIME_RAND_MAX = 4500;
+    private static final double SPAWN_OFFSET = 65;
 
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;
@@ -233,14 +234,14 @@ public class Arena extends Scene {
         if(bugSpawnTimeCheck < 0){
             double randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
             bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
-            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
+            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }else if(System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime){
             double screenWidth = gc.getCanvas().getWidth();
             double centerx = screenWidth / 2;
 
             double randomDouble = (-BUG_SPAWN_RAND_MAX) + (BUG_SPAWN_RAND_MAX - (-BUG_SPAWN_RAND_MAX)) * r.nextDouble();
-            double spawnX = centerx + randomDouble;
+            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
 
             int randomLevel = sprintBacklog.get(r.nextInt(sprintBacklog.size())).getLevel();
 
@@ -251,7 +252,7 @@ public class Arena extends Scene {
 
             randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
             bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
-            if(!activeStories.isEmpty()) bugSpawnTime /= activeStories.size();
+            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }
 
@@ -265,7 +266,7 @@ public class Arena extends Scene {
             double centerx = screenWidth / 2;
 
             double randomDouble = (-ITEM_SPAWN_RAND_MAX) + (ITEM_SPAWN_RAND_MAX - (-ITEM_SPAWN_RAND_MAX)) * r.nextDouble();
-            double spawnX = centerx + randomDouble;
+            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
 
             Spray spray = new Spray(gc, spawnX);
 
