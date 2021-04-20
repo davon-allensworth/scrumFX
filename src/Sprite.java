@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +22,7 @@ public class Sprite {
         this.gc = gc;
         this.scale = scale * SCALE_MULTIPLIER;
         imageName = filename;
-        image = new Image(filename);
+        image = new Image(new File("src/" + filename).toURI().toString());
         ImageView imageView = new ImageView();
         imageView.setImage(image);
     }

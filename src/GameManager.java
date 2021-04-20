@@ -7,6 +7,7 @@ import java.util.Scanner;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.Axis;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
@@ -23,7 +24,8 @@ public class GameManager {
     public int totalPoints;     // Story points completed by the user
     public int totalScore;      // Score accumulated throughout game
     public int currentSprint;
-    private int amountOfSprints;
+    public int amountOfSprints;
+    public int totalStoryPoints;
     private int sprintTimeLimit;
     private int currentSprintTime;
     public boolean iterationsComplete;
@@ -32,6 +34,8 @@ public class GameManager {
 
     public List<Story> productBacklog;
     public List<Story> sprintBacklog;
+
+    public ArrayList<Integer> velocities;
     public ArrayList<Score> scores;
 
     private Stage stage;
@@ -61,6 +65,11 @@ public class GameManager {
         this.sprintBacklog = new ArrayList<>();
         this.font = gc.getFont();
         this.scores = new ArrayList<>();
+        this.velocities = new ArrayList<Integer>(this.amountOfSprints);
+        // this.velocities = new int[] {12, 9, 12}; // TODO demo
+        
+        this.totalStoryPoints = 0;
+
         loadScores();
     }
 
@@ -97,6 +106,10 @@ public class GameManager {
         productBacklog.add(new Story(gc, "take\n\na nice\n\nnap", 3, 0, 0));
         productBacklog.add(new Story(gc, "goof\n\naround\n\non\n\nreddit", 1, 0, 0));
         Collections.shuffle(productBacklog);
+
+        for (Story s : productBacklog)
+            this.totalStoryPoints += s.getLevel();
+        // this.totalStoryPoints = 70; // TODO demo
 
         return productBacklog;
     }
@@ -195,6 +208,8 @@ public class GameManager {
                 break;
 
             case "results":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new Results(root, gc);
                 break;
             
@@ -290,13 +305,15 @@ public class GameManager {
     // End of a typical iteration, should show the user the score screen
     // and check to see if last iteration.
     public void endSprint(){
-
+        int score = 0;
         // add point values
         for(Story s : sprintBacklog){
             if (s.isCompleted()){
-                totalPoints += s.getLevel();
+                score += s.getLevel();
             }
         }
+        totalScore += score;
+        velocities.add(score);
 
         // add score to overall
         int sprintMultiplier = (amountOfSprints - currentSprint);
@@ -308,6 +325,7 @@ public class GameManager {
                 totalScore -= s.getLevel();
             }
         }
+        
 
         // Check if last iteration
         if(currentSprint < amountOfSprints && !productBacklogDone()) {
