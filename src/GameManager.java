@@ -189,14 +189,15 @@ public class GameManager {
         switch(sceneName) {
             case "arena":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(menuMusic.isPlaying()) menuMusic.stop();
                 if(!arenaMusic.isPlaying()) arenaMusic.play();
                 scene = new Arena(root, gc);
                 break;
 
             case "story select":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(menuMusic.isPlaying()) menuMusic.stop();
                 if(arenaMusic.isPlaying()) arenaMusic.stop();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new StorySelect(root, gc);
                 break;
 
