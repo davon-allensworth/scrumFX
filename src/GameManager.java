@@ -58,7 +58,7 @@ public class GameManager {
         this.totalPoints = 0;
         this.totalScore = 0;
         this.currentSprint = 0;
-        this.amountOfSprints = 1;
+        this.amountOfSprints = 0;
         this.iterationsComplete = false;
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
