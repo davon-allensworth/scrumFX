@@ -43,7 +43,8 @@ public class SprintRetrospective extends Scene {
         xAxis.setLabel("Sprint");
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(0);
-        xAxis.setUpperBound(gm.amountOfSprints);
+        // xAxis.setUpperBound(gm.amountOfSprints);
+        xAxis.setUpperBound(4);
 
         yAxis.setLabel("Velocity");
         yAxis.setForceZeroInRange(true);
