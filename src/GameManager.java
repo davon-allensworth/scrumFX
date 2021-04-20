@@ -19,7 +19,7 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public int totalPoints;     // Story points completed by the user
     public int totalScore;      // Score accumulated throughout game
