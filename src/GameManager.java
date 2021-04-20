@@ -1,18 +1,15 @@
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.Axis;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 public class GameManager {
     private static GameManager instance = null;
@@ -154,6 +151,16 @@ public class GameManager {
             productBacklog = generateStories();
         }
         return productBacklog;
+    }
+
+    public int storiesCompleted(){
+        int num = 0;
+        for (Story s: productBacklog){
+            if (s.isCompleted()){
+                num++;
+            }
+        }
+        return num;
     }
 
     public void resetBacklogs(){
@@ -327,7 +334,6 @@ public class GameManager {
                 totalScore -= s.getLevel();
             }
         }
-        
 
         // Check if last iteration
         if(currentSprint < amountOfSprints && !productBacklogDone()) {
