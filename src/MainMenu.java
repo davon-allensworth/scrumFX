@@ -45,14 +45,14 @@ public class MainMenu extends Scene {
         this.entities.add(startGameButton);
         this.entities.add(settingsButton);
 
-        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, (centery/4) + 20, 1);
+        Entity title = new Entity(gc, "assets/S.C.R.U.M..gif", 0, (centery/4) + 55, 1);
         title.centerX();
         this.entities.add(title);
         text = new Text();
         this.highScores = new StringBuilder("HIGH SCORES:\n\n");
 
-        // Display top 3 high scores
-        for(int i = 0; i < 3; i++){
+        // Display top 5 high scores
+        for(int i = 0; i < 5; i++){
             if(i < gm.scores.size()){
                 Score s = gm.scores.get(i);
                 String score = String.format("%-13s%s%n", s.player, s.value);
@@ -65,6 +65,13 @@ public class MainMenu extends Scene {
                         break;
                     case 2:
                         highScores.append("3rd ").append(score).append("\n");
+                        break;
+                    case 3:
+                        highScores.append("4th ").append(score).append("\n");
+                        break;
+                    case 4:
+                        highScores.append("5th ").append(score).append("\n");
+                        break;
                 }
             }
         }
