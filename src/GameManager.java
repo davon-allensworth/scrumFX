@@ -58,7 +58,7 @@ public class GameManager {
         this.totalPoints = 0;
         this.totalScore = 0;
         this.currentSprint = 0;
-        this.amountOfSprints = 4;
+        this.amountOfSprints = 1;
         this.iterationsComplete = false;
         this.sprintTimeLimit = 120;
         this.productBacklog = new ArrayList<>();
@@ -66,7 +66,8 @@ public class GameManager {
         this.font = gc.getFont();
         this.scores = new ArrayList<>();
         this.velocities = new ArrayList<Integer>(this.amountOfSprints);
-        // this.velocities = new int[] {12, 9, 12}; // TODO demo
+        this.velocities.add(4); // TODO demo
+        this.velocities.add(6); // TODO demo
         
         this.totalStoryPoints = 0;
 
