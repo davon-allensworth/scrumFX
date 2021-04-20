@@ -113,6 +113,10 @@ public class Player extends Entity {
         }
     }
 
+    public void stopPrespraySound(){
+        prespraySound.stop();
+    }
+
     public void swat(){
         moveCode = 3;
         if(spray){
