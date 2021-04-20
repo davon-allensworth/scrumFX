@@ -16,7 +16,7 @@ public class GameManager {
 
     private GraphicsContext gc;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public int totalPoints;     // Story points completed by the user
     public int totalScore;      // Score accumulated throughout game
@@ -196,14 +196,15 @@ public class GameManager {
         switch(sceneName) {
             case "arena":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(menuMusic.isPlaying()) menuMusic.stop();
                 if(!arenaMusic.isPlaying()) arenaMusic.play();
                 scene = new Arena(root, gc);
                 break;
 
             case "story select":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
-                if(menuMusic.isPlaying()) menuMusic.stop();
                 if(arenaMusic.isPlaying()) arenaMusic.stop();
+                if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new StorySelect(root, gc);
                 break;
 

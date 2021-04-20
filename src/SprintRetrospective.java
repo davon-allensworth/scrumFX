@@ -44,10 +44,15 @@ public class SprintRetrospective extends Scene {
         xAxis.setLabel("Sprint");
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(0);
-        xAxis.setUpperBound(gm.amountOfSprints);
+        // xAxis.setUpperBound(gm.amountOfSprints);
+        xAxis.setUpperBound(4);
+        xAxis.setTickUnit(1.0);
+        xAxis.setMinorTickVisible(false);
 
         yAxis.setLabel("Velocity");
         yAxis.setForceZeroInRange(true);
+        yAxis.setTickUnit(5.0);
+        yAxis.setMinorTickVisible(false);
 
         chart = new LineChart<Number, Number>(xAxis, yAxis);
         // velocityChart.setLegendVisible(false);

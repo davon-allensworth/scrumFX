@@ -149,7 +149,7 @@ public class Arena extends Scene {
 
     @Override
     public void teardown() {
-        
+        player.stopPrespraySound();
     }
 
     @Override
