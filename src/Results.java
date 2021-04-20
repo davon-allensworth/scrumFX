@@ -112,7 +112,7 @@ public class Results extends Scene{
         this.drawBackground();
         for(Entity e : this.entities)
             e.draw();
-        gc.fillText(this.resultsText.toString(), 80, 90);
+        gc.fillText(this.resultsText.toString(), 60, 90);
     }
 
     @Override
