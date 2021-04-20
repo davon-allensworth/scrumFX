@@ -112,7 +112,7 @@ public class Arena extends Scene {
         
         double x = 0;
         for(Story story : activeStories){
-            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth());
+            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth())/2;
             story.setLocation(x, screenHeight-story.getHeight());
             story.startProgress();
             this.entities.add(story);

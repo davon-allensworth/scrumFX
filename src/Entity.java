@@ -53,7 +53,13 @@ public class Entity {
     }
     
     public void draw() {
-        if(this.visible) sprite.draw(x, y);
+        if(this.visible){
+            try{
+                sprite.draw(x, y);
+            }catch(NullPointerException e){
+                System.out.println("Error: sprite is null");
+            }
+        }
         if(GameManager.DEBUG){
             gc.strokeRect(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
         }

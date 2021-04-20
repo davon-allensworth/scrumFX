@@ -199,6 +199,7 @@ public class GameManager {
                 break;
             
             case "main menu":
+                resetBacklogs();
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
                 if(!menuMusic.isPlaying()) menuMusic.play();
                 scene = new MainMenu(root, gc);
@@ -311,6 +312,7 @@ public class GameManager {
         // Check if last iteration
         if(currentSprint < amountOfSprints && !productBacklogDone()) {
             currentSprint++;
+            iterationsComplete = false;
         } else {
             iterationsComplete = true;
         }
