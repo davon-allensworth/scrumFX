@@ -15,7 +15,7 @@ public class StorySelect extends Scene {
     private Entity text;
 
     public StorySelect(Parent root, GraphicsContext gc) {
-        super(root);
+        super(root, Color.LIGHTCORAL);
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
         this.gm = GameManager.getInstance();
@@ -106,7 +106,7 @@ public class StorySelect extends Scene {
     
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for(Entity e : this.entities)
             e.draw();  
     }
@@ -125,12 +125,5 @@ public class StorySelect extends Scene {
             }
         }
         if(startSprintButton.isTriggered()) GameManager.getInstance().changeScene("arena");
-    }
-
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.LIGHTCORAL);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
     }
 }

@@ -25,7 +25,7 @@ public class Settings extends Scene {
     GameManager gm;
 
     public Settings(Parent root, GraphicsContext gc, GameManager gm) {
-        super(root);
+        super(root, Color.CORNSILK);
         this.root = (Group)root;
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -45,7 +45,7 @@ public class Settings extends Scene {
 
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for(Entity e : this.entities)
             e.draw();  
     }
@@ -118,11 +118,4 @@ public class Settings extends Scene {
         vbox.setSpacing(60);
         root.getChildren().add(vbox);
     }
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.CORNSILK);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
-    }
-    
 }

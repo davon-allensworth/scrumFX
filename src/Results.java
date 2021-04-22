@@ -24,7 +24,7 @@ public class Results extends Scene{
     StringBuilder resultsText;
 
     public Results(Parent root, GraphicsContext gc) {
-        super(root);
+        super(root, Color.LIGHTCORAL);
         this.root = root;
         this.entities = new ArrayList<>();
         this.gc = gc;
@@ -109,7 +109,7 @@ public class Results extends Scene{
 
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for(Entity e : this.entities)
             e.draw();
         gc.fillText(this.resultsText.toString(), 60, 90);
@@ -169,12 +169,4 @@ public class Results extends Scene{
 
         saveButton.setDefaultButton(true);
     }
-    
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.LIGHTCORAL);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
-    }
-
 }

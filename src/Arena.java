@@ -35,7 +35,7 @@ public class Arena extends Scene {
     private static final double ITEM_TIME_RAND_MAX = 3000;
 
     public Arena(Parent root, GraphicsContext gc) {
-        super(root);
+        super(root, Color.LIGHTSKYBLUE);
         this.entities = new ArrayList<>();
         this.gc = gc;
         this.gm = GameManager.getInstance();
@@ -351,17 +351,10 @@ public class Arena extends Scene {
 
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for(Entity e : this.entities)
             if(!(e instanceof Player)) e.draw();  
         player.draw(); //draw player on top
         gc.fillText(timerCounter.toString(), 10, 20);
-    }
-
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.LIGHTSKYBLUE);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
     }
 }

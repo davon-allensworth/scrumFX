@@ -22,7 +22,7 @@ public class SprintRetrospective extends Scene {
     StringBuilder victoryText;
 
     public SprintRetrospective(Parent root, GraphicsContext gc) {
-        super(root);
+        super(root, Color.LIGHTCORAL);
         this.entities = new ArrayList<>();
         this.gc = gc;
         this.root = root;
@@ -77,7 +77,7 @@ public class SprintRetrospective extends Scene {
 
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for (Entity e : this.entities)
             e.draw();
 
@@ -130,12 +130,5 @@ public class SprintRetrospective extends Scene {
                 gm.changeScene("story select");
             }
         }
-    }
-
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.LIGHTCORAL);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
     }
 }

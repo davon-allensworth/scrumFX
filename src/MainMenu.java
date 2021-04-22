@@ -13,7 +13,7 @@ public class MainMenu extends Scene {
     StringBuilder highScores;
 
     public MainMenu(Parent root, GraphicsContext gc) {
-        super(root);
+        super(root, Color.LIGHTSKYBLUE);
         this.entities = new ArrayList<>();
         this.gc = gc;
         gm = GameManager.getInstance();
@@ -93,16 +93,9 @@ public class MainMenu extends Scene {
 
     @Override
     public void draw() {
-        this.drawBackground();
+        super.drawBackground(gc);
         for(Entity e : this.entities)
             e.draw();
         gc.fillText(this.highScores.toString(), 10, 20);
-    }
-
-    private void drawBackground() {
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Color.LIGHTSKYBLUE);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(GameManager.getTextColor());
     }
 }
