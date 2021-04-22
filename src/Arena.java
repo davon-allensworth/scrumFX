@@ -188,37 +188,48 @@ public class Arena extends Scene {
     }
 
     private void spawnItems() {
-        if(itemsNotReady()){
-            double randomDouble = getRand(ITEM_TIME_RAND_MAX);
-            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) / 2;
-            itemSpawnTimeCheck = System.currentTimeMillis();
-        }else if(itemsCanSpawn()){
-            double screenWidth = gc.getCanvas().getWidth();
-            double centerx = screenWidth / 2;
-
-            double randomDouble = getRand(ITEM_SPAWN_RAND_MAX);
-            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
-
-            Spray spray = new Spray(gc, spawnX);
-
-            this.entities.add(spray);
-            spray.startMoving();
-
-            randomDouble = (getRand(ITEM_TIME_RAND_MAX));
-            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) * 4;
-            itemSpawnTimeCheck = System.currentTimeMillis();
+        if (noItemHasBeenSpawned()) {
+            setInitialItemSpawnTime();
+        } else if (itemCanSpawn()) {
+            spawnItem();
         }
+    }
+
+    private void spawnItem() {
+        double screenWidth = gc.getCanvas().getWidth();
+        double centerx = screenWidth / 2;
+        double randomDouble = getRand(ITEM_SPAWN_RAND_MAX);
+        double spawnX = centerx + randomDouble - SPAWN_OFFSET;
+
+        Spray spray = new Spray(gc, spawnX);
+
+        this.entities.add(spray);
+        spray.startMoving();
+
+        randomDouble = getRand(ITEM_TIME_RAND_MAX);
+        itemSpawnTime = (int) (ITEM_SPAWN_TIME_BASE + randomDouble) * 4;
+        resetItemSpawnTimeCheck();
+    }
+
+    private void setInitialItemSpawnTime() {
+        double randomDouble = getRand(ITEM_TIME_RAND_MAX);
+        itemSpawnTime = (int) (ITEM_SPAWN_TIME_BASE + randomDouble) / 2;
+        resetItemSpawnTimeCheck();
+    }
+
+    private void resetItemSpawnTimeCheck() {
+        itemSpawnTimeCheck = System.currentTimeMillis();
     }
 
     private double getRand(double itemTimeRandMax) {
         return (-itemTimeRandMax) + (itemTimeRandMax - (-itemTimeRandMax)) * r.nextDouble();
     }
 
-    private boolean itemsNotReady() {
+    private boolean noItemHasBeenSpawned() {
         return itemSpawnTimeCheck < 0;
     }
 
-    private boolean itemsCanSpawn() {
+    private boolean itemCanSpawn() {
         return System.currentTimeMillis() - itemSpawnTimeCheck > itemSpawnTime;
     }
 
