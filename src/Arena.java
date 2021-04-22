@@ -1,13 +1,11 @@
-import java.util.*;
-
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
+import java.util.*;
 
 public class Arena extends Scene {
     Player player = null;
@@ -17,23 +15,19 @@ public class Arena extends Scene {
     List<Story> activeStories;
     List<Bug> bugs = new ArrayList<>();
     List<Entity> despawnList = new ArrayList<>();
-    List<Spray> sprays = new ArrayList<>();
     Random r = new Random(System.currentTimeMillis());
-
-    //ArenaTimer arenaTimer;
     Timer timer;
     TimerTask timerTask;
     Integer timerCounter;
     Text text;
-    private static final double MAX_ACTIVE_STORIES = 4;
 
+    private static final double MAX_ACTIVE_STORIES = 4;
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
     private static final int BUG_SPAWN_TIME_BASE = 5000;
     private static final double BUG_SPAWN_RAND_MAX = 280;
     private static final double BUG_TIME_RAND_MAX = 4500;
     private static final double SPAWN_OFFSET = 65;
-
     private long itemSpawnTimeCheck = -1;
     private int itemSpawnTime;
     private static final int ITEM_SPAWN_TIME_BASE = 7000;
@@ -50,44 +44,36 @@ public class Arena extends Scene {
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
         this.setOnKeyPressed(
-            new EventHandler<KeyEvent>()
-            {
-                public void handle(KeyEvent e)
-                {
-                    KeyCode keyCode = e.getCode();
-                    if(player.moveCode() != Player.SWAT_CODE &&
-                            keyCode == KeyCode.SPACE && player.moveCode() != Player.PRESWAT_CODE){
-                        player.preswat();
-                    }else if(player.moveCode() != Player.PRESWAT_CODE && 
-                            player.moveCode() != Player.SWAT_CODE &&
-                            player.moveCode() != Player.LEFT_CODE &&
-                            keyCode == KeyCode.LEFT){
-                        player.moveLeft();
-                    }else if(player.moveCode() != Player.PRESWAT_CODE &&
-                            player.moveCode() != Player.SWAT_CODE &&
-                            player.moveCode() != Player.RIGHT_CODE &&
-                            keyCode == KeyCode.RIGHT){
-                        player.moveRight();
-                    }
+            e -> {
+                KeyCode keyCode = e.getCode();
+                if (player.moveCode() != Player.SWAT_CODE &&
+                        keyCode == KeyCode.SPACE && player.moveCode() != Player.PRESWAT_CODE) {
+                    player.preswat();
+                } else if (player.moveCode() != Player.PRESWAT_CODE &&
+                        player.moveCode() != Player.SWAT_CODE &&
+                        player.moveCode() != Player.LEFT_CODE &&
+                        keyCode == KeyCode.LEFT) {
+                    player.moveLeft();
+                } else if (player.moveCode() != Player.PRESWAT_CODE &&
+                        player.moveCode() != Player.SWAT_CODE &&
+                        player.moveCode() != Player.RIGHT_CODE &&
+                        keyCode == KeyCode.RIGHT) {
+                    player.moveRight();
                 }
             });
 
-            this.setOnKeyReleased(
-                new EventHandler<KeyEvent>()
-                {
-                    public void handle(KeyEvent e)
-                    {
-                        KeyCode keyCode = e.getCode();
-                        if(keyCode == KeyCode.SPACE && player.moveCode() == Player.PRESWAT_CODE){
-                            player.swat();
-                        }else if((keyCode == KeyCode.LEFT && player.moveCode() == -1) ||
-                            (keyCode == KeyCode.RIGHT && player.moveCode() == 1)){
-                            player.idle();
-                        }
-                    }
-                });
+        this.setOnKeyReleased(
+            e -> {
+                KeyCode keyCode = e.getCode();
+                if (keyCode == KeyCode.SPACE && player.moveCode() == Player.PRESWAT_CODE) {
+                    player.swat();
+                } else if ((keyCode == KeyCode.LEFT && player.moveCode() == -1) ||
+                        (keyCode == KeyCode.RIGHT && player.moveCode() == 1)) {
+                    player.idle();
+                }
+            });
     }
-    
+
     @Override
     public void setup() {
         double screenWidth = gc.getCanvas().getWidth();
@@ -149,10 +135,14 @@ public class Arena extends Scene {
 
     @Override
     public void update() {
-
         updateEntities();
+        despawnEntities();
+        updateActiveStories();
+        spawnBugs();
+        spawnItems();
+    }
 
-        //despawn things
+    private void despawnEntities() {
         for(Entity e : despawnList){
             if(e instanceof SprayParticle){
                 Objects.requireNonNull(player.getParticles()).remove(e);
@@ -160,15 +150,6 @@ public class Arena extends Scene {
                 entities.remove(e);
             }
         }
-
-        //check for completed stories
-        updateActiveStories();
-
-        //spawn bugs
-        spawnBugs();
-
-        //spawn items
-        spawnItems();
     }
 
     private void updateActiveStories() {
