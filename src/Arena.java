@@ -276,36 +276,14 @@ public class Arena extends Scene {
         }
     }
 
-    private void handlePlayerCollision(Player e) {
+    private void handlePlayerCollision(Player p) {
         for (Entity other : entities) {
-            if (other instanceof Spray) {
-                handlePlayerSprayCollision(e, (Spray) other);
-            }
+            p.handleCollision(other);
         }
-    }
-
-    private void handlePlayerSprayCollision(Player player, Spray spray) {
-        if (playerCanPickUpSpray(player, spray)) {
-            player.equipSpray();
-            spray.stop();
-        }
-    }
-
-    private boolean playerCanPickUpSpray(Player player, Spray spray) {
-        return player.moveCode() != Player.SWAT_CODE && player.moveCode() != Player.PRESWAT_CODE && spray.isActive()
-                && player.collidesWith(spray);
-    }
-
-    private boolean bugCanCollide(Bug bug) {
-        return bug.isAlive() && !bug.isAbsorbing();
     }
 
     private void handleBugCollision(Bug bug) {
-        if (!bugCanCollide(bug)) {
-            return;
-        }
-        handleBugSwatterCollision(bug);
-        handleBugParticleCollision(bug);
+        bug.handlePlayerCollision(player);
         for (Entity other : entities) {
             handleBugStoryCollision(bug, other);
         }

@@ -215,4 +215,22 @@ public class Player extends Entity {
             swatter.setPosition(x, y);
         }
     }
+
+    public void handleCollision(Entity other) {
+        if (other instanceof Spray) {
+            handleSprayCollision((Spray) other);
+        }
+    }
+
+    private void handleSprayCollision(Spray spray) {
+        if (canPickUpSpray(spray)) {
+            equipSpray();
+            spray.stop();
+        }
+    }
+
+    private boolean canPickUpSpray(Spray spray) {
+        return moveCode() != Player.SWAT_CODE && moveCode() != Player.PRESWAT_CODE && spray.isActive()
+                && collidesWith(spray);
+    }
 }
