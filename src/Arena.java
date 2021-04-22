@@ -51,7 +51,7 @@ public class Arena extends Scene {
 
     @Override
     public void setup() {
-        updateProductBacklog();
+        notifyStoriesInProdBacklog();
         initActiveStories();
         initBugs();
         initTimer();
@@ -109,7 +109,7 @@ public class Arena extends Scene {
         }
     }
 
-    private void updateProductBacklog() {
+    private void notifyStoriesInProdBacklog() {
         for (Story story : gm.getProductBacklog()) {
             story.inArena(true);
             story.updateGraphicsContext(gc);
