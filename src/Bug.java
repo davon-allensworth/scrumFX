@@ -109,6 +109,15 @@ public class Bug extends Entity{
         }
     }
 
+    public void handleStoryCollision(Entity other) {
+        if (other instanceof Story) {
+            if (collidesWith(other)) {
+                startAbsorb();
+                ((Story) other).hit();
+            }
+        }
+    }
+
     @Override
     public void update(){
         if(startAbsorb) absorb(); 

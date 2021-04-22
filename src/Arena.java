@@ -289,7 +289,7 @@ public class Arena extends Scene {
         bug.handleSwatterCollision(player);
         handleBugParticleCollision(bug);
         for (Entity other : entities) {
-            handleBugStoryCollision(bug, other);
+            bug.handleStoryCollision(other);
         }
     }
 
@@ -303,15 +303,6 @@ public class Arena extends Scene {
                 despawnList.add(particle);
             } else if (particle.collidesWith(e)) {
                 ((Bug) e).inSpray();
-            }
-        }
-    }
-
-    private void handleBugStoryCollision(Entity e, Entity other) {
-        if (other instanceof Story) {
-            if (e.collidesWith(other)) {
-                ((Bug) e).startAbsorb();
-                ((Story) other).hit();
             }
         }
     }
