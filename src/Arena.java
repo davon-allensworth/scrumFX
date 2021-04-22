@@ -7,18 +7,17 @@ import javafx.scene.text.Text;
 import java.util.*;
 
 public class Arena extends Scene {
-    Player player = null;
-    GraphicsContext gc;
-    GameManager gm;
-    List<Story> sprintBacklog;
-    List<Story> activeStories;
-    List<Bug> bugs = new ArrayList<>();
-    List<Entity> despawnList = new ArrayList<>();
-    Random r = new Random(System.currentTimeMillis());
-    Timer timer;
-    TimerTask timerTask;
-    Integer timerCounter;
-    Text text;
+    private Player player = null;
+    private GraphicsContext gc;
+    private GameManager gm;
+    private List<Story> sprintBacklog;
+    private List<Story> activeStories;
+    private List<Bug> bugs = new ArrayList<>();
+    private List<Entity> despawnList = new ArrayList<>();
+    private Random r = new Random(System.currentTimeMillis());
+    private Timer timer;
+    private TimerTask timerTask;
+    private Integer timerCounter;
     
     private static final int SPRINT_TIMER = 60;
     private static final double MAX_ACTIVE_STORIES = 4;
@@ -65,7 +64,6 @@ public class Arena extends Scene {
     private void initTimer() {
         timerCounter = SPRINT_TIMER;
         timer = new Timer();
-        text = new Text();
         timerTask = new TimerTask() {
             @Override
             public void run() {
