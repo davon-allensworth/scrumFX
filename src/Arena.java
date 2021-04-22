@@ -145,24 +145,28 @@ public class Arena extends Scene {
     }
 
     private void updateActiveStories() {
-        for(int i = 0; i < activeStories.size(); i++){
-            if(activeStories.get(i).shouldSwitchOut()){
-                for(Story story : sprintBacklog){ //fill in the stories
-                    if(canBeSwappedIn(story)){
-                        swapStory(i, story);
-                    }
-                }
+        for (int i = 0; i < activeStories.size(); i++) {
+            if (activeStories.get(i).shouldSwitchOut()) {
+                attemptToSwitchStory(i);
+            }
+        }
+    }
+
+    private void attemptToSwitchStory(int i) {
+        for (Story story : sprintBacklog) {
+            if (canBeSwappedIn(story)) {
+                swapStory(i, story);
             }
         }
     }
 
     private void swapStory(int i, Story story) {
-        Story removedStory = activeStories.remove(i);//remove completed story
+        Story removedStory = activeStories.remove(i);
         entities.remove(removedStory);
         double removedStoryX = removedStory.x;
         double removedStoryY = removedStory.y;
         story.setLocation(removedStoryX, removedStoryY);
-        activeStories.add(i, story);//add new story
+        activeStories.add(i, story);
         entities.add(story);
         story.inArena(true);
         story.startProgress();
