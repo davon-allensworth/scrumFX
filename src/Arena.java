@@ -56,36 +56,15 @@ public class Arena extends Scene {
 
     @Override
     public void setup() {
-        double screenWidth = gc.getCanvas().getWidth();
-        double screenHeight = gc.getCanvas().getHeight();
-        
-        for(Story story : gm.getProductBacklog()){
-            story.inArena(true); //tell them they should be in arena mode
-            story.updateGraphicsContext(gc);
-        }
+        updateProductBacklog();
+        initActiveStories();
+        initBugs();
+        initTimer();
+        player = new Player(gc);
+        this.entities.add(player);
+    }
 
-        this.sprintBacklog = gm.getSprintBacklog();
-        for(Story story : sprintBacklog){
-            if(activeStories.size() >= MAX_ACTIVE_STORIES){
-                break; //we have reached our current max
-            }
-            activeStories.add(story);
-        }
-        
-        double x = 0;
-        for(Story story : activeStories){
-            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth())/2;
-            story.setLocation(x, screenHeight-story.getHeight());
-            story.startProgress();
-            this.entities.add(story);
-            x += screenWidth/activeStories.size();
-        }
-
-        for(Bug bug : bugs){
-            this.entities.add(bug);
-            bug.startMoving();
-        }
- 
+    private void initTimer() {
         timerCounter = 60; //Will change this later
         timer = new Timer();
         text = new Text();
@@ -104,8 +83,42 @@ public class Arena extends Scene {
         };
 
         timer.schedule(timerTask, 0, 1000);
-        player = new Player(gc);
-        this.entities.add(player);
+    }
+
+    private void initBugs() {
+        for(Bug bug : bugs){
+            this.entities.add(bug);
+            bug.startMoving();
+        }
+    }
+
+    private void initActiveStories() {
+        double screenWidth = gc.getCanvas().getWidth();
+        double screenHeight = gc.getCanvas().getHeight();
+
+        this.sprintBacklog = gm.getSprintBacklog();
+        for(Story story : sprintBacklog){
+            if(activeStories.size() >= MAX_ACTIVE_STORIES){
+                break; //we have reached our current max
+            }
+            activeStories.add(story);
+        }
+
+        double x = 0;
+        for(Story story : activeStories){
+            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth())/2;
+            story.setLocation(x, screenHeight-story.getHeight());
+            story.startProgress();
+            this.entities.add(story);
+            x += screenWidth/activeStories.size();
+        }
+    }
+
+    private void updateProductBacklog() {
+        for(Story story : gm.getProductBacklog()){
+            story.inArena(true); //tell them they should be in arena mode
+            story.updateGraphicsContext(gc);
+        }
     }
 
     @Override
