@@ -42,15 +42,13 @@ public class Arena extends Scene {
         this.activeStories = new LinkedList<>();
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
-        this.setOnKeyPressed(
-            e -> {
-                player.keyPressed(e.getCode());
-            });
+        this.setOnKeyPressed(e -> {
+            player.keyPressed(e.getCode());
+        });
 
-        this.setOnKeyReleased(
-            e -> {
-                player.keyReleased(e.getCode());
-            });
+        this.setOnKeyReleased(e -> {
+            player.keyReleased(e.getCode());
+        });
     }
 
     @Override
@@ -64,15 +62,15 @@ public class Arena extends Scene {
     }
 
     private void initTimer() {
-        timerCounter = 60; //Will change this later
+        timerCounter = 60;
         timer = new Timer();
         text = new Text();
-        timerTask = new TimerTask(){
+        timerTask = new TimerTask() {
             @Override
-            public void run(){
+            public void run() {
                 Platform.runLater(() -> {
                     timerCounter--;
-                    if(timerCounter == 0 || gm.storiesDone()){
+                    if (timerCounter == 0 || gm.storiesDone()) {
                         timer.cancel();
                         timerTask.cancel();
                         gm.endSprint();
@@ -85,7 +83,7 @@ public class Arena extends Scene {
     }
 
     private void initBugs() {
-        for(Bug bug : bugs){
+        for (Bug bug : bugs) {
             this.entities.add(bug);
             bug.startMoving();
         }
@@ -96,26 +94,27 @@ public class Arena extends Scene {
         double screenHeight = gc.getCanvas().getHeight();
 
         this.sprintBacklog = gm.getSprintBacklog();
-        for(Story story : sprintBacklog){
-            if(activeStories.size() >= MAX_ACTIVE_STORIES){
-                break; //we have reached our current max
+        for (Story story : sprintBacklog) {
+            if (activeStories.size() >= MAX_ACTIVE_STORIES) {
+                break; // we have reached our current max
             }
             activeStories.add(story);
         }
 
         double x = 0;
-        for(Story story : activeStories){
-            if(x==0) x = (screenWidth/activeStories.size()-story.getWidth())/2;
-            story.setLocation(x, screenHeight-story.getHeight());
+        for (Story story : activeStories) {
+            if (x == 0)
+                x = (screenWidth / activeStories.size() - story.getWidth()) / 2;
+            story.setLocation(x, screenHeight - story.getHeight());
             story.startProgress();
             this.entities.add(story);
-            x += screenWidth/activeStories.size();
+            x += screenWidth / activeStories.size();
         }
     }
 
     private void updateProductBacklog() {
-        for(Story story : gm.getProductBacklog()){
-            story.inArena(true); //tell them they should be in arena mode
+        for (Story story : gm.getProductBacklog()) {
+            story.inArena(true);
             story.updateGraphicsContext(gc);
         }
     }
@@ -135,10 +134,10 @@ public class Arena extends Scene {
     }
 
     private void despawnEntities() {
-        for(Entity e : despawnList){
-            if(e instanceof SprayParticle){
+        for (Entity e : despawnList) {
+            if (e instanceof SprayParticle) {
                 Objects.requireNonNull(player.getParticles()).remove(e);
-            }else{
+            } else {
                 entities.remove(e);
             }
         }
@@ -220,7 +219,6 @@ public class Arena extends Scene {
     private boolean itemCanSpawn() {
         return System.currentTimeMillis() - itemSpawnTimeCheck > itemSpawnTime;
     }
-
 
     private void spawnBugs() {
         if (noBugBeenSpawned()) {
@@ -348,9 +346,10 @@ public class Arena extends Scene {
     @Override
     public void draw() {
         super.drawBackground(gc);
-        for(Entity e : this.entities)
-            if(!(e instanceof Player)) e.draw();  
-        player.draw(); //draw player on top
+        for (Entity e : this.entities)
+            if (!(e instanceof Player))
+                e.draw();
+        player.draw();
         gc.fillText(timerCounter.toString(), 10, 20);
     }
 }
