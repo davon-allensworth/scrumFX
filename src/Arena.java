@@ -282,8 +282,16 @@ public class Arena extends Scene {
         }
     }
 
+    private boolean bugCanCollide(Bug bug) {
+        return bug.isAlive() && !bug.isAbsorbing();
+    }
+
     private void handleBugCollision(Bug bug) {
-        bug.handlePlayerCollision(player);
+        if (!bugCanCollide(bug)) {
+            return;
+        }
+        handleBugSwatterCollision(bug);
+        handleBugParticleCollision(bug);
         for (Entity other : entities) {
             handleBugStoryCollision(bug, other);
         }
