@@ -282,15 +282,11 @@ public class Arena extends Scene {
         }
     }
 
-    private boolean bugCanCollide(Bug bug) {
-        return bug.isAlive() && !bug.isAbsorbing();
-    }
-
     private void handleBugCollision(Bug bug) {
-        if (!bugCanCollide(bug)) {
+        if (!bug.canCollide()) {
             return;
         }
-        handleBugSwatterCollision(bug);
+        bug.handleSwatterCollision(player);
         handleBugParticleCollision(bug);
         for (Entity other : entities) {
             handleBugStoryCollision(bug, other);
@@ -307,14 +303,6 @@ public class Arena extends Scene {
                 despawnList.add(particle);
             } else if (particle.collidesWith(e)) {
                 ((Bug) e).inSpray();
-            }
-        }
-    }
-
-    private void handleBugSwatterCollision(Entity e) {
-        if (player.getSwatter() != null && !player.hasSpray()) {
-            if (player.moveCode() == Player.SWAT_CODE && e.collidesWith(player.getSwatter())) {
-                ((Bug) e).kill();
             }
         }
     }

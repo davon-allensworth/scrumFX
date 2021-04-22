@@ -97,6 +97,18 @@ public class Bug extends Entity{
         return this.despawn;
     }
 
+    public boolean canCollide() {
+        return isAlive() && !isAbsorbing();
+    }
+
+    public void handleSwatterCollision(Player player) {
+        if (player.getSwatter() != null && !player.hasSpray()) {
+            if (player.moveCode() == Player.SWAT_CODE && collidesWith(player.getSwatter())) {
+                kill();
+            }
+        }
+    }
+
     @Override
     public void update(){
         if(startAbsorb) absorb(); 
