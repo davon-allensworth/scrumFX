@@ -293,7 +293,7 @@ public class Arena extends Scene {
         }
     }
 
-    private void handleBugParticleCollision(Entity e) {
+    private void handleBugParticleCollision(Bug bug) {
         if (player.getParticles() == null) {
             return;
         }
@@ -301,8 +301,8 @@ public class Arena extends Scene {
         for (SprayParticle particle : player.getParticles()) {
             if (!particle.isActive()) {
                 despawnList.add(particle);
-            } else if (particle.collidesWith(e)) {
-                ((Bug) e).inSpray();
+            } else if (particle.collidesWith(bug)) {
+                bug.inSpray();
             }
         }
     }
