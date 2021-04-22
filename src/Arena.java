@@ -89,16 +89,9 @@ public class Arena extends Scene {
     private void initActiveStories() {
         double screenWidth = gc.getCanvas().getWidth();
         double screenHeight = gc.getCanvas().getHeight();
-
-        this.sprintBacklog = gm.getSprintBacklog();
-        for (Story story : sprintBacklog) {
-            if (activeStories.size() >= MAX_ACTIVE_STORIES) {
-                break;
-            }
-            activeStories.add(story);
-        }
-
         double x = 0;
+
+        populateActiveStories();
         for (Story story : activeStories) {
             if (x == 0)
                 x = (screenWidth / activeStories.size() - story.getWidth()) / 2;
@@ -106,6 +99,16 @@ public class Arena extends Scene {
             story.startProgress();
             this.entities.add(story);
             x += screenWidth / activeStories.size();
+        }
+    }
+
+    private void populateActiveStories() {
+        this.sprintBacklog = gm.getSprintBacklog();
+        for (Story story : sprintBacklog) {
+            if (activeStories.size() >= MAX_ACTIVE_STORIES) {
+                break;
+            }
+            activeStories.add(story);
         }
     }
 
