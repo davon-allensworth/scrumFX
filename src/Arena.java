@@ -162,29 +162,41 @@ public class Arena extends Scene {
         }
 
         //check for completed stories
-        for(int i = 0; i < activeStories.size(); i++){
-            if(activeStories.get(i).shouldSwitchOut()){
-                for(Story story : sprintBacklog){ //fill in the stories
-                    if(!activeStories.contains(story) && !story.isCompleted()){
-                        Story removedStory = activeStories.remove(i);//remove completed story
-                        entities.remove(removedStory);
-                        double removedStoryX = removedStory.x;
-                        double removedStoryY = removedStory.y;
-                        story.setLocation(removedStoryX, removedStoryY);
-                        activeStories.add(i, story);//add new story
-                        entities.add(story);
-                        story.inArena(true);
-                        story.startProgress();
-                    }
-                }
-            }
-        }
+        updateActiveStories();
 
         //spawn bugs
         spawnBugs();
 
         //spawn items
         spawnItems();
+    }
+
+    private void updateActiveStories() {
+        for(int i = 0; i < activeStories.size(); i++){
+            if(activeStories.get(i).shouldSwitchOut()){
+                for(Story story : sprintBacklog){ //fill in the stories
+                    if(canBeSwappedIn(story)){
+                        swapStory(i, story);
+                    }
+                }
+            }
+        }
+    }
+
+    private void swapStory(int i, Story story) {
+        Story removedStory = activeStories.remove(i);//remove completed story
+        entities.remove(removedStory);
+        double removedStoryX = removedStory.x;
+        double removedStoryY = removedStory.y;
+        story.setLocation(removedStoryX, removedStoryY);
+        activeStories.add(i, story);//add new story
+        entities.add(story);
+        story.inArena(true);
+        story.startProgress();
+    }
+
+    private boolean canBeSwappedIn(Story story) {
+        return !activeStories.contains(story) && !story.isCompleted();
     }
 
     private void spawnItems() {
