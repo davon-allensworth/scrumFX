@@ -45,32 +45,12 @@ public class Arena extends Scene {
 
         this.setOnKeyPressed(
             e -> {
-                KeyCode keyCode = e.getCode();
-                if (player.moveCode() != Player.SWAT_CODE &&
-                        keyCode == KeyCode.SPACE && player.moveCode() != Player.PRESWAT_CODE) {
-                    player.preswat();
-                } else if (player.moveCode() != Player.PRESWAT_CODE &&
-                        player.moveCode() != Player.SWAT_CODE &&
-                        player.moveCode() != Player.LEFT_CODE &&
-                        keyCode == KeyCode.LEFT) {
-                    player.moveLeft();
-                } else if (player.moveCode() != Player.PRESWAT_CODE &&
-                        player.moveCode() != Player.SWAT_CODE &&
-                        player.moveCode() != Player.RIGHT_CODE &&
-                        keyCode == KeyCode.RIGHT) {
-                    player.moveRight();
-                }
+                player.keyPressed(e.getCode());
             });
 
         this.setOnKeyReleased(
             e -> {
-                KeyCode keyCode = e.getCode();
-                if (keyCode == KeyCode.SPACE && player.moveCode() == Player.PRESWAT_CODE) {
-                    player.swat();
-                } else if ((keyCode == KeyCode.LEFT && player.moveCode() == -1) ||
-                        (keyCode == KeyCode.RIGHT && player.moveCode() == 1)) {
-                    player.idle();
-                }
+                player.keyReleased(e.getCode());
             });
     }
 

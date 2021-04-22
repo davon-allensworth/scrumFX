@@ -2,6 +2,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 
 public class Player extends Entity {
     private int moveCode = 0; // 0 for idle, -1 for left, 1 for right, 2 for preswat, 3 for swat
@@ -81,6 +82,32 @@ public class Player extends Entity {
             swatter.draw();
         }
         super.draw();
+    }
+
+    public void keyPressed(KeyCode keyCode) {
+        if (moveCode() != Player.SWAT_CODE &&
+                keyCode == KeyCode.SPACE && moveCode() != Player.PRESWAT_CODE) {
+            preswat();
+        } else if (moveCode() != Player.PRESWAT_CODE &&
+                moveCode() != Player.SWAT_CODE &&
+                moveCode() != Player.LEFT_CODE &&
+                keyCode == KeyCode.LEFT) {
+            moveLeft();
+        } else if (moveCode() != Player.PRESWAT_CODE &&
+                moveCode() != Player.SWAT_CODE &&
+                moveCode() != Player.RIGHT_CODE &&
+                keyCode == KeyCode.RIGHT) {
+            moveRight();
+        }
+    }
+
+    public void keyReleased(KeyCode keyCode) {
+        if (keyCode == KeyCode.SPACE && moveCode() == Player.PRESWAT_CODE) {
+            swat();
+        } else if ((keyCode == KeyCode.LEFT && moveCode() == -1) ||
+                (keyCode == KeyCode.RIGHT && moveCode() == 1)) {
+            idle();
+        }
     }
 
     public void idle(){
