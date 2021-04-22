@@ -1,9 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Random;
+import java.util.*;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -205,7 +200,7 @@ public class Arena extends Scene {
         //despawn things
         for(Entity e : despawnList){
             if(e instanceof SprayParticle){
-                player.getParticles().remove(((SprayParticle)e));
+                Objects.requireNonNull(player.getParticles()).remove(e);
             }else{
                 entities.remove(e);
             }
@@ -231,16 +226,59 @@ public class Arena extends Scene {
         }
 
         //spawn bugs
-        if(bugSpawnTimeCheck < 0){
-            double randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
-            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
-            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
-            bugSpawnTimeCheck = System.currentTimeMillis();
-        }else if(System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime){
+        spawnBugs();
+
+        //spawn items
+        spawnItems();
+    }
+
+    private void spawnItems() {
+        if(itemsNotReady()){
+            double randomDouble = getRand(ITEM_TIME_RAND_MAX);
+            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) / 2;
+            itemSpawnTimeCheck = System.currentTimeMillis();
+        }else if(itemsCanSpawn()){
             double screenWidth = gc.getCanvas().getWidth();
             double centerx = screenWidth / 2;
 
-            double randomDouble = (-BUG_SPAWN_RAND_MAX) + (BUG_SPAWN_RAND_MAX - (-BUG_SPAWN_RAND_MAX)) * r.nextDouble();
+            double randomDouble = getRand(ITEM_SPAWN_RAND_MAX);
+            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
+
+            Spray spray = new Spray(gc, spawnX);
+
+            this.entities.add(spray);
+            spray.startMoving();
+
+            randomDouble = (getRand(ITEM_TIME_RAND_MAX));
+            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) * 4;
+            itemSpawnTimeCheck = System.currentTimeMillis();
+        }
+    }
+
+    private double getRand(double itemTimeRandMax) {
+        return (-itemTimeRandMax) + (itemTimeRandMax - (-itemTimeRandMax)) * r.nextDouble();
+    }
+
+    private boolean itemsNotReady() {
+        return itemSpawnTimeCheck < 0;
+    }
+
+    private boolean itemsCanSpawn() {
+        return System.currentTimeMillis() - itemSpawnTimeCheck > itemSpawnTime;
+    }
+
+
+    private void spawnBugs() {
+        if(bugNotReady()){
+            double randomDouble = (getRand(BUG_TIME_RAND_MAX));
+            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
+            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
+            bugSpawnTimeCheck = System.currentTimeMillis();
+        }else if(bugCanSpawn()){
+            double screenWidth = gc.getCanvas().getWidth();
+            double centerx = screenWidth / 2;
+
+            double randomDouble = getRand(BUG_SPAWN_RAND_MAX);
             double spawnX = centerx + randomDouble - SPAWN_OFFSET;
 
             int randomLevel = sprintBacklog.get(r.nextInt(sprintBacklog.size())).getLevel();
@@ -250,33 +288,19 @@ public class Arena extends Scene {
             this.entities.add(bug);
             bug.startMoving();
 
-            randomDouble = ((-BUG_TIME_RAND_MAX) + (BUG_TIME_RAND_MAX - (-BUG_TIME_RAND_MAX)) * r.nextDouble());
+            randomDouble = (getRand(BUG_TIME_RAND_MAX));
             bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
             if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
             bugSpawnTimeCheck = System.currentTimeMillis();
         }
+    }
 
-        //spawn items
-        if(itemSpawnTimeCheck < 0){
-            double randomDouble = ((-ITEM_TIME_RAND_MAX) + (ITEM_TIME_RAND_MAX - (-ITEM_TIME_RAND_MAX)) * r.nextDouble());
-            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) / 2;
-            itemSpawnTimeCheck = System.currentTimeMillis();
-        }else if(System.currentTimeMillis() - itemSpawnTimeCheck > itemSpawnTime){
-            double screenWidth = gc.getCanvas().getWidth();
-            double centerx = screenWidth / 2;
+    private boolean bugNotReady() {
+        return bugSpawnTimeCheck < 0;
+    }
 
-            double randomDouble = (-ITEM_SPAWN_RAND_MAX) + (ITEM_SPAWN_RAND_MAX - (-ITEM_SPAWN_RAND_MAX)) * r.nextDouble();
-            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
-
-            Spray spray = new Spray(gc, spawnX);
-
-            this.entities.add(spray);
-            spray.startMoving();
-
-            randomDouble = ((-ITEM_TIME_RAND_MAX) + (ITEM_TIME_RAND_MAX - (-ITEM_TIME_RAND_MAX)) * r.nextDouble());
-            itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) * 4;
-            itemSpawnTimeCheck = System.currentTimeMillis();
-        }
+    private boolean bugCanSpawn() {
+        return System.currentTimeMillis() - bugSpawnTimeCheck > bugSpawnTime;
     }
 
     @Override
