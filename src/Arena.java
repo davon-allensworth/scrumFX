@@ -19,7 +19,8 @@ public class Arena extends Scene {
     TimerTask timerTask;
     Integer timerCounter;
     Text text;
-
+    
+    private static final int SPRINT_TIMER = 60;
     private static final double MAX_ACTIVE_STORIES = 4;
     private long bugSpawnTimeCheck = -1;
     private int bugSpawnTime;
@@ -62,7 +63,7 @@ public class Arena extends Scene {
     }
 
     private void initTimer() {
-        timerCounter = 60;
+        timerCounter = SPRINT_TIMER;
         timer = new Timer();
         text = new Text();
         timerTask = new TimerTask() {
@@ -96,7 +97,7 @@ public class Arena extends Scene {
         this.sprintBacklog = gm.getSprintBacklog();
         for (Story story : sprintBacklog) {
             if (activeStories.size() >= MAX_ACTIVE_STORIES) {
-                break; // we have reached our current max
+                break;
             }
             activeStories.add(story);
         }
