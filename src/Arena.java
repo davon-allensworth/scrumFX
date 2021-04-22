@@ -200,7 +200,7 @@ public class Arena extends Scene {
     }
 
     private void spawnItems() {
-        if (noItemHasBeenSpawned()) {
+        if (noItemBeenSpawned()) {
             setInitialItemSpawnTime();
         } else if (itemCanSpawn()) {
             spawnItem();
@@ -214,7 +214,6 @@ public class Arena extends Scene {
         double spawnX = centerx + randomDouble - SPAWN_OFFSET;
 
         Spray spray = new Spray(gc, spawnX);
-
         this.entities.add(spray);
         spray.startMoving();
 
@@ -237,7 +236,7 @@ public class Arena extends Scene {
         return (-itemTimeRandMax) + (itemTimeRandMax - (-itemTimeRandMax)) * r.nextDouble();
     }
 
-    private boolean noItemHasBeenSpawned() {
+    private boolean noItemBeenSpawned() {
         return itemSpawnTimeCheck < 0;
     }
 
@@ -247,33 +246,37 @@ public class Arena extends Scene {
 
 
     private void spawnBugs() {
-        if(bugNotReady()){
-            double randomDouble = (getRand(BUG_TIME_RAND_MAX));
-            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
-            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
-            bugSpawnTimeCheck = System.currentTimeMillis();
-        }else if(bugCanSpawn()){
-            double screenWidth = gc.getCanvas().getWidth();
-            double centerx = screenWidth / 2;
-
-            double randomDouble = getRand(BUG_SPAWN_RAND_MAX);
-            double spawnX = centerx + randomDouble - SPAWN_OFFSET;
-
-            int randomLevel = sprintBacklog.get(r.nextInt(sprintBacklog.size())).getLevel();
-
-            Bug bug = new Bug(gc, spawnX,(randomLevel));
-
-            this.entities.add(bug);
-            bug.startMoving();
-
-            randomDouble = (getRand(BUG_TIME_RAND_MAX));
-            bugSpawnTime = (int)(BUG_SPAWN_TIME_BASE + randomDouble);
-            if(!activeStories.isEmpty()) bugSpawnTime /= sprintBacklog.size();
-            bugSpawnTimeCheck = System.currentTimeMillis();
+        if (noBugBeenSpawned()) {
+            setBugSpawnTime();
+        } else if (bugCanSpawn()) {
+            spawnBug();
         }
     }
 
-    private boolean bugNotReady() {
+    private void spawnBug() {
+        double screenWidth = gc.getCanvas().getWidth();
+        double centerx = screenWidth / 2;
+        double randomDouble = getRand(BUG_SPAWN_RAND_MAX);
+        double spawnX = centerx + randomDouble - SPAWN_OFFSET;
+
+        int randomLevel = sprintBacklog.get(r.nextInt(sprintBacklog.size())).getLevel();
+
+        Bug bug = new Bug(gc, spawnX, randomLevel);
+        this.entities.add(bug);
+        bug.startMoving();
+
+        setBugSpawnTime();
+    }
+
+    private void setBugSpawnTime() {
+        double randomDouble = getRand(BUG_TIME_RAND_MAX);
+        bugSpawnTime = (int) (BUG_SPAWN_TIME_BASE + randomDouble);
+        if (!activeStories.isEmpty())
+            bugSpawnTime /= sprintBacklog.size();
+        bugSpawnTimeCheck = System.currentTimeMillis();
+    }
+
+    private boolean noBugBeenSpawned() {
         return bugSpawnTimeCheck < 0;
     }
 
