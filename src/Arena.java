@@ -40,13 +40,8 @@ public class Arena extends Scene {
         this.activeStories = new LinkedList<>();
         this.bugSpawnTime = BUG_SPAWN_TIME_BASE;
 
-        this.setOnKeyPressed(e -> {
-            player.keyPressed(e.getCode());
-        });
-
-        this.setOnKeyReleased(e -> {
-            player.keyReleased(e.getCode());
-        });
+        this.setOnKeyPressed(e -> player.keyPressed(e.getCode()));
+        this.setOnKeyReleased(e -> player.keyReleased(e.getCode()));
     }
 
     @Override
