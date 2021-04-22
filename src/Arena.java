@@ -155,52 +155,7 @@ public class Arena extends Scene {
     @Override
     public void update() {
 
-        // update entities and check for collisions
-        for(Entity e : entities){
-            e.update();
-            if(e instanceof Bug && ((Bug)e).isAlive() && !((Bug)e).isAbsorbing()){ //check for bug collisions
-                for(Entity other : entities){
-                    if(other instanceof Story){ //with story
-                        if(e.collidesWith(other)){
-                            ((Bug)e).startAbsorb();
-                            ((Story)other).hit();
-                        }
-                    }
-                    // check if bug is hit by swatter
-                    if(player.getSwatter() != null && !player.hasSpray()){
-                        if(player.moveCode() == Player.SWAT_CODE && e.collidesWith(player.getSwatter())){
-                            ((Bug)e).kill();
-                        }
-                    }
-                    // check if bug hit by particle
-                    if(player.getParticles() != null){
-                        for(SprayParticle particle : player.getParticles()){
-                            if(particle.isActive() && particle.collidesWith(e)){
-                                ((Bug)e).inSpray();
-                                //((Bug)e).kill();
-                            }
-                            if(!particle.isActive()){
-                                despawnList.add(particle); //despawn this particle
-                            }
-                        }
-                    }
-                }
-            }else if(e instanceof Bug && ((Bug)e).shouldDespawn()){ //check for despawning bug
-                despawnList.add(e); //add for despawning
-            }else if(e instanceof Player){
-                for(Entity other : entities){
-                    //don't equip spray unless you are done swatting
-                    if(((Player)e).moveCode() != Player.SWAT_CODE && ((Player)e).moveCode() != Player.PRESWAT_CODE){
-                        if(other instanceof Spray){ //with spray
-                            if(((Spray)other).isActive() && e.collidesWith(other)){
-                                ((Player)e).equipSpray();
-                                ((Spray)other).stop();
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        updateEntities();
 
         //despawn things
         for(Entity e : despawnList){
@@ -276,6 +231,90 @@ public class Arena extends Scene {
             randomDouble = ((-ITEM_TIME_RAND_MAX) + (ITEM_TIME_RAND_MAX - (-ITEM_TIME_RAND_MAX)) * r.nextDouble());
             itemSpawnTime = (int)(ITEM_SPAWN_TIME_BASE + randomDouble) * 4;
             itemSpawnTimeCheck = System.currentTimeMillis();
+        }
+    }
+
+    private void updateEntities() {
+        for (Entity e : entities) {
+            e.update();
+            if (e instanceof Bug) {
+                handleBugCollision((Bug) e);
+                handleBugDespawn((Bug) e);
+            } else if (e instanceof Player) {
+                handlePlayerCollision((Player) e);
+            }
+        }
+    }
+
+    private void handleBugDespawn(Bug bug) {
+        if (bug.shouldDespawn()) {
+            despawnList.add(bug);
+        }
+    }
+
+    private void handlePlayerCollision(Player e) {
+        for (Entity other : entities) {
+            if (other instanceof Spray) {
+                handlePlayerSprayCollision(e, (Spray) other);
+            }
+        }
+    }
+
+    private void handlePlayerSprayCollision(Player player, Spray spray) {
+        if (playerCanPickUpSpray(player, spray)) {
+            player.equipSpray();
+            spray.stop();
+        }
+    }
+
+    private boolean playerCanPickUpSpray(Player player, Spray spray) {
+        return player.moveCode() != Player.SWAT_CODE && player.moveCode() != Player.PRESWAT_CODE && spray.isActive()
+                && player.collidesWith(spray);
+    }
+
+    private boolean bugCanCollide(Bug bug) {
+        return bug.isAlive() && !bug.isAbsorbing();
+    }
+
+    private void handleBugCollision(Bug bug) {
+        if (!bugCanCollide(bug)) {
+            return;
+        }
+        handleBugSwatterCollision(bug);
+        handleBugParticleCollision(bug);
+        for (Entity other : entities) {
+            handleBugStoryCollision(bug, other);
+        }
+    }
+
+    private void handleBugParticleCollision(Entity e) {
+        if (player.getParticles() == null) {
+            return;
+        }
+
+        for (SprayParticle particle : player.getParticles()) {
+            if (!particle.isActive()) {
+                despawnList.add(particle);
+            } else if (particle.collidesWith(e)) {
+                ((Bug) e).inSpray();
+            }
+        }
+    }
+
+    private void handleBugSwatterCollision(Entity e) {
+        if (player.getSwatter() != null && !player.hasSpray()) {
+            if (player.moveCode() == Player.SWAT_CODE && e.collidesWith(player.getSwatter())) {
+                ((Bug) e).kill();
+            }
+        }
+    }
+
+    private void handleBugStoryCollision(Entity e, Entity other) {
+        if (other instanceof Story) {
+            if (e.collidesWith(other)) {
+                ((Bug) e).startAbsorb();
+                ((Story) other).hit();
+            }
         }
     }
 
