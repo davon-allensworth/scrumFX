@@ -201,6 +201,13 @@ public class GameManager {
                 scene = new Arena(root, gc);
                 break;
 
+            case "sprint number":
+                if(victoryMusic.isPlaying()) victoryMusic.stop();
+                if(arenaMusic.isPlaying()) arenaMusic.stop();
+                if(!menuMusic.isPlaying()) menuMusic.play();
+                scene = new SprintNumber(root, gc);
+                break;
+
             case "story select":
                 if(victoryMusic.isPlaying()) victoryMusic.stop();
                 if(arenaMusic.isPlaying()) arenaMusic.stop();

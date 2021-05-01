@@ -127,7 +127,7 @@ public class SprintRetrospective extends Scene {
             if (gm.iterationsComplete) {
                 gm.changeScene("results");
             } else {
-                gm.changeScene("story select");
+                gm.changeScene("sprint number");
             }
         }
     }

@@ -83,7 +83,7 @@ public class MainMenu extends Scene {
         startGameButton.update();
         settingsButton.update();
 
-        if(startGameButton.isTriggered()) GameManager.getInstance().changeScene("story select");
+        if(startGameButton.isTriggered()) GameManager.getInstance().changeScene("sprint number");
         else if(settingsButton.isTriggered()) GameManager.getInstance().changeScene("settings");
     }
 
