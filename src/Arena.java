@@ -16,6 +16,14 @@ public class Arena extends Scene {
     private Timer timer;
     private TimerTask timerTask;
     private Integer timerCounter;
+
+    private Entity overText;
+    private long overTextTimeCheck = -1;
+    private static final int OVER_TEXT_TIME = 2000;
+
+    private Entity startText;
+    private long startTextTimeCheck = -1;
+    private static final int START_TEXT_TIME = 2000;
     
     private static final int SPRINT_TIMER = 60;
     private static final double MAX_ACTIVE_STORIES = 4;
@@ -50,6 +58,15 @@ public class Arena extends Scene {
         initActiveStories();
         initBugs();
         initTimer();
+
+        startText = new Entity(gc, "assets/stories/other/sprint start.png", 0, 0, 1);
+        startText.updateY((double)(gc.getCanvas().getHeight()) / 8); //move down screen
+        entities.add(startText);
+        startTextTimeCheck = System.currentTimeMillis();
+
+        overText = new Entity(gc, "assets/stories/other/sprint over.png", 0, 0, 1);
+        overText.updateY((double)(gc.getCanvas().getHeight()) / 8); //move down screen
+
         player = new Player(gc);
         this.entities.add(player);
     }
@@ -65,7 +82,10 @@ public class Arena extends Scene {
                     if (timerCounter == 0 || gm.storiesDone()) {
                         timer.cancel();
                         timerTask.cancel();
-                        gm.endSprint();
+
+                        //display over text
+                        entities.add(overText);
+                        overTextTimeCheck = System.currentTimeMillis();
                     }
                 });
             }
@@ -121,11 +141,17 @@ public class Arena extends Scene {
 
     @Override
     public void update() {
-        updateEntities();
-        despawnEntities();
-        updateActiveStories();
-        spawnBugs();
-        spawnItems();
+        if(overTextTimeCheck > 0){ //next scene after displaying text
+            if(System.currentTimeMillis() - overTextTimeCheck > OVER_TEXT_TIME){
+                gm.endSprint();
+            }
+        }else{ //otherwise just update everything
+            updateEntities();
+            despawnEntities();
+            updateActiveStories();
+            spawnBugs();
+            spawnItems();
+        }
     }
 
     private void despawnEntities() {
@@ -262,6 +288,12 @@ public class Arena extends Scene {
                 handleBugDespawn((Bug) e);
             } else if (e instanceof Player) {
                 handlePlayerCollision((Player) e);
+            }
+        }
+        if(startText != null){
+            if(System.currentTimeMillis() - startTextTimeCheck > START_TEXT_TIME){
+                entities.remove(startText);
+                startText = null;
             }
         }
     }

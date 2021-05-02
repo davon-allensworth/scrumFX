@@ -24,7 +24,7 @@ public class SprintNumber extends Scene {
     Entity text;
 
     public SprintNumber(Parent root, GraphicsContext gc) {
-        super(root, Color.CORNSILK);
+        super(root, Color.LIGHTCORAL);
         this.root = (Group)root;
         this.entities = new ArrayList<Entity>();
         this.gc = gc;
@@ -38,7 +38,6 @@ public class SprintNumber extends Scene {
                     }
                 }
             });
-        
     }
 
     @Override

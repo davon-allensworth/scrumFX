@@ -40,7 +40,6 @@ public class Settings extends Scene {
                     }
                 }
             });
-        
     }
 
     @Override
